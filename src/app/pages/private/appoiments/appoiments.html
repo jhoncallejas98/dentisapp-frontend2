@@ -1,0 +1,62 @@
+<p>Appointments works!</p>
+
+<div id="appointmentContainer">
+    <h1 class="form-title">CITAS ODONTOLÓGICAS</h1>
+    <form [formGroup]="formAppoiments" id="appointmentForm">
+        
+        <div>
+            <label>Cédula del paciente:</label>
+            <input type="number" id="cedula" formControlName="cedula" required>
+        </div>
+
+        <div>
+            <label>Odontólogo:</label>
+            <select id="odontologistId" formControlName="odontologistId">
+                <option value="pendiente">Dr. Jhon Callejas</option>
+                <option value="confirmada">Dra. Lizeth Franco</option>
+                <option value="cancelada">Dra. Dariana Medina</option>
+            </select>   
+        </div>
+
+        <div>
+            <label>Fecha:</label>
+            <input type="date" id="date" formControlName="date" required>
+        </div>
+
+        <div class="fechas">
+            <div>
+                <label>Hora Inicio:</label>
+                <input type="time" id="startTime" formControlName="startTime" required>
+            </div>
+
+            <div>
+                <label>Hora Fin:</label>
+                <input type="time" id="endTime" formControlName="endTime" required>
+            </div>
+        </div>
+
+        <div style="display: none;">
+            <label>Estado:</label>
+            <select id="status" formControlName="status">
+                <option value="pendiente">Pendiente</option>
+                <option value="confirmada">Confirmada</option>
+                <option value="cancelada">Cancelada</option>
+                <option value="completada">Completada</option>
+            </select>
+        </div>
+
+        <div class="half-field">
+            <label>Motivo:</label>
+            <textarea id="reason" formControlName="reason" required></textarea>
+        </div>
+
+        <div class="half-field">
+            <label>Notas:</label>
+            <textarea id="notes" formControlName="notes"></textarea>
+        </div>
+    </form>
+
+    <div class="button-container">
+        <button type="submit">Agregar Cita</button>
+    </div>
+</div>

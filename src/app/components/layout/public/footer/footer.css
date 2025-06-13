@@ -1,0 +1,38 @@
+.footer {
+  background-color: #f8f8f8;
+  padding: 10px 40px; /* delgado y con espacio lateral */
+  color: #333;
+  width: 100%;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between; /* Espacio entre los 3 bloques */
+  align-items: center;
+  flex-wrap: wrap; /* por si es móvil, se baja bonito */
+}
+
+.footer-logo {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px; /* Espacio entre los links del medio */
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+}
+
+.footer-links a:hover {
+  color: #007bff;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: #777;
+}

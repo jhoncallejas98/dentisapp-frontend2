@@ -1,0 +1,71 @@
+body {
+    font-size: 1.4rem;
+    font-family: "Inter", sans-serif;
+    width: 100%;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    font-size: 80%;
+}
+
+/* Navbar */
+.navbar {
+    position: relative;
+    background-color: #f3e8e1;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar .logo {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.navbar nav {
+    display: flex;
+    gap: 8rem;
+    align-items: center;
+}
+
+.navbar a {
+    position: relative;
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: background-color 0.25s ease, color 0.25s ease;
+    font-size: 1rem;
+}
+
+.navbar a:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #000;
+}
+
+.navbar a.active {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #000;
+}
+
+.page-login .iniciar-sesion-header {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+}
+
+/* por defecto, oculta el hamburger y el menú */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.hamburger,
+.menu {
+    display: none;
+}
