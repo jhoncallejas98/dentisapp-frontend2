@@ -23,7 +23,7 @@ doctors: any = [];
     dentist: new FormControl(), // traer los datos del backend ante dde establecdr las reglas
     date: new FormControl( '', [Validators.required]),  // en las fechas son diferentes.  
     timeBlock: new FormControl('', [Validators.required]),
-    endTime: new FormControl('', [Validators.required]),
+    // endTime: new FormControl('', [Validators.required]),
     status: new FormControl(true, [Validators.required]), 
     reason: new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(50)]  ),
     notes: new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(50)] ) 
