@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AppoimentsServices } from '../../../../services/appoiments-services';
+import { DentistServices } from '../../../../services/dentist-services';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-new-form',
@@ -9,21 +12,85 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class AppoimentsNewForm {
 formAppoiments!: FormGroup;
+appoiments: any =[];
+doctors: any = [];
 
-  constructor() {
+
+
+  constructor( private appoimentsServices: AppoimentsServices, private dentistServices : DentistServices) {
     this.formAppoiments = new FormGroup({
-    cedula: new FormControl(),
-    odontologistId: new FormControl(),
-    date: new FormControl(),
-    startTime: new FormControl(),
-    endTime: new FormControl(),
-    status: new FormControl(), 
-    reason: new FormControl(),
-    notes: new FormControl() 
+    patient: new FormControl('',[Validators.required]),
+    dentist: new FormControl(), // traer los datos del backend ante dde establecdr las reglas
+    date: new FormControl( '', [Validators.required]),  // en las fechas son diferentes.  
+    timeBlock: new FormControl('', [Validators.required]),
+    endTime: new FormControl('', [Validators.required]),
+    status: new FormControl(true, [Validators.required]), 
+    reason: new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(50)]  ),
+    notes: new FormControl('',[Validators.required, Validators.minLength(5), Validators.maxLength(50)] ) 
     });
   }
 
+
+  
+
   onSubmit() {
-    console.log( this.formAppoiments.value)
+
+    console.log(
+      this.formAppoiments.valid,
+      this.formAppoiments.invalid,
+      this.formAppoiments.pristine,
+      this.formAppoiments.dirty,
+      this.formAppoiments.touched
+    )
+
+  if (this.formAppoiments.valid) {
+    this.appoimentsServices.registerAppoiment(this.formAppoiments.value).subscribe({
+      next: (data) => {
+        console.log('✅ Cita registrada:', data);
+      },
+      error: (error) => {
+        console.error( error);
+      },
+      complete: () => {
+        this.formAppoiments.reset();
+      }
+    });
+  }
+
+
+  }
+    ngOnChanges() {
+    console.log( 'ngOnChanges' );
+  }
+  ngOnInit() {
+    this.appoimentsServices.getAppoiments().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.appoiments = data
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('complete');
+      }
+    })
+
+    this.dentistServices.getDentist().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.doctors = data
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('complete');
+      }
+    })
+  }
+  ngOnDestroy() {
+    console.log( 'ngOnDestroy' );
   }
 }
+
