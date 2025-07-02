@@ -1,1 +1,74 @@
 <p>login works!</p>
+
+<main class="main-container">
+    <section class="info-section">
+        <h1>DentisApp</h1>
+        <p>
+            Es la solución perfecta para modernizar tu consultorio odontológico: crea historias clínicas en segundos, agenda y organiza citas fácilmente, gestiona consentimientos informados y accede al historial de tus pacientes desde un solo lugar. Todo de forma rápida, segura y sin complicaciones. Simplifica tu práctica diaria y lleva la atención al siguiente nivel con la app pensada especialmente para odontólogos que buscan eficiencia y tranquilidad.
+        </p>
+    </section>
+
+    <!-- <section class="form-section">
+        <div class="tabs">
+            <button class="tab active">Doctor</button>
+            <button class="tab">Paciente</button>
+        </div>
+
+        <form class="login-form">
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" placeholder="Digite su correo" required />
+            <label for="contrasena">Contraseña</label>
+            <input type="password" id="contrasena" placeholder="Digite su contraseña" required />
+            <button type="submit">Iniciar sesión</button>
+            <a href="#" class="link">Recuperar contraseña</a>
+            <p class="without-account">¿No tienes una cuenta aún?</p>
+            <button class="register-btn" type="button">Registro</button>
+        </form> -->
+
+        <form class="form-login"  [formGroup]="formData" (ngSubmit)="onSubmit()"> 
+            <h2>LOGIN</h2>
+            <div class=" form-content">
+                <div class="field">     
+                    <label for="username">username</label>
+                    <input type="text" placeholder="correo@ejemplo.com" id="username" formControlName="userName">
+                </div>
+                <div class="error" >
+                    <!-- validar el estado del campo actual -->
+                    @if (formData.get('userName')?.invalid && (formData.get('userName')?.dirty || formData.get('userName')?.touched) ) {
+                        <!-- validar las reglas para el campo  -->
+                        @if (formData.get('userName')?.errors?.['required']) {
+                            <span>El correo es obligatorio</span>
+                        }
+                        @if (formData.get('userName')?.errors?.['email']) {
+                            <span>Por favor escriba un correo valido</span>
+                        }
+                    }
+                </div>
+
+                <div class="field">     
+                    <label for="">password *</label>
+                    <input type="password" placeholder="********" id="password" formControlName="password">
+                </div>
+                <div class="error">                   
+                    <!-- validar el estado del campo actual -->
+                    @if (formData.get('password')?.invalid && (formData.get('password')?.dirty || formData.get('password')?.touched) ) {
+                        <!-- validar las reglas para el campo  -->
+                        @if (formData.get('password')?.errors?.['required']) {
+                            <span>La contraseña es obligatoria</span>
+                        }
+                        @if (formData.get('password')?.errors?.['minlength']) {
+                            <span>Debe tener minimo 6 caracteres</span>
+                        }
+                        @if (formData.get('password')?.errors?.['maxlength']) {
+                            <span>Debe tener maximo 12 caracteres</span>
+                        }
+                    }
+                </div>
+
+                <div class="flied">
+                    <button type="submit" [disabled]="formData.invalid" >login</button>
+                </div>
+            </div>
+        </form>
+    <!-- </section> -->
+</main> 
