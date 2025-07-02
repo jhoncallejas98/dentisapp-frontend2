@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthServices } from '../../../services/auth-services';
 
 @Component({
   selector: 'app-login',
@@ -10,9 +11,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class Login {
   formData!: FormGroup;
 
-  constructor() {
+  constructor(private authServices: AuthServices) {
     this.formData = new FormGroup({
-      userName: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('',[Validators.required, Validators.minLength(6), Validators.maxLength(12)] )
     })
   }
@@ -20,6 +21,18 @@ export class Login {
   onSubmit(){
     if (this.formData.valid){
       console.log(this.formData.value);
+
+    this.authServices.loginUser(this.formData.value).subscribe({
+      next: (data) => {
+        console.log(data)
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        this.formData.reset();
+      }
+    });
     }
   }
 }

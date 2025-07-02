@@ -29,17 +29,17 @@
             <h2>LOGIN</h2>
             <div class=" form-content">
                 <div class="field">     
-                    <label for="username">username</label>
-                    <input type="text" placeholder="correo@ejemplo.com" id="username" formControlName="userName">
+                    <label for="email">email</label>
+                    <input type="text" placeholder="correo@ejemplo.com" id="email" formControlName="email">
                 </div>
                 <div class="error" >
                     <!-- validar el estado del campo actual -->
-                    @if (formData.get('userName')?.invalid && (formData.get('userName')?.dirty || formData.get('userName')?.touched) ) {
+                    @if (formData.get('email')?.invalid && (formData.get('email')?.dirty || formData.get('email')?.touched) ) {
                         <!-- validar las reglas para el campo  -->
-                        @if (formData.get('userName')?.errors?.['required']) {
+                        @if (formData.get('email')?.errors?.['required']) {
                             <span>El correo es obligatorio</span>
                         }
-                        @if (formData.get('userName')?.errors?.['email']) {
+                        @if (formData.get('email')?.errors?.['email']) {
                             <span>Por favor escriba un correo valido</span>
                         }
                     }
