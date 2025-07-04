@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServices } from '../../../services/auth-services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { AuthServices } from '../../../services/auth-services';
 export class Login {
   formData!: FormGroup;
 
-  constructor(private authServices: AuthServices) {
+  constructor(private authServices: AuthServices, private router: Router) {
     this.formData = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('',[Validators.required, Validators.minLength(6), Validators.maxLength(12)] )
@@ -23,8 +24,9 @@ export class Login {
       console.log(this.formData.value);
 
     this.authServices.loginUser(this.formData.value).subscribe({
-      next: (data) => {
-        console.log(data)
+      next: (data: any) => {
+        this.authServices.saveLocalStorage('token',data.token) // almacena el token en el local storage
+        this.router.navigateByUrl('dashboard')
       },
       error: (error) => {
         console.error(error);

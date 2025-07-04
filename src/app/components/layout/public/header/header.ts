@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthServices } from '../../../../services/auth-services';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +11,15 @@ import { RouterLink } from '@angular/router';
 export class Header {
   menuOpen = false;
 
+  constructor( private authServices: AuthServices, private router: Router) {
+
+  }
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+  }
+
+  logout(){
+    this.authServices.deleteLocalStorage('token')
+    this.router.navigateByUrl('home')
   }
 }

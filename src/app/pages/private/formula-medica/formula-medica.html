@@ -1,0 +1,87 @@
+<h1 class="form-title">FÓRMULA MÉDICA</h1>
+
+<form [formGroup]="formFormula" (ngSubmit)="onSubmit()">
+    <div>
+        <label>Cédula del paciente:</label>
+        <input type="text" formControlName="patient" />
+        <div class="error" *ngIf="formFormula.get('patient')?.touched && formFormula.get('patient')?.invalid">
+        Este campo es obligatorio.
+        </div>
+    </div>
+
+    <div>
+    <label>Odontólogo:</label>
+    <select formControlName="dentist">
+        <option value="">Seleccione...</option>
+        @for (doctor of dentist; track $index) {
+        <option [value]="doctor._id">{{ doctor.name }}</option>
+        }
+    </select>
+    <div class="error" *ngIf="formFormula.get('dentist')?.touched && formFormula.get('dentist')?.invalid">
+        Campo obligatorio.
+    </div>
+    </div>
+
+    <div>
+    <label>Cita relacionada:</label>
+    <select formControlName="appointment">
+        <option value="">Seleccione...</option>
+        @for (appt of appointments; track $index) {
+        <option [value]="appt._id">{{ appt.date | date:'shortDate' }} - {{ appt.timeBlock }}</option>
+        }
+    </select>
+    <div class="error" *ngIf="formFormula.get('appointment')?.touched && formFormula.get('appointment')?.invalid">
+        Campo obligatorio.
+    </div>
+    </div>
+
+
+    <div>
+        <label>Fecha:</label>
+        <input type="date" formControlName="fecha" />
+        <div class="error" *ngIf="formFormula.get('fecha')?.touched && formFormula.get('fecha')?.invalid">
+        Campo obligatorio.
+        </div>
+    </div>
+
+    <div>
+        <label>Medicamento:</label>
+        <input type="text" formControlName="medicamento" />
+        <div class="error" *ngIf="formFormula.get('medicamento')?.touched && formFormula.get('medicamento')?.invalid">
+        El medicamento es obligatorio (mínimo 2 caracteres).
+        </div>
+    </div>
+
+    <div>
+        <label>Dosis:</label>
+        <input type="text" formControlName="dosis" />
+        <div class="error" *ngIf="formFormula.get('dosis')?.touched && formFormula.get('dosis')?.invalid">
+        La dosis es obligatoria.
+        </div>
+    </div>
+
+    <div>
+        <label>Frecuencia:</label>
+        <input type="text" formControlName="frecuencia" />
+        <div class="error" *ngIf="formFormula.get('frecuencia')?.touched && formFormula.get('frecuencia')?.invalid">
+        La frecuencia es obligatoria.
+        </div>
+    </div>
+
+    <div>
+        <label>Duración (días):</label>
+        <input type="number" formControlName="duracionDias" />
+        <div class="error" *ngIf="formFormula.get('duracionDias')?.touched && formFormula.get('duracionDias')?.invalid">
+        Ingrese mínimo 1 día.
+        </div>
+    </div>
+
+    <div class="half-field">
+        <label>Instrucciones adicionales:</label>
+        <textarea formControlName="instrucciones"></textarea>
+    </div>
+
+    <div class="button-container">
+        <button type="submit">Agregar Fórmula Médica</button>
+    </div>
+</form>

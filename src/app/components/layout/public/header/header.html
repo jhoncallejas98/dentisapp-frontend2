@@ -1,27 +1,27 @@
 <header class="navbar">
-    <div class="logo">DentisApp</div>
-    <nav class="header-selection">
-        <a routerLink="/who-we-are"  class="quienes-somos-header">¿Quienes somos?</a>
-        <a routerLink="/plans" class="planes-header">Planes</a>
-        <a routerLink="/contact"  class="contacto-header">Contacto</a>
-        <a routerLink="/login"  class="iniciar-sesion-header">Iniciar sesión</a>
-        <li><la routerLink="admin/appoiments" class="iniciar-sesion-header">Appoiments</la></li>
-        <li><la routerLink="admin/appoiments/AppoimentsNewForms" class="iniciar-sesion-header">New Appoiments</la></li>
+  <div class="logo">DentisApp</div>
 
-    </nav>
+  <nav class="header-selection" [class.hide]="menuOpen">
+    <ul>
+      <li><a routerLink="/who-we-are" class="quienes-somos-header">¿Quiénes somos?</a></li>
+      <li><a routerLink="/plans" class="planes-header">Planes</a></li>
+      <li><a routerLink="/contact" class="contacto-header">Contacto</a></li>
+      <li><a routerLink="/login" class="iniciar-sesion-header">Iniciar sesión</a></li>
+      <li><a class="iniciar-sesion-header" (click)="logout()">Cerrar sesión</a></li>
+    </ul>
+  </nav>
 
-    <button class="hamburger" (click)="toggleMenu()">
-        <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M0 96C0 78.3..."></path>
-        </svg> -->
-    </button>
+  <button class="hamburger" (click)="toggleMenu()">
+    &#9776; <!-- ícono hamburguesa -->
+  </button>
 
-    <div class="menu" [class.active]="menuOpen">
-        <ul>
-        <li><a routerLink="/who-we-are" routerLinkActive="active">¿Quienes somos?</a></li>
-        <li><a routerLink="/plans" routerLinkActive="active">Planes</a></li>
-        <li><a routerLink="/contact" routerLinkActive="active">Contacto</a></li>
-        <li><a routerLink="/login" routerLinkActive="active">Iniciar sesión</a></li>
-        </ul>
-    </div>
+  <div class="menu" [class.active]="menuOpen">
+    <ul>
+      <li><a routerLink="/who-we-are" (click)="toggleMenu()">¿Quiénes somos?</a></li>
+      <li><a routerLink="/plans" (click)="toggleMenu()">Planes</a></li>
+      <li><a routerLink="/contact" (click)="toggleMenu()">Contacto</a></li>
+      <li><a routerLink="/login" (click)="toggleMenu()">Iniciar sesión</a></li>
+      <li><a (click)="logout(); toggleMenu()">Cerrar sesión</a></li>
+    </ul>
+  </div>
 </header>

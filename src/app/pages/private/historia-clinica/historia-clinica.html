@@ -1,0 +1,145 @@
+<h1 class="form-title">HISTORIA CLÍNICA</h1>
+<!-- 
+<form [formGroup]="formHistoria" (ngSubmit)="onSubmit()"> -->
+<form>
+    <!-- Datos personales -->
+    <div>
+        <label>Cédula del paciente:</label>
+        <input type="text" formControlName="documentId" />
+    </div>
+
+    <div>
+        <label>Fecha de nacimiento:</label>
+        <input type="date" formControlName="birthDate" />
+    </div>
+
+    <div>
+        <label>Edad:</label>
+        <input type="number" formControlName="age" readonly />
+    </div>
+
+    <div>
+        <label>Correo electrónico:</label>
+        <input type="email" formControlName="email" />
+    </div>
+
+    <div>
+        <label>Género:</label>
+        <select formControlName="gender">
+        <option value="">Seleccionar</option>
+        <option value="masculino">Masculino</option>
+        <option value="femenino">Femenino</option>
+        <option value="otro">Otro</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Grupo étnico:</label>
+        <input type="text" formControlName="ethnicGroup" />
+    </div>
+
+    <div>
+        <label>Tipo de sangre:</label>
+        <input type="text" formControlName="bloodType" />
+    </div>
+
+    <!-- COVID-19 -->
+    <div>
+        <label>¿Aislamiento por COVID en últimos 15 días?</label>
+        <select formControlName="covidIsolation">
+        <option value="">Seleccionar</option>
+        <option [value]="true">Sí</option>
+        <option [value]="false">No</option>
+        </select>
+    </div>
+
+    <!-- Motivo de consulta e historia de enfermedad -->
+    <div>
+        <label>Motivo de consulta:</label>
+        <textarea formControlName="consultReason"></textarea>
+    </div>
+
+    <div>
+        <label>Historia de la enfermedad:</label>
+        <textarea formControlName="diseaseHistory"></textarea>
+    </div>
+
+    <!-- Antecedentes -->
+    <div>
+        <label>Antecedentes personales:</label>
+        <textarea formControlName="personalHistory"></textarea>
+    </div>
+
+    <div>
+        <label>Antecedentes familiares:</label>
+        <textarea formControlName="familyHistory"></textarea>
+    </div>
+
+    <div>
+        <label>Medicación actual:</label>
+        <textarea formControlName="currentMeds"></textarea>
+    </div>
+
+    <!-- Higiene y Examenes -->
+    <div>
+        <label>Hábitos de higiene oral:</label>
+        <input type="text" formControlName="oralHygiene" />
+    </div>
+
+    <div>
+        <label>Examen intraoral:</label>
+        <textarea formControlName="intraoralExam"></textarea>
+    </div>
+
+    <div>
+        <label>Otros hallazgos clínicos:</label>
+        <textarea formControlName="otherFindings"></textarea>
+    </div>
+
+    <!-- Acompañante -->
+    <div>
+        <label>Nombre del acompañante:</label>
+        <input type="text" formControlName="companionName" />
+    </div>
+
+    <div>
+        <label>No. identificación del acompañante:</label>
+        <input type="text" formControlName="companionId" />
+    </div>
+
+    <div>
+        <label>Parentesco del acompañante:</label>
+        <input type="text" formControlName="companionRelation" />
+    </div>
+
+    <!-- Acudiente -->
+    <div>
+        <label>¿Es el acudiente o responsable?</label>
+        <select formControlName="isGuardian">
+        <option value="">Seleccionar</option>
+        <option [value]="true">Sí</option>
+        <option [value]="false">No</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Nombre del acudiente:</label>
+        <input type="text" formControlName="guardianName" />
+    </div>
+
+    <div>
+        <label>Identificación del acudiente:</label>
+        <input type="text" formControlName="guardianId" />
+    </div>
+
+    <div>
+        <label>Teléfono del acudiente:</label>
+        <input type="tel" formControlName="guardianPhone" />
+    </div>
+
+    <!-- Botón -->
+    <div class="button-container">
+        <button type="submit">Guardar Historia Clínica</button>
+    </div>
+
+</form>
