@@ -1,24 +1,60 @@
 :host {
-    display: block;
-    padding: 2rem;
+    display: flex;
+
     background-color: #f9f9f9;
     font-family: 'Inter', sans-serif;
 }
 
+/* Centra y separa el aside del contenido principal */
+.layout-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.5rem; /* Espacio entre aside y formulario */
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    padding: 2rem 0;
+    margin-top: -32px;
+}
+
+/* Aside bar fijo y estilizado */
+app-aside-bar {
+    min-width: 220px;
+    max-width: 260px;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem 1rem;
+    height: fit-content;
+}
+
+/* Contenido principal más ancho y centrado */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Título más atractivo */
 .form-title {
     text-align: center;
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: 2.5rem;
+    margin-bottom: 2.5rem;
     color: #000000;
     font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(126,76,182,0.08);
 }
 
 form {
     background: #ffffff;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    max-width: 700px;
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.13);
+    max-width: 900px;
+    min-width: 350px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -93,16 +129,26 @@ button:hover {
     min-height: 1rem;
 }
 
-@media (max-width: 600px) {
-    form {
-        padding: 1rem;
+/* Responsive */
+@media (max-width: 900px) {
+    .layout-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1.5rem;
     }
-
-.form-title {
-    font-size: 1.5rem;
-}
-
-button {
-    width: 100%;
-}
+    app-aside-bar {
+        max-width: 100%;
+        margin-bottom: 1.5rem;
+    }
+    .main-content {
+        align-items: stretch;
+    }
+    form {
+        min-width: unset;
+        max-width: 100%;
+        padding: 1.2rem;
+    }
+    .form-title {
+        font-size: 1.5rem;
+    }
 }

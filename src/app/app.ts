@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { Header } from "./components/layout/public/header/header";
-import { Footer } from "./components/layout/public/footer/footer";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Footer],
+  standalone: true,
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {
-  protected title = 'fonefo-kids-frontend';
+  protected title = 'dentisapp-frontend';
 }
+

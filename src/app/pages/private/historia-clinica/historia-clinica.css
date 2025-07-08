@@ -1,6 +1,6 @@
 :host {
-    display: block;
-    padding: 2rem;
+    display: flex;
+
     background-color: #f9f9f9;
     font-family: 'Inter', sans-serif;
 }
@@ -12,6 +12,17 @@
     color: #222;
     font-weight: bold;
 }
+/* Centra y separa el aside del contenido principal */
+.layout-container {
+    display: flex;
+    justify-content: center;
+    gap: 5rem; /* Espacio entre aside y formulario */
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    padding: 2rem 0;
+    margin-top: -32px;
+}
+
 
 form {
     background: #ffffff;
@@ -102,4 +113,8 @@ button[type="submit"]:hover {
     button[type="submit"] {
         width: 100%;
     }
+}
+
+.history {
+    flex-direction: column;
 }
