@@ -12,11 +12,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: 0.5rem; /* Espacio entre aside y formulario */
+    gap: 2.5rem; /* Espacio entre aside y formulario */
     min-height: 100vh;
-    background-color: #f9f9f9;
-    padding: 2rem 0;
-    margin-top: -32px;
 }
 .header {
     background-color: #f3e8e1;
