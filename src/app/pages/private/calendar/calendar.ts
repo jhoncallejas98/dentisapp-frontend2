@@ -21,7 +21,7 @@ interface Appointment {
   standalone: true,
   imports: [CommonModule, AsideBar],
   templateUrl: './calendar.html',
-  styleUrls: ['./calendar.css']
+  styleUrl: './calendar.css'
 })
 export class Calendar implements OnInit {
   currentDate = new Date();
@@ -200,11 +200,14 @@ export class Calendar implements OnInit {
   }
 
   getTimeSlots(): string[] {
-    return [
-      '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-      '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
-      '16:00', '16:30', '17:00', '17:30'
-    ];
+    const slots = [];
+    for (let hour = 8; hour <= 18; hour++) {
+      slots.push(`${hour.toString().padStart(2, '0')}:00`);
+      if (hour < 18) {
+        slots.push(`${hour.toString().padStart(2, '0')}:30`);
+      }
+    }
+    return slots;
   }
 
   isToday(date: Date): boolean {
@@ -212,7 +215,6 @@ export class Calendar implements OnInit {
     return date.toDateString() === today.toDateString();
   }
 
-  // Métodos para el resumen estadístico
   getConfirmedCount(): number {
     return this.appointments.filter(a => a.status === 'confirmed').length;
   }
@@ -230,6 +232,6 @@ export class Calendar implements OnInit {
   }
 
   showComingSoon() {
-    alert('Funcionalidad próximamente disponible');
+    alert("✨ Próximamente disponible");
   }
 } 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 
 interface Patient {
   id: number;
@@ -19,7 +20,7 @@ interface Patient {
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, AsideBar],
   templateUrl: './patients-list.html',
   styleUrl: './patients-list.css'
 })
