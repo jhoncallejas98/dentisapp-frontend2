@@ -1,102 +1,177 @@
+/* General layout */
+.layout-container {
+  display: flex;
+}
+
+/* ASIDE */
+.aside-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #e9dcd2;
+  width: 22%;
+  min-width: 250px;
+  padding: 1.5rem 1rem;
+  height: 100vh;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+.aside-bar h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  padding-left: 0.5rem;
+}
+
+.aside-bar h3 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.5rem 0.5rem;
+  color: #444;
+  font-weight: 600;
+}
+
+.aside-tiles {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  margin: 0.2rem 0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: black;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.aside-tiles:hover {
+  background-color: #d3c2b7;
+  transform: translateX(2px);
+}
+
+.aside-tiles.active {
+  background-color: #6d28d9;
+  color: white;
+}
+
+.aside-tiles.active .logos-aside path {
+  fill: white;
+}
+
+.logos-aside {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* FORMULARIO */
 #appointmentContainer {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 30px;
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    background-color: #f9f9f9;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  margin: 0 auto; /* Quitamos margen superior excesivo */
+  padding: 20px 30px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid #e5e7eb;
+  flex-grow: 1;
+  align-self: flex-start; /* Se alinea arriba */
+  margin-top: 30px; /* Un poco de espacio arriba nomás */
 }
 
 .form-title {
-    width: 100%;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #000;
-    font-size: 28px;
-    font-weight: bold;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
 }
 
 #appointmentForm {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
 }
 
 #appointmentForm > div {
-    flex: 1 1 200px;
-    display: flex;
-    flex-direction: column;
-}
-
-#appointmentForm > .wide-field {
-    flex: 1 1 45%;
-}
-
-.wide-field input {
-    width: 100%;
-    height: 6rem; 
-}
-.wide-field {
-    flex: 1 1 50%; 
-}
-
-.half-field {
-    flex: 1 1 45%; 
-    display: flex;
-    flex-direction: column;
-}
-
-.half-field textarea {
-    width: 100%;
-    height: 6rem; 
-    padding: 10px;
-    border: 1px solid #999;
-    border-radius: 6px;
-    resize: vertical; 
-}
-
-.fechas {
-    flex-direction: column;
+  flex: 1 1 240px;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-    margin-bottom: 5px;
-    color: #000;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
 }
 
-input, select {
-    padding: 10px;
-    border: 1px solid #999;
-    border-radius: 6px;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 14px;
-    color: #000;
-    background-color: #fff;
+input,
+select,
+textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  font-size: 13px;
+  color: #111;
+  transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #000000;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.2);
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
 }
 
 .button-container {
-    width: 100%; 
-    display: flex;
-    justify-content: center; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }
 
 button {
-    padding: 12px 25px;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 12px 24px;
+  background-color: #000000;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #333;
+  background-color: #7c6f66;
+}
+
+.half-field,
+.wide-field {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.fechas {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
 }

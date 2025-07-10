@@ -154,7 +154,8 @@ th, td {
 }
 
 .aside-tiles.active {
-    background-color: #007bff;
+    background-color: #a3a3a3;
+
     color: white;
 }
 

@@ -13,6 +13,8 @@ import { Contact } from './pages/public/contact/contact';
 import { HistoriaClinica } from './pages/private/historia-clinica/historia-clinica';
 import { PrivateLayout } from './components/layout/private/private-layout.component';
 import { PublicLayout } from './components/layout/public/public-layout.component';
+import { DashboardUsers } from './pages/private/dashboard-users/dashboard-users';
+import { FormulaUsers } from './pages/private/formula-users/formula-users';
 
 export const routes: Routes = [
     {
@@ -34,6 +36,10 @@ export const routes: Routes = [
         { path: "historia-clinica", component: HistoriaClinica, canActivate: [authGuard] },
         { path: 'formula-medica', component: FormulaMedica, canActivate: [authGuard] },
         { path: 'dashboard', component: Dashboard, canActivate: [authGuard] },
+        { path: 'dashboard-users', component: DashboardUsers, canActivate: [authGuard] },
+        { path: 'formula-users', component: FormulaUsers, canActivate: [authGuard] },
+        { path: 'disponibilidad', component: Odontologodisponible, canActivate: [authGuard] },
+
         { path: "admin/disponibilidad", component: Odontologodisponible, canActivate: [authGuard] },
         { path: "admin/appoiments", component: Appoiments, canActivate: [authGuard] },
         { path: "admin/appoiments/AppoimentsNewForms", component: AppoimentsNewForm, canActivate: [authGuard] }

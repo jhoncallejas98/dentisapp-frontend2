@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormulaMedicaServices } from '../../../services/formula-medica-services';
 import { DentistServices } from '../../../services/dentist-services';
 import { AppoimentsServices } from '../../../services/appoiments-services';
+import { AsideBar } from "../../../components/aside-bar-dentist/aside-bar";
 
 
 @Component({
   selector: 'app-formula-medica',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AsideBar],
   templateUrl: './formula-medica.html',
   styleUrl: './formula-medica.css'
 })

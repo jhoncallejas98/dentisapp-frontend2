@@ -1,0 +1,70 @@
+.aside-bar {
+  width: 260px;
+  min-height: 100vh;
+  background-color: #f3e8e1;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.aside-bar h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.aside-bar h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  color: #444;
+}
+
+.aside-tiles {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  gap: 1rem;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0.5rem;
+}
+
+.aside-tiles:hover {
+  background-color: #d9cfc7;
+  transform: translateX(3px);
+}
+
+.aside-tiles.active {
+  background-color: #a3a3a3;
+
+  color: white;
+}
+
+.aside-tiles.active p {
+  color: white;
+}
+
+.logos-aside {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.aside-tiles.active .logos-aside path {
+  fill: white;
+}
+
+.aside-tiles p {
+  margin: 0;
+  font-size: 1rem;
+  flex: 1;
+}

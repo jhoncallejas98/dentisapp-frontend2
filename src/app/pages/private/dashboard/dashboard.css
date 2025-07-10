@@ -1,20 +1,21 @@
 body {
-    font-size: 1.4rem;        
+    font-size: 1.4rem;
     font-family: "Inter", sans-serif;
-    width: 100%;
     margin: 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    background-color: #fafafa;
 }
+
 .layout-container {
     display: flex;
-    justify-content: center;
     align-items: flex-start;
-    gap: 2.5rem; /* Espacio entre aside y formulario */
+    gap: 0;
     min-height: 100vh;
 }
+
 .header {
     background-color: #f3e8e1;
     padding: 10px;
@@ -37,20 +38,6 @@ body {
     display: flex;
     align-items: center;
     gap: 2rem;
-}
-
-.menu {
-    display: flex;
-    list-style: none;
-    gap: 8rem;
-    margin: 0;
-    padding: 0;
-} 
-
-.menu-link {
-    color: black;
-    text-decoration: none;
-    font-weight: 500;
 }
 
 .search-bar {
@@ -93,49 +80,68 @@ body {
 .left-rigth {
     display: flex;
     gap: 4rem;
-    flex: 1 0 auto;
     width: 100%;
 }
 
+/* === ASIDE LATERAL IZQUIERDO === */
 .aside-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    background-color: #e9dcd2;
-    width: 25%;
-    min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: #e9dcd2;
+  width: 22%;
+  min-width: 250px;
+  padding: 2rem 1rem;
+  height: 100vh;
+  color: black;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  left: 0;
 }
 
 .aside-bar h2 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    text-align: justify;
-    margin-left: 1rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
 }
 
 .aside-bar h3 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    text-align: justify;
-    margin-left: 1rem;
-    margin-top: 3rem;
-    margin-bottom: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem 0.5rem;
 }
 
-.aside-bar p {
-    margin: 1rem;
-    align-self: center;
-    font-size: 1rem;
+/* === LINKS / TILES === */
+.aside-tiles {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 0.3rem 0.5rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+.aside-tiles:hover,
+.aside-tiles.active {
+  background-color: #6a5f57;
+  transform: translateX(2px);
+}
+
+/* === ICONOS SVG === */
+.logos-aside {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.6rem;
+}
 .configuration {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    background-color: transparent;
     padding: 1rem 0;
-    list-style: none;
-    align-items: center; 
+    align-items: center;
 }
 
 .configuration a {
@@ -145,53 +151,51 @@ body {
     color: white;
     text-decoration: none;
     border-radius: 20px;
-    border: 1px solid #ccc;
     font-size: 0.95rem;
     text-align: center;
+    width: 9.3rem;
+    max-width: 90%;
     transition: all 0.2s ease;
     font-weight: 500;
-    width: 9.3rem; 
-    max-width: 90%; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .configuration a:hover {
     background-color: gray;
-    color: white;
-    border-color: gray;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 main {
-    flex: 1 0 auto;
-    width: 70%; 
+    flex: 1;
+    width: 100%;
     box-sizing: border-box;
+    padding: 2rem 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
 }
 
 .table-patiente {
-    display: flex;
-    justify-self: center;
     width: 100%;
-    margin-left: 5rem;
+    display: flex;
+    justify-content: center;
 }
-table {
-    width: 100%; 
-    border-collapse: collapse;
-    margin: 2rem 0; 
-    background-color: #fff; 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px; 
-    overflow: hidden; 
-    min-width: 900px;
-    max-width: 100%;
-    justify-self: center;
 
+table {
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 900px;
 }
 
 th, td {
-    padding: 1.2rem; 
+    padding: 1.2rem;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0; 
+    border-bottom: 1px solid #e0e0e0;
     white-space: nowrap;
     font-size: 1rem;
 }
@@ -203,14 +207,16 @@ thead {
 tbody tr:hover {
     background-color: #f9f9f9;
 }
+
 footer {
-    flex-shrink: 0; 
+    flex-shrink: 0;
     background-color: black;
     padding: 3px;
     text-align: center;
     color: white;
     font-size: 0.8rem;
 }
+
 .perfil {
     width: 40px;
     height: 40px;
@@ -223,52 +229,39 @@ footer {
 }
 
 .logos-aside {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    align-self: center;
 }
+
 .aside-tiles {
     display: flex;
-    margin-left: 1rem;
+    align-items: center;
     text-decoration: none;
     color: black;
-    padding: 0rem;
+    padding: 0.4rem 1rem;
     border-radius: 8px;
+    margin: 0.3rem 1rem;
     transition: all 0.3s ease;
 }
 
 .aside-tiles:hover {
     background-color: #999999;
-    border-radius: 10px;
-    padding: 0.5rem;
-    transition: all 0.3s ease;
+    padding: 0.6rem 1rem;
 }
 
 .aside-tiles.active {
-    background-color: #007bff;
-    color: white;
-    border-radius: 8px;
-    padding: 0.5rem;
-}
+    background-color: #a3a3a3;
 
-.logos-aside {
-    width: 2rem;
-    height: 2rem;
-    align-self: center;
-    margin-right: 0.5rem;
+    color: white;
+    padding: 0.6rem 1rem;
 }
 
 .aside-tiles.active .logos-aside path {
     fill: white;
 }
 
-.background-table {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 1rem;
-    margin-top: 2rem;
-    margin-right: 2rem;
-    max-width: 60%;
-}
 .estado {
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -297,33 +290,33 @@ footer {
 }
 
 .atender-btn {
-    background-color: #007bff;
+    background-color: #a3a3a3;
+
     color: white;
     border: none;
-    padding: 0.6rem 1.2rem; 
-    border-radius: 20px; 
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     font-weight: 500;
     width: 7rem;
     height: 2.5rem;
 }
 
 .atender-btn:hover {
-    background-color: #0056b3; 
-    transform: translateY(-2px); 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .atender-btn i {
     font-size: 0.9rem;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
 .atender-btn:hover i {
-    transform: translateX(5px); 
+    transform: translateX(5px);
 }

@@ -3,10 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AppoimentsServices } from '../../../../services/appoiments-services';
 import { DentistServices } from '../../../../services/dentist-services';
 import { JsonPipe } from '@angular/common';
+import { AsideBar } from "../../../../components/aside-bar-dentist/aside-bar";
 
 @Component({
   selector: 'app-new-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, AsideBar],
   templateUrl: './new-form.html',
   styleUrl: './new-form.css'
 })
