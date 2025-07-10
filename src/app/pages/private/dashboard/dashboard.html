@@ -2,39 +2,28 @@
   <app-aside-bar></app-aside-bar>
 
   <div class="dashboard-container">
-    <!-- Header del dashboard -->
+    <!-- Header simple -->
     <div class="dashboard-header">
-      <div class="header-left">
+      <div class="header-content">
         <h2>Dashboard</h2>
-        <p class="subtitle">Resumen de tu día y estadísticas</p>
+        <p>Resumen de tu día</p>
       </div>
-      
-      <div class="header-right">
-        <button class="btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 3v18h18"></path>
-            <path d="m9 9 3 3 3-3"></path>
-            <path d="m12 12 3 3 3-3"></path>
-          </svg>
-          Exportar
-        </button>
-        <button class="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Nueva Cita
-        </button>
-      </div>
+      <button class="btn-primary" routerLink="/appoiments/new">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Nueva Cita
+      </button>
     </div>
 
-    <!-- Estadísticas rápidas -->
+    <!-- Estadísticas simples -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon confirmed">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22,4 12,14.01 9,11.01"></polyline>
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
           </svg>
         </div>
         <div class="stat-content">
@@ -44,8 +33,8 @@
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon pending">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12,6 12,12 16,14"></polyline>
           </svg>
@@ -57,8 +46,8 @@
       </div>
 
       <div class="stat-card">
-        <div class="stat-icon completed">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9 12l2 2 4-4"></path>
             <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"></path>
           </svg>
@@ -68,190 +57,26 @@
           <span class="stat-label">Completadas</span>
         </div>
       </div>
-
-      <div class="stat-card">
-        <div class="stat-icon patients">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="m23 21-2-2"></path>
-            <path d="m16 16 4 4 4-4"></path>
-          </svg>
-        </div>
-        <div class="stat-content">
-          <span class="stat-number">127</span>
-          <span class="stat-label">Total Pacientes</span>
-        </div>
-      </div>
     </div>
 
     <!-- Pacientes del día -->
     <div class="section-container">
       <div class="section-header">
         <h3>Pacientes del Día</h3>
-        <span class="date-badge">{{ today | date:'EEEE, dd MMMM yyyy' }}</span>
+        <span class="date">{{ today | date:'EEEE, dd MMMM' }}</span>
       </div>
 
-      <div class="table-container">
-        <table class="patients-table">
-          <thead>
-            <tr>
-              <th>Paciente</th>
-              <th>Documento</th>
-              <th>Hora Cita</th>
-              <th>Tratamiento</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="patient-row">
-              <td class="patient-info">
-                <div class="avatar">
-                  <span>LG</span>
-                </div>
-                <div class="patient-details">
-                  <strong>Laura Garzón</strong>
-                  <span class="patient-phone">+57 300 123 4567</span>
-                </div>
-              </td>
-              <td>1022465873</td>
-              <td>
-                <span class="time-badge">07:20</span>
-              </td>
-              <td>
-                <span class="treatment-badge limpieza">Limpieza</span>
-              </td>
-              <td>
-                <span class="status-badge confirmed">Asistió</span>
-              </td>
-              <td class="actions">
-                <button class="btn-icon" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
-                <button class="btn-icon primary" title="Atender">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
-                </button>
-              </td>
-            </tr>
-
-            <tr class="patient-row">
-              <td class="patient-info">
-                <div class="avatar">
-                  <span>VG</span>
-                </div>
-                <div class="patient-details">
-                  <strong>Valentina García</strong>
-                  <span class="patient-phone">+57 310 987 6543</span>
-                </div>
-              </td>
-              <td>98362792</td>
-              <td>
-                <span class="time-badge">10:30</span>
-              </td>
-              <td>
-                <span class="treatment-badge consulta">Consulta</span>
-              </td>
-              <td>
-                <span class="status-badge pending">Pendiente</span>
-              </td>
-              <td class="actions">
-                <button class="btn-icon" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
-                <button class="btn-icon primary" title="Atender">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
-                </button>
-              </td>
-            </tr>
-
-            <tr class="patient-row">
-              <td class="patient-info">
-                <div class="avatar">
-                  <span>AP</span>
-                </div>
-                <div class="patient-details">
-                  <strong>Andrés Pastrana</strong>
-                  <span class="patient-phone">+57 315 555 1234</span>
-                </div>
-              </td>
-              <td>29376252</td>
-              <td>
-                <span class="time-badge">14:00</span>
-              </td>
-              <td>
-                <span class="treatment-badge extraccion">Extracción</span>
-              </td>
-              <td>
-                <span class="status-badge cancelled">Cancelada</span>
-              </td>
-              <td class="actions">
-                <button class="btn-icon" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
-                <button class="btn-icon primary" title="Atender">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14"></path>
-                    <path d="m12 5 7 7-7 7"></path>
-                  </svg>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Próximas citas -->
-    <div class="section-container">
-      <div class="section-header">
-        <h3>Próximas Citas</h3>
-        <button class="btn-text">Ver todas</button>
-      </div>
-
-      <div class="upcoming-appointments">
-        <div class="appointment-card">
-          <div class="appointment-time">
-            <span class="time">15:30</span>
-            <span class="date">Hoy</span>
+      <div class="patients-list">
+        <div class="patient-item" *ngFor="let patient of todayPatients">
+          <div class="patient-info">
+            <div class="avatar">{{ patient.initials }}</div>
+            <div class="patient-details">
+              <h4>{{ patient.name }}</h4>
+              <span>{{ patient.time }}</span>
+            </div>
           </div>
-          <div class="appointment-info">
-            <h4>María González</h4>
-            <p>Ortodoncia - Ajuste de brackets</p>
-            <span class="duration">45 min</span>
-          </div>
-          <div class="appointment-status">
-            <span class="status-badge confirmed">Confirmada</span>
-          </div>
-        </div>
-
-        <div class="appointment-card">
-          <div class="appointment-time">
-            <span class="time">09:00</span>
-            <span class="date">Mañana</span>
-          </div>
-          <div class="appointment-info">
-            <h4>Carlos Rodríguez</h4>
-            <p>Limpieza dental</p>
-            <span class="duration">60 min</span>
-          </div>
-          <div class="appointment-status">
-            <span class="status-badge pending">Pendiente</span>
+          <div class="patient-status">
+            <span class="status-badge" [class]="patient.status">{{ patient.statusText }}</span>
           </div>
         </div>
       </div>

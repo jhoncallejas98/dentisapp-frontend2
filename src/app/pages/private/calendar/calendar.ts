@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 
 interface Appointment {
   id: number;
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
   date: string;
   time: string;
-  duration: number; // en minutos
-  type: string;
-  status: 'confirmed' | 'pending' | 'cancelled' | 'completed';
-  notes?: string;
+  patientName: string;
+  treatment: string;
+  status: string;
+}
+
+interface WeekDay {
+  name: string;
+  date: string;
 }
 
 @Component({
@@ -23,215 +23,92 @@ interface Appointment {
   templateUrl: './calendar.html',
   styleUrl: './calendar.css'
 })
-export class Calendar implements OnInit {
-  currentDate = new Date();
-  selectedDate = new Date();
-  appointments: Appointment[] = [];
-  viewMode: 'week' | 'month' | 'day' = 'week';
+export class CalendarComponent {
+  currentWeek = 0;
+  timeSlots = ['08:00', '09:00', '10:00', '11:00', '14:00', '15:00', '16:00', '17:00'];
   
-  // Datos de ejemplo
-  sampleAppointments: Appointment[] = [
+  weekDays: WeekDay[] = [
+    { name: 'Lun', date: '15' },
+    { name: 'Mar', date: '16' },
+    { name: 'Mié', date: '17' },
+    { name: 'Jue', date: '18' },
+    { name: 'Vie', date: '19' },
+    { name: 'Sáb', date: '20' },
+    { name: 'Dom', date: '21' }
+  ];
+
+  appointments: Appointment[] = [
     {
       id: 1,
-      patientName: 'María González',
-      patientEmail: 'maria.gonzalez@email.com',
-      patientPhone: '300-123-4567',
-      date: '2024-01-15',
+      date: '15',
       time: '09:00',
-      duration: 60,
-      type: 'Limpieza',
-      status: 'confirmed',
-      notes: 'Primera visita'
+      patientName: 'María González',
+      treatment: 'Ortodoncia',
+      status: 'confirmed'
     },
     {
       id: 2,
+      date: '15',
+      time: '14:00',
       patientName: 'Carlos Rodríguez',
-      patientEmail: 'carlos.rodriguez@email.com',
-      patientPhone: '310-987-6543',
-      date: '2024-01-15',
-      time: '10:30',
-      duration: 90,
-      type: 'Extracción',
-      status: 'confirmed',
-      notes: 'Extracción molar'
+      treatment: 'Limpieza',
+      status: 'pending'
     },
     {
       id: 3,
-      patientName: 'Ana Martínez',
-      patientEmail: 'ana.martinez@email.com',
-      patientPhone: '315-555-1234',
-      date: '2024-01-16',
-      time: '14:00',
-      duration: 45,
-      type: 'Consulta',
-      status: 'pending',
-      notes: 'Revisión post-tratamiento'
+      date: '16',
+      time: '10:00',
+      patientName: 'Ana Pérez',
+      treatment: 'Consulta',
+      status: 'confirmed'
     },
     {
       id: 4,
-      patientName: 'Luis Pérez',
-      patientEmail: 'luis.perez@email.com',
-      patientPhone: '320-111-2222',
-      date: '2024-01-17',
+      date: '17',
+      time: '15:00',
+      patientName: 'Laura Garzón',
+      treatment: 'Extracción',
+      status: 'cancelled'
+    },
+    {
+      id: 5,
+      date: '18',
       time: '11:00',
-      duration: 60,
-      type: 'Ortodoncia',
-      status: 'confirmed',
-      notes: 'Ajuste de brackets'
+      patientName: 'Valentina García',
+      treatment: 'Ortodoncia',
+      status: 'completed'
     }
   ];
 
-  constructor(public router: Router) {}
-
-  ngOnInit() {
-    this.loadAppointments();
+  get currentWeekText(): string {
+    return '15 - 21 Enero 2024';
   }
 
-  loadAppointments() {
-    // Aquí irá la lógica para cargar citas desde el backend
-    this.appointments = this.sampleAppointments;
-  }
-
-  getWeekDays(): Date[] {
-    const days: Date[] = [];
-    const startOfWeek = new Date(this.selectedDate);
-    startOfWeek.setDate(this.selectedDate.getDate() - this.selectedDate.getDay());
-    
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(startOfWeek);
-      day.setDate(startOfWeek.getDate() + i);
-      days.push(day);
-    }
-    
-    return days;
-  }
-
-  getAppointmentsForDate(date: Date): Appointment[] {
-    const dateStr = this.formatDate(date);
-    return this.appointments.filter(appointment => appointment.date === dateStr);
-  }
-
-  getAppointmentsForTimeSlot(date: Date, time: string): Appointment[] {
-    const dateStr = this.formatDate(date);
+  getAppointmentsForDayAndTime(date: string, time: string): Appointment[] {
     return this.appointments.filter(appointment => 
-      appointment.date === dateStr && appointment.time === time
+      appointment.date === date && appointment.time === time
     );
   }
 
-  formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
+  getTotalAppointments(): number {
+    return this.appointments.length;
   }
 
-  formatTime(time: string): string {
-    return time.substring(0, 5);
-  }
-
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'confirmed': return 'status-confirmed';
-      case 'pending': return 'status-pending';
-      case 'cancelled': return 'status-cancelled';
-      case 'completed': return 'status-completed';
-      default: return '';
-    }
-  }
-
-  getStatusText(status: string): string {
-    switch (status) {
-      case 'confirmed': return 'Confirmada';
-      case 'pending': return 'Pendiente';
-      case 'cancelled': return 'Cancelada';
-      case 'completed': return 'Completada';
-      default: return status;
-    }
-  }
-
-  getTypeColor(type: string): string {
-    switch (type.toLowerCase()) {
-      case 'limpieza': return '#4CAF50';
-      case 'extracción': return '#FF5722';
-      case 'consulta': return '#2196F3';
-      case 'ortodoncia': return '#9C27B0';
-      case 'endodoncia': return '#FF9800';
-      default: return '#607D8B';
-    }
-  }
-
-  previousWeek() {
-    this.selectedDate.setDate(this.selectedDate.getDate() - 7);
-    this.selectedDate = new Date(this.selectedDate);
-  }
-
-  nextWeek() {
-    this.selectedDate.setDate(this.selectedDate.getDate() + 7);
-    this.selectedDate = new Date(this.selectedDate);
-  }
-
-  goToToday() {
-    this.selectedDate = new Date();
-  }
-
-  selectDate(date: Date) {
-    this.selectedDate = new Date(date);
-  }
-
-  viewAppointment(appointment: Appointment) {
-    // Aquí irá la lógica para ver detalles de la cita
-    console.log('Ver cita:', appointment);
-    this.router.navigate(['/admin/appointments/view', appointment.id]);
-  }
-
-  editAppointment(appointment: Appointment) {
-    // Aquí irá la lógica para editar la cita
-    console.log('Editar cita:', appointment);
-    this.router.navigate(['/admin/appointments/edit', appointment.id]);
-  }
-
-  cancelAppointment(appointment: Appointment) {
-    if (confirm(`¿Estás seguro de que quieres cancelar la cita con ${appointment.patientName}?`)) {
-      // Aquí irá la lógica para cancelar la cita
-      console.log('Cancelar cita:', appointment.id);
-      appointment.status = 'cancelled';
-    }
-  }
-
-  addNewAppointment() {
-    this.router.navigate(['/admin/appoiments/AppoimentsNewForms']);
-  }
-
-  getTimeSlots(): string[] {
-    const slots = [];
-    for (let hour = 8; hour <= 18; hour++) {
-      slots.push(`${hour.toString().padStart(2, '0')}:00`);
-      if (hour < 18) {
-        slots.push(`${hour.toString().padStart(2, '0')}:30`);
-      }
-    }
-    return slots;
-  }
-
-  isToday(date: Date): boolean {
-    const today = new Date();
-    return date.toDateString() === today.toDateString();
-  }
-
-  getConfirmedCount(): number {
+  getConfirmedAppointments(): number {
     return this.appointments.filter(a => a.status === 'confirmed').length;
   }
 
-  getPendingCount(): number {
+  getPendingAppointments(): number {
     return this.appointments.filter(a => a.status === 'pending').length;
   }
 
-  getCompletedCount(): number {
-    return this.appointments.filter(a => a.status === 'completed').length;
+  previousWeek(): void {
+    this.currentWeek--;
+    // Aquí actualizarías las fechas de la semana
   }
 
-  getCancelledCount(): number {
-    return this.appointments.filter(a => a.status === 'cancelled').length;
-  }
-
-  showComingSoon() {
-    alert("✨ Próximamente disponible");
+  nextWeek(): void {
+    this.currentWeek++;
+    // Aquí actualizarías las fechas de la semana
   }
 } 
