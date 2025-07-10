@@ -15,6 +15,11 @@ import { PrivateLayout } from './components/layout/private/private-layout.compon
 import { PublicLayout } from './components/layout/public/public-layout.component';
 import { DashboardUsers } from './pages/private/dashboard-users/dashboard-users';
 import { FormulaUsers } from './pages/private/formula-users/formula-users';
+import { AddPatient } from './pages/private/add-patient/add-patient';
+import { PatientsList } from './pages/private/patients-list/patients-list';
+import { EditAvailability } from './pages/private/edit-availability/edit-availability';
+import { AvailabilityList } from './pages/private/availability-list/availability-list';
+import { Calendar } from './pages/private/calendar/calendar';
 
 export const routes: Routes = [
     {
@@ -42,7 +47,14 @@ export const routes: Routes = [
 
         { path: "admin/disponibilidad", component: Odontologodisponible, canActivate: [authGuard] },
         { path: "admin/appoiments", component: Appoiments, canActivate: [authGuard] },
-        { path: "admin/appoiments/AppoimentsNewForms", component: AppoimentsNewForm, canActivate: [authGuard] }
+        { path: "admin/appoiments/AppoimentsNewForms", component: AppoimentsNewForm, canActivate: [authGuard] },
+        { path: "admin/patients", component: PatientsList, canActivate: [authGuard] },
+        { path: "admin/patients/add", component: AddPatient, canActivate: [authGuard] },
+        { path: "admin/patients/edit/:id", component: AddPatient, canActivate: [authGuard] },
+        { path: "admin/patients/view/:id", component: AddPatient, canActivate: [authGuard] },
+        { path: "admin/availability/edit/:id", component: EditAvailability, canActivate: [authGuard] },
+        { path: "admin/availability", component: AvailabilityList, canActivate: [authGuard] },
+        { path: "admin/calendar", component: Calendar, canActivate: [authGuard] }
         ]
     },
     { path: "**", redirectTo: "home", pathMatch: "full" }

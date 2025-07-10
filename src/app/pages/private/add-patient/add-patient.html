@@ -1,0 +1,142 @@
+<div class="layout-container">
+  <app-aside-bar></app-aside-bar>
+
+  <form class="patient-form" (ngSubmit)="onSubmit()">
+    <h2>Registrar Nuevo Paciente</h2>
+
+    <!-- Información Personal -->
+    <div class="form-section">
+      <h3>Información Personal</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input type="text" id="nombre" name="nombre" [(ngModel)]="patient.nombre" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="apellido">Apellido *</label>
+          <input type="text" id="apellido" name="apellido" [(ngModel)]="patient.apellido" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" [(ngModel)]="patient.email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="telefono">Teléfono *</label>
+          <input type="tel" id="telefono" name="telefono" [(ngModel)]="patient.telefono" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fechaNacimiento">Fecha de Nacimiento *</label>
+          <input type="date" id="fechaNacimiento" name="fechaNacimiento" [(ngModel)]="patient.fechaNacimiento" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="genero">Género</label>
+          <select id="genero" name="genero" [(ngModel)]="patient.genero">
+            <option value="">Seleccionar</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input type="text" id="direccion" name="direccion" [(ngModel)]="patient.direccion">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tipoDocumento">Tipo de Documento</label>
+          <select id="tipoDocumento" name="tipoDocumento" [(ngModel)]="patient.tipoDocumento">
+            <option value="">Seleccionar</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="CE">Cédula de Extranjería</option>
+            <option value="TI">Tarjeta de Identidad</option>
+            <option value="PP">Pasaporte</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="documento">Número de Documento</label>
+          <input type="text" id="documento" name="documento" [(ngModel)]="patient.documento">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ocupacion">Ocupación</label>
+          <input type="text" id="ocupacion" name="ocupacion" [(ngModel)]="patient.ocupacion">
+        </div>
+        
+        <div class="form-group">
+          <label for="estadoCivil">Estado Civil</label>
+          <select id="estadoCivil" name="estadoCivil" [(ngModel)]="patient.estadoCivil">
+            <option value="">Seleccionar</option>
+            <option value="Soltero">Soltero</option>
+            <option value="Casado">Casado</option>
+            <option value="Divorciado">Divorciado</option>
+            <option value="Viudo">Viudo</option>
+            <option value="Unión Libre">Unión Libre</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contacto de Emergencia -->
+    <div class="form-section">
+      <h3>Contacto de Emergencia</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="nombreContacto">Nombre del Contacto</label>
+          <input type="text" id="nombreContacto" name="nombreContacto" [(ngModel)]="patient.nombreContacto">
+        </div>
+        
+        <div class="form-group">
+          <label for="telefonoContacto">Teléfono del Contacto</label>
+          <input type="tel" id="telefonoContacto" name="telefonoContacto" [(ngModel)]="patient.telefonoContacto">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="parentescoContacto">Parentesco</label>
+        <input type="text" id="parentescoContacto" name="parentescoContacto" [(ngModel)]="patient.parentescoContacto">
+      </div>
+    </div>
+
+    <!-- Información Médica -->
+    <div class="form-section">
+      <h3>Información Médica</h3>
+      
+      <div class="form-group">
+        <label for="alergias">Alergias</label>
+        <textarea id="alergias" name="alergias" [(ngModel)]="patient.alergias" rows="3" placeholder="Especificar alergias conocidas..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="medicamentos">Medicamentos Actuales</label>
+        <textarea id="medicamentos" name="medicamentos" [(ngModel)]="patient.medicamentos" rows="3" placeholder="Listar medicamentos que toma actualmente..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="antecedentes">Antecedentes Médicos</label>
+        <textarea id="antecedentes" name="antecedentes" [(ngModel)]="patient.antecedentes" rows="3" placeholder="Enfermedades previas, cirugías, etc..."></textarea>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="router.navigate(['/admin/patients'])">Cancelar</button>
+      <button type="submit" class="btn-primary">Registrar Paciente</button>
+    </div>
+  </form>
+</div> 

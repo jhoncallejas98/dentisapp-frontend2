@@ -1,0 +1,151 @@
+<div class="layout-container">
+  <app-aside-bar></app-aside-bar>
+
+  <div class="calendar-container">
+    <!-- Header del calendario -->
+    <div class="calendar-header">
+      <div class="header-left">
+        <h2>Agenda de Citas</h2>
+        <div class="date-navigation">
+          <button class="btn-nav" (click)="previousWeek()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15,18 9,12 15,6"></polyline>
+            </svg>
+          </button>
+          <span class="current-period">
+            {{ getWeekDays()[0] | date:'dd MMM' }} - {{ getWeekDays()[6] | date:'dd MMM yyyy' }}
+          </span>
+          <button class="btn-nav" (click)="nextWeek()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9,18 15,12 9,6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <button class="btn-secondary" (click)="goToToday()">Hoy</button>
+        <button class="btn-primary" (click)="addNewAppointment()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Nueva Cita
+        </button>
+      </div>
+    </div>
+
+    <!-- Calendario semanal -->
+    <div class="calendar-grid">
+      <!-- Header de días -->
+      <div class="calendar-header-row">
+        <div class="time-column-header"></div>
+        <div 
+          *ngFor="let day of getWeekDays()" 
+          class="day-header"
+          [class.today]="isToday(day)"
+        >
+          <div class="day-name">{{ day | date:'EEE' }}</div>
+          <div class="day-number">{{ day | date:'dd' }}</div>
+          <div class="appointment-count" *ngIf="getAppointmentsForDate(day).length > 0">
+            {{ getAppointmentsForDate(day).length }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Filas de tiempo -->
+      <div class="calendar-body">
+        <div *ngFor="let timeSlot of getTimeSlots()" class="time-row">
+          <!-- Columna de tiempo -->
+          <div class="time-column">
+            <span class="time-label">{{ formatTime(timeSlot) }}</span>
+          </div>
+
+          <!-- Celdas de cada día -->
+          <div 
+            *ngFor="let day of getWeekDays()" 
+            class="day-cell"
+            [class.today]="isToday(day)"
+          >
+            <div 
+              *ngFor="let appointment of getAppointmentsForTimeSlot(day, timeSlot)"
+              class="appointment-card"
+              [style.background-color]="getTypeColor(appointment.type)"
+              (click)="viewAppointment(appointment)"
+            >
+              <div class="appointment-header">
+                <span class="appointment-time">{{ formatTime(appointment.time) }}</span>
+                <span class="appointment-status" [class]="getStatusClass(appointment.status)">
+                  {{ getStatusText(appointment.status) }}
+                </span>
+              </div>
+              <div class="appointment-content">
+                <div class="patient-name">{{ appointment.patientName }}</div>
+                <div class="appointment-type">{{ appointment.type }}</div>
+                <div class="appointment-duration">{{ appointment.duration }} min</div>
+              </div>
+              <div class="appointment-actions">
+                <button 
+                  class="btn-icon-small"
+                  (click)="editAppointment(appointment); $event.stopPropagation()"
+                  title="Editar"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button 
+                  class="btn-icon-small delete"
+                  (click)="cancelAppointment(appointment); $event.stopPropagation()"
+                  title="Cancelar"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado vacío -->
+    <div *ngIf="appointments.length === 0" class="empty-state">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <h3>No hay citas programadas</h3>
+      <p>Comienza creando tu primera cita para ver tu agenda.</p>
+      <button class="btn-primary" (click)="addNewAppointment()">Crear Primera Cita</button>
+    </div>
+
+    <!-- Resumen de la semana -->
+    <div class="week-summary" *ngIf="appointments.length > 0">
+      <h3>Resumen de la Semana</h3>
+      <div class="summary-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ getConfirmedCount() }}</span>
+          <span class="stat-label">Confirmadas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getPendingCount() }}</span>
+          <span class="stat-label">Pendientes</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getCompletedCount() }}</span>
+          <span class="stat-label">Completadas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getCancelledCount() }}</span>
+          <span class="stat-label">Canceladas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { AsideBar } from "../../../components/aside-bar-dentist/aside-bar";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [AsideBar],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
-export class Dashboard {
-
+export class DashboardComponent {
+  today = new Date();
 }

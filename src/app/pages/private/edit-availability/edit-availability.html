@@ -1,0 +1,80 @@
+<div class="layout-container">
+  <app-aside-bar></app-aside-bar>
+
+  <form class="availability-form" (ngSubmit)="onSubmit()">
+    <h2>Editar Disponibilidad</h2>
+
+    <!-- Día de la semana -->
+    <label for="diaSemana">Día de la semana</label>
+    <select name="diaSemana" id="diaSemana" [(ngModel)]="availability.diaSemana" required>
+      <option value="">Selecciona un día</option>
+      <option value="Lunes">Lunes</option>
+      <option value="Martes">Martes</option>
+      <option value="Miércoles">Miércoles</option>
+      <option value="Jueves">Jueves</option>
+      <option value="Viernes">Viernes</option>
+      <option value="Sábado">Sábado</option>
+      <option value="Por Asignar">Por Asignar</option>
+    </select>
+
+    <!-- Horario -->
+    <div class="time-range">
+      <div class="time-input">
+        <label for="horaInicio">Hora de inicio</label>
+        <input 
+          type="time" 
+          name="horaInicio" 
+          id="horaInicio" 
+          [(ngModel)]="availability.horaInicio" 
+          (change)="onTimeRangeChange()"
+          required 
+        />
+      </div>
+      
+      <div class="time-input">
+        <label for="horaFin">Hora de fin</label>
+        <input 
+          type="time" 
+          name="horaFin" 
+          id="horaFin" 
+          [(ngModel)]="availability.horaFin" 
+          (change)="onTimeRangeChange()"
+          required 
+        />
+      </div>
+    </div>
+
+    <!-- Bloques disponibles -->
+    <div class="time-slots-section">
+      <label>Bloques disponibles</label>
+      <div class="time-slots-grid">
+        <button 
+          type="button"
+          *ngFor="let slot of allTimeSlots" 
+          class="time-slot"
+          [class.selected]="isTimeSlotSelected(slot)"
+          [class.available]="isTimeSlotInRange(slot)"
+          (click)="toggleTimeSlot(slot)"
+          [disabled]="!isTimeSlotInRange(slot)"
+        >
+          {{ slot }}
+        </button>
+      </div>
+      <p class="help-text">
+        Selecciona los bloques de tiempo que estarán disponibles para citas.
+        Los bloques fuera del rango de tiempo no están disponibles.
+      </p>
+    </div>
+
+    <!-- Activo -->
+    <label for="activo" class="checkbox-label">
+      <input type="checkbox" name="activo" id="activo" [(ngModel)]="availability.activo" />
+      ¿Disponible?
+    </label>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="btn-primary">Actualizar Disponibilidad</button>
+    </div>
+  </form>
+</div> 
