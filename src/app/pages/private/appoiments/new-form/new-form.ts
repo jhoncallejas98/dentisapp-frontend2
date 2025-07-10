@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AppoimentsServices } from '../../../../services/appoiments-services';
 import { DentistServices } from '../../../../services/dentist-services';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AsideBar } from "../../../../components/aside-bar-dentist/aside-bar";
 
 @Component({
   selector: 'app-new-form',
-  imports: [ReactiveFormsModule, AsideBar],
+  standalone: true,
+  imports: [ReactiveFormsModule, AsideBar, CommonModule, RouterModule],
   templateUrl: './new-form.html',
   styleUrl: './new-form.css'
 })
