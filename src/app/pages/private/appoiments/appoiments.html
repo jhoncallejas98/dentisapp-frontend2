@@ -41,10 +41,12 @@
         
         <div class="appointment-status">
           <span class="status-badge" [ngClass]="{
-            'badge-yellow': appointment.status === 'pendiente',
-            'badge-green': appointment.status === 'confirmada',
-            'badge-red': appointment.status === 'cancelada'
-          }">{{ appointment.status }}</span>
+            'badge-yellow': appointment.status === 'pendiente' || appointment.status === 'pending',
+            'badge-green': appointment.status === 'confirmada' || appointment.status === 'confirmed' || appointment.status === 'attended' || appointment.status === 'completed',
+            'badge-red': appointment.status === 'cancelada' || appointment.status === 'cancelled'
+          }">
+            {{ translateStatus(appointment.status) }}
+          </span>
         </div>
         
         <div class="appointment-actions">

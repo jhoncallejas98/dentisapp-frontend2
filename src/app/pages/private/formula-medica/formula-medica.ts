@@ -5,6 +5,7 @@ import { FormulaMedicaServices } from '../../../services/formula-medica-services
 import { DentistServices } from '../../../services/dentist-services';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { AsideBar } from "../../../components/aside-bar-dentist/aside-bar";
+import { AuthServices } from '../../../services/auth-services';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class FormulaMedica implements OnInit {
   constructor(
     private formulaService: FormulaMedicaServices,
     private dentistService: DentistServices,
-    private appoimentService: AppoimentsServices
+    private appoimentService: AppoimentsServices,
+    private authServices: AuthServices
   ) {
     this.formFormula = new FormGroup({
       patient: new FormControl('', [Validators.required]),
@@ -52,10 +54,29 @@ export class FormulaMedica implements OnInit {
       }
     });
 
+    // Obtener la cédula del doctor actual
+    const currentUser = this.authServices.getCurrentUser();
+    const doctorCedula = currentUser?.cedula;
+    
+    if (!doctorCedula) {
+      console.error('No se pudo obtener la cédula del doctor actual');
+      return;
+    }
+
     this.appoimentService.getAppoiments().subscribe({
       next: (data) => {
         console.log(data);
-        this.appointments = Array.isArray(data) ? data : [];
+        const allAppointments = Array.isArray(data) ? data : [];
+        
+        // Filtrar citas por el doctor actual
+        this.appointments = allAppointments.filter((appointment: any) => {
+          const appointmentDoctorCedula = appointment.dentist?.cedula || 
+                                         appointment.cedulaDentista || 
+                                         appointment.dentistId;
+          return appointmentDoctorCedula === doctorCedula;
+        });
+        
+        console.log('Citas filtradas por doctor:', this.appointments);
       },
       error: (error) => {
         console.error('Error al cargar citas:', error);

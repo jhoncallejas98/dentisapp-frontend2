@@ -18,6 +18,7 @@ export class Register {
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.registerForm = this.fb.group({
+      title: ['', Validators.required],
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(7)]],
@@ -30,9 +31,14 @@ export class Register {
     this.errorMessage = '';
     this.successMessage = '';
     if (this.registerForm.invalid) return;
+    
     const formValue = this.registerForm.value;
+    
+    // Combinar título y nombre
+    const fullName = `${formValue.title} ${formValue.name}`.trim();
+    
     const userData = {
-      name: formValue.name,
+      name: fullName,
       email: formValue.email,
       password: formValue.password,
       cedula: formValue.cedula,
@@ -41,6 +47,7 @@ export class Register {
         specialty: formValue.specialty
       }
     };
+    
     this.http.post('http://localhost:3000/api/users', userData).subscribe({
       next: (res: any) => {
         this.successMessage = 'Odontólogo registrado exitosamente.';

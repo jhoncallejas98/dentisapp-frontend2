@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { DentistServices } from '../../../services/dentist-services';
 import { AvailabilityServices } from '../../../services/availability-services';
+import { AuthServices } from '../../../services/auth-services';
 
 @Component({
   selector: 'app-edit-availability',
@@ -39,13 +40,22 @@ export class EditAvailability implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private dentistServices: DentistServices,
-    private availabilityServices: AvailabilityServices
+    private availabilityServices: AvailabilityServices,
+    private authServices: AuthServices
   ) {}
 
   ngOnInit() {
-    // Obtener el ID del usuario logueado (doctor)
-    const userId = localStorage.getItem('userId');
-    this.availability.dentist = userId || '';
+    // Obtener el ID del doctor actual desde el token
+    const currentUser = this.authServices.getCurrentUser();
+    const dentistId = currentUser?._id; // Este es el ObjectId de MongoDB
+    
+    if (!dentistId) {
+      console.error('No se pudo obtener el ID del doctor actual');
+      this.errorMessage = 'Error al obtener información del usuario';
+      return;
+    }
+    
+    this.availability.dentist = dentistId;
     const availabilityId = this.route.snapshot.params['id'];
     if (availabilityId) {
       this.loadAvailability(availabilityId);
@@ -108,34 +118,51 @@ export class EditAvailability implements OnInit {
   onSubmit() {
     this.successMessage = '';
     this.errorMessage = '';
+    
     // Validación extra para horaFin
     if (!this.availability.horaFin) {
       this.errorMessage = 'Debes seleccionar la hora de fin.';
       return;
     }
+    
+    // Obtener el ID del doctor actual desde el token
+    const currentUser = this.authServices.getCurrentUser();
+    const dentistId = currentUser?._id;
+    
+    if (!dentistId) {
+      this.errorMessage = 'Error: No se pudo obtener el ID del doctor.';
+      return;
+    }
+    
     // Guardar la disponibilidad en el backend
     const payload = {
-      dentist: this.availability.dentist,
+      dentist: dentistId, // Usar el ObjectId del token
       diaSemana: this.availability.diaSemana,
       horaInicio: this.availability.horaInicio,
       horaFin: this.availability.horaFin,
       bloquesDisponibles: this.availability.bloquesDisponibles,
       activo: this.availability.activo
     };
+    
     console.log('Payload enviado:', payload);
+    console.log('Dentist ID (ObjectId):', dentistId);
+    
     if (!payload.horaFin) {
       this.errorMessage = 'El campo horaFin no está definido. Revisa el formulario.';
       return;
     }
-    (this.availabilityServices as any).createOrUpdateAvailability(payload).subscribe({
-      next: () => {
+    
+    this.availabilityServices.createOrUpdateAvailability(payload).subscribe({
+      next: (response) => {
+        console.log('Respuesta exitosa:', response);
         this.successMessage = 'Disponibilidad guardada correctamente.';
         setTimeout(() => {
           this.router.navigate(['/admin/availability']);
         }, 1200);
       },
       error: (err: any) => {
-        this.errorMessage = 'Error guardando disponibilidad: ' + (err?.error?.msg || err.message);
+        console.error('Error completo:', err);
+        this.errorMessage = 'Error guardando disponibilidad: ' + (err?.error?.msg || err.message || 'Error desconocido');
       }
     });
   }

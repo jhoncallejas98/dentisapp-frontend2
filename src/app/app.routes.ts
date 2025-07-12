@@ -5,9 +5,10 @@ import { Register } from './pages/public/register/register';
 import { Odontologodisponible } from './pages/private/odontologodisponible/odontologodisponible';
 import { AppoimentsComponent } from './pages/private/appoiments/appoiments';
 import { AppoimentsNewForm } from './pages/private/appoiments/new-form/new-form';
+import { AppoimentUsers } from './pages/private/appoiment-users/appoiment-users';
 import { FormulaMedica } from './pages/private/formula-medica/formula-medica';
 import { DashboardComponent } from './pages/private/dashboard/dashboard';
-import { authGuard } from './guards/auth-guard';
+import { authGuard, dentistGuard, patientGuard } from './guards/auth-guard';
 import { Plans } from './pages/public/plans/plans';
 import { Contact } from './pages/public/contact/contact';
 import { HistoriaClinica } from './pages/private/historia-clinica/historia-clinica';
@@ -21,6 +22,8 @@ import { EditAvailability } from './pages/private/edit-availability/edit-availab
 import { AvailabilityList } from './pages/private/availability-list/availability-list';
 import { CalendarComponent } from './pages/private/calendar/calendar';
 import { IncapacidadUsers } from './pages/private/incapacidad-users/incapacidad-users';
+import { NewForm } from './pages/private/appoiments-users/new-form/new-form';
+import { IncapacidadMedica } from './pages/private/incapacidad-medica/incapacidad-medica';
 
 export const routes: Routes = [
   {
@@ -39,32 +42,38 @@ export const routes: Routes = [
     path: '',
     component: PrivateLayout,
     children: [
+      // Rutas compartidas (accesibles para todos los usuarios autenticados)
       { path: "historia-clinica/:documento", component: HistoriaClinica, canActivate: [authGuard] },
-      { path: 'formula-medica', component: FormulaMedica, canActivate: [authGuard] },
-      { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
-      { path: 'dashboard-users', component: DashboardUsers, canActivate: [authGuard] },
-      { path: 'formula-users', component: FormulaUsers, canActivate: [authGuard] },
-      { path: 'disponibilidad', component: EditAvailability, canActivate: [authGuard] },
-      { path: 'disponibilidad/:id', component: EditAvailability, canActivate: [authGuard] },
-
-      // Rutas para el admin
-      { path: "admin/disponibilidad", component: Odontologodisponible, canActivate: [authGuard] },
-      { path: "admin/appoiments", component: AppoimentsComponent, canActivate: [authGuard] },
-      { path: "admin/appoiments/new", component: AppoimentsNewForm, canActivate: [authGuard] },
-      { path: "admin/appoiments/AppoimentsNewForms", component: AppoimentsNewForm, canActivate: [authGuard] },
-      { path: "admin/patients", component: PatientsListComponent, canActivate: [authGuard] },
-      { path: "add-patient", component: AddPatient, canActivate: [authGuard] },
-      { path: "admin/patients/add", component: AddPatient, canActivate: [authGuard] },
-      { path: "admin/patients/edit/:id", component: AddPatient, canActivate: [authGuard] },
-      { path: "admin/patients/view/:id", component: AddPatient, canActivate: [authGuard] },
-      { path: "admin/availability/edit/:id", component: EditAvailability, canActivate: [authGuard] },
-      { path: "admin/availability", component: AvailabilityList, canActivate: [authGuard] },
-      { path: "admin/calendar", component: CalendarComponent, canActivate: [authGuard] },
-      { path: "calendar", component: CalendarComponent, canActivate: [authGuard] },
-      { path: "appoiments", component: AppoimentsComponent, canActivate: [authGuard] },
-      { path: "appoiments/new", component: AppoimentsNewForm, canActivate: [authGuard] },
-      { path: "patients", component: PatientsListComponent, canActivate: [authGuard] },
-      { path: "incapacidad/:cedula", component: IncapacidadUsers, canActivate: [authGuard] }
+      
+      // Rutas específicas para DOCTORES/ADMIN
+      { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard, dentistGuard] },
+      { path: 'formula-medica', component: FormulaMedica, canActivate: [authGuard, dentistGuard] },
+      { path: 'incapacidad-medica', component: IncapacidadMedica, canActivate: [authGuard, dentistGuard] },
+      { path: 'disponibilidad', component: EditAvailability, canActivate: [authGuard, dentistGuard] },
+      { path: 'disponibilidad/:id', component: EditAvailability, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/disponibilidad", component: Odontologodisponible, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/appoiments", component: AppoimentsComponent, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/appoiments/new", component: AppoimentsNewForm, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/appoiments/AppoimentsNewForms", component: AppoimentsNewForm, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/patients", component: PatientsListComponent, canActivate: [authGuard, dentistGuard] },
+      { path: "add-patient", component: AddPatient, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/patients/add", component: AddPatient, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/patients/edit/:id", component: AddPatient, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/patients/view/:id", component: AddPatient, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/availability/edit/:id", component: EditAvailability, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/availability", component: AvailabilityList, canActivate: [authGuard, dentistGuard] },
+      { path: "admin/calendar", component: CalendarComponent, canActivate: [authGuard, dentistGuard] },
+      { path: "calendar", component: CalendarComponent, canActivate: [authGuard, dentistGuard] },
+      { path: "appoiments", component: AppoimentsComponent, canActivate: [authGuard, dentistGuard] },
+      { path: "appoiments/new", component: AppoimentsNewForm, canActivate: [authGuard, dentistGuard] },
+      { path: "patients", component: PatientsListComponent, canActivate: [authGuard, dentistGuard] },
+      
+      // Rutas específicas para PACIENTES
+      { path: 'dashboard-users', component: DashboardUsers, canActivate: [authGuard, patientGuard] },
+      { path: 'formula-users', component: FormulaUsers, canActivate: [authGuard, patientGuard] },
+      { path: 'appoiment-users', component: AppoimentUsers, canActivate: [authGuard, patientGuard] },
+      { path: 'appoiments-users/new-form', component: NewForm, canActivate: [authGuard, patientGuard] },
+      { path: "incapacidad/:cedula", component: IncapacidadUsers, canActivate: [authGuard, patientGuard] }
     ]
   },
   { path: "**", redirectTo: "home", pathMatch: "full" }

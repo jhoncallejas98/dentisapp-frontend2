@@ -1,124 +1,108 @@
 <div class="layout-container">
-  <app-aside-bar></app-aside-bar>
-  <main class="incapacidad-container">
+  <app-aside-users></app-aside-users>
+  
+  <div class="incapacidad-container">
     <!-- Header -->
     <div class="incapacidad-header">
-      <h1 class="form-title">INCAPACIDAD MÉDICA</h1>
-      <div class="paciente-info" *ngIf="pacienteCedula">
-        <span>Cédula del paciente: {{ pacienteCedula }}</span>
+      <div class="header-content">
+        <h1 class="form-title">🏥 Incapacidades Médicas</h1>
+        <p class="form-subtitle">Consulta tus incapacidades médicas registradas</p>
       </div>
     </div>
 
-    <!-- Contenido con scroll -->
-    <div class="incapacidad-content">
-      <form (ngSubmit)="guardarIncapacidad()" #incapacidadForm="ngForm">
-        <!-- Fechas -->
-        <div class="form-section">
-          <h3 class="section-title">Período de Incapacidad</h3>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="fechaInicio">Fecha de inicio:</label>
-              <input 
-                type="date" 
-                id="fechaInicio"
-                [(ngModel)]="fechaInicio" 
-                name="fechaInicio" 
-                required
-                (change)="calcularDias()">
+    <!-- Contenido principal -->
+    <div class="main-content">
+      <!-- Loading -->
+      <div *ngIf="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Cargando incapacidades...</p>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error && !loading" class="error-container">
+        <p class="error-message">{{ error }}</p>
+        <button class="btn-primary" (click)="loadIncapacities()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2v6h-6"></path>
+            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+            <path d="M3 22v-6h6"></path>
+            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+          </svg>
+          Reintentar
+        </button>
+      </div>
+
+      <!-- Lista de incapacidades -->
+      <div *ngIf="!loading && !error" class="incapacidades-content">
+        <!-- Sin incapacidades -->
+        <div *ngIf="filteredIncapacities.length === 0" class="no-data-container">
+          <div class="no-data-icon">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+            </svg>
+          </div>
+          <h2>No tienes incapacidades médicas</h2>
+          <p>Las incapacidades médicas aparecerán aquí cuando sean registradas por tu médico.</p>
+        </div>
+
+        <!-- Lista de incapacidades -->
+        <div *ngIf="filteredIncapacities.length > 0" class="incapacidades-grid">
+          <div class="incapacidad-card" *ngFor="let incapacidad of filteredIncapacities">
+            <div class="card-header">
+              <div class="incapacidad-status" [ngClass]="getStatusClass(incapacidad)">
+                {{ getStatusText(incapacidad) }}
+              </div>
+              <div class="incapacidad-days">
+                {{ incapacidad.diasIncapacidad || 0 }} días
+              </div>
             </div>
-            <div class="form-group">
-              <label for="fechaFin">Fecha de fin:</label>
-              <input 
-                type="date" 
-                id="fechaFin"
-                [(ngModel)]="fechaFin" 
-                name="fechaFin" 
-                required
-                (change)="calcularDias()">
+            
+            <div class="card-content">
+              <div class="incapacidad-dates">
+                <div class="date-item">
+                  <span class="date-label">Inicio:</span>
+                  <span class="date-value">{{ formatDate(incapacidad.fechaInicio) }}</span>
+                </div>
+                <div class="date-item">
+                  <span class="date-label">Fin:</span>
+                  <span class="date-value">{{ formatDate(incapacidad.fechaFin) }}</span>
+                </div>
+              </div>
+              
+              <div class="incapacidad-details">
+                <div class="detail-item">
+                  <span class="detail-label">Diagnóstico:</span>
+                  <span class="detail-value">{{ incapacidad.diagnostico || 'No especificado' }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Motivo:</span>
+                  <span class="detail-value">{{ incapacidad.motivo || 'No especificado' }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Tratamiento:</span>
+                  <span class="detail-value">{{ incapacidad.tratamiento || 'No especificado' }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Tipo:</span>
+                  <span class="detail-value">{{ incapacidad.tipoIncapacidad || 'No especificado' }}</span>
+                </div>
+                
+                <div class="detail-item" *ngIf="incapacidad.observaciones">
+                  <span class="detail-label">Observaciones:</span>
+                  <span class="detail-value">{{ incapacidad.observaciones }}</span>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="diasIncapacidad">Días de incapacidad:</label>
-              <input 
-                type="number" 
-                id="diasIncapacidad"
-                [(ngModel)]="diasIncapacidad" 
-                name="diasIncapacidad" 
-                readonly>
+            
+            <div class="card-footer">
+              <span class="incapacidad-date">Registrada el {{ formatDate(incapacidad.createdAt || incapacidad.fechaInicio) }}</span>
             </div>
           </div>
         </div>
-
-        <!-- Diagnóstico -->
-        <div class="form-section">
-          <h3 class="section-title">Diagnóstico</h3>
-          <div class="form-group">
-            <label for="diagnostico">Diagnóstico principal:</label>
-            <textarea 
-              id="diagnostico"
-              [(ngModel)]="diagnostico" 
-              name="diagnostico" 
-              required
-              rows="3"
-              placeholder="Describa el diagnóstico..."></textarea>
-          </div>
-        </div>
-
-        <!-- Tipo de incapacidad -->
-        <div class="form-section">
-          <h3 class="section-title">Tipo de Incapacidad</h3>
-          <div class="form-group">
-            <label for="tipoIncapacidad">Tipo:</label>
-            <select 
-              id="tipoIncapacidad"
-              [(ngModel)]="tipoIncapacidad" 
-              name="tipoIncapacidad">
-              <option value="">Seleccionar tipo</option>
-              <option value="enfermedad_general">Enfermedad General</option>
-              <option value="accidente_laboral">Accidente Laboral</option>
-              <option value="enfermedad_profesional">Enfermedad Profesional</option>
-              <option value="maternidad">Maternidad</option>
-              <option value="otro">Otro</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Observaciones -->
-        <div class="form-section">
-          <h3 class="section-title">Observaciones</h3>
-          <div class="form-group">
-            <label for="observaciones">Observaciones adicionales:</label>
-            <textarea 
-              id="observaciones"
-              [(ngModel)]="observaciones" 
-              name="observaciones" 
-              rows="4"
-              placeholder="Observaciones adicionales..."></textarea>
-          </div>
-        </div>
-
-        <!-- Mensajes -->
-        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
-        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-      </form>
+      </div>
     </div>
-
-    <!-- Botones fijos -->
-    <div class="incapacidad-actions">
-      <button 
-        type="button" 
-        class="btn-save" 
-        (click)="guardarIncapacidad()"
-        [disabled]="loading || !incapacidadForm.valid">
-        {{ loading ? 'Guardando...' : '💾 Guardar Incapacidad' }}
-      </button>
-      
-      <button 
-        type="button" 
-        class="btn-clear" 
-        (click)="limpiarFormulario()"
-        [disabled]="loading">
-        🗑️ Limpiar
-      </button>
-    </div>
-  </main>
+  </div>
 </div>

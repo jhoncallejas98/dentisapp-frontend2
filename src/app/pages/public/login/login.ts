@@ -29,8 +29,22 @@ export class Login {
         this.authServices.saveLocalStorage('token',data.token) // almacena el token en el local storage
         if (data.user && data.user._id) {
           this.authServices.saveLocalStorage('userId', data.user._id);
+          // Guardar también los datos completos del usuario
+          this.authServices.saveLocalStorage('user', JSON.stringify(data.user));
         }
-        this.router.navigateByUrl('dashboard')
+        
+        // Redirigir según el rol del usuario
+        const userRole = data.user?.role;
+        if (userRole === 'dentist' || userRole === 'admin') {
+          // Doctor/Admin va al dashboard principal
+          this.router.navigateByUrl('dashboard');
+        } else if (userRole === 'patient') {
+          // Paciente va al dashboard de usuarios
+          this.router.navigateByUrl('dashboard-users');
+        } else {
+          // Por defecto va al dashboard principal
+          this.router.navigateByUrl('dashboard');
+        }
       },
       error: (error) => {
         console.error(error);

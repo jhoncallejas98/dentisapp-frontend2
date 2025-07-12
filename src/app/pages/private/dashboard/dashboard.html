@@ -51,11 +51,7 @@
                     'badge-yellow': appointment.status === 'pendiente' || appointment.status === 'pending',
                     'badge-red': appointment.status === 'cancelada' || appointment.status === 'cancelled'
                   }">
-                  {{ appointment.status === 'attended' ? 'Atendido' : 
-                     appointment.status === 'completed' ? 'Completado' : 
-                     appointment.status === 'pending' ? 'Pendiente' : 
-                     appointment.status === 'confirmed' ? 'Confirmada' : 
-                     appointment.status }}
+                  {{ translateStatus(appointment.status) }}
                 </span>
               </td>
               <td>

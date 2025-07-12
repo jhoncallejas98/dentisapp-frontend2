@@ -1,78 +1,121 @@
 <aside class="aside-bar">
-  <h2>Bienvenido <br> Dr. Juan Perez</h2>
+  <h2 style="white-space: pre-line;">{{ welcomeMessage || 'Bienvenido,' }}</h2>
   <div class="aside-patiente">
     
-    <!-- INICIO -->
-    <a class="aside-tiles" routerLink="/dashboard" routerLinkActive="active">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M128 0c17.7 0 32 14.3 32 32v32h128V32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h48c26.5 0 48 21.5 48 48v48H0v-48C0 85.5 21.5 64 48 64h48V32c0-17.7 14.3-32 32-32zM0 192h448v272c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm80 64c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16h96c8.8 0 16-7.2 16-16v-96c0-8.8-7.2-16-16-16H80z"/>
-      </svg>
-      <p>Inicio</p>
-    </a>
-    <h3>Pacientes</h3>
-    <!-- NUEVO PACIENTE -->
-    <a routerLink="/admin/patients/add" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="aside-tiles">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-        <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
-      </svg>
-      <p>Añadir paciente</p>
-    </a>
+    <!-- MENÚ PARA DOCTORES/ADMIN -->
+    <div *ngIf="isDentist()">
+      <!-- INICIO -->
+      <a class="aside-tiles" routerLink="/dashboard" routerLinkActive="active">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M128 0c17.7 0 32 14.3 32 32v32h128V32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h48c26.5 0 48 21.5 48 48v48H0v-48C0 85.5 21.5 64 48 64h48V32c0-17.7 14.3-32 32-32zM0 192h448v272c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm80 64c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16h96c8.8 0 16-7.2 16-16v-96c0-8.8-7.2-16-16-16H80z"/>
+        </svg>
+        <p>Dashboard</p>
+      </a>
+      
+      <h3>Gestión de Pacientes</h3>
+      <!-- LISTA DE PACIENTES -->
+      <a routerLink="/admin/patients" routerLinkActive="active" class="aside-tiles">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304h-91.4z"/>
+        </svg>
+        <p>Lista de Pacientes</p>
+      </a>
 
-    <!-- PACIENTES -->
-    <a routerLink="/admin/patients" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="aside-tiles">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3 0 498.7 13.3 512 29.7 512h388.6c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304h-91.4z"/>
-      </svg>
-      <p>Pacientes</p>
-    </a>
-    <h3>Agenda y citas</h3>
-    <!-- DISPONIBILIDAD -->
-    <a routerLink="/admin/availability" routerLinkActive="active" class="aside-tiles">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path d="M64 480h384c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64z"/>
-      </svg>
-      <p>Disponibilidad</p>
-    </a>
+      <!-- NUEVO PACIENTE -->
+      <a routerLink="/admin/patients/add" routerLinkActive="active" class="aside-tiles">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+          <path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312v-64h-64c-13.3 0-24-10.7-24-24s10.7-24 24-24h64v-64c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24h-64v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
+        </svg>
+        <p>Añadir Paciente</p>
+      </a>
+      
+      <h3>Agenda y Citas</h3>
+      <!-- CALENDARIO -->
+      <a class="aside-tiles" routerLink="/admin/calendar" routerLinkActive="active">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M128 0c17.7 0 32 14.3 32 32v32h128V32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h48c26.5 0 48 21.5 48 48v48H0v-48C0 85.5 21.5 64 48 64h48V32c0-17.7 14.3-32 32-32zM0 192h448v272c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm80 64c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16h96c8.8 0 16-7.2 16-16v-96c0-8.8-7.2-16-16-16H80z"/>
+        </svg>
+        <p>Calendario</p>
+      </a>
 
-    <!-- CALENDARIO -->
-    <a class="aside-tiles" routerLink="/admin/calendar" routerLinkActive="active">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M128 0c17.7 0 32 14.3 32 32v32h128V32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h48c26.5 0 48 21.5 48 48v48H0v-48C0 85.5 21.5 64 48 64h48V32c0-17.7 14.3-32 32-32zM0 192h448v272c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm80 64c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16h96c8.8 0 16-7.2 16-16v-96c0-8.8-7.2-16-16-16H80z"/>
-      </svg>
-      <p>Calendario</p>
-    </a>
+      <!-- CITAS -->
+      <a class="aside-tiles" routerLink="/appoiments" routerLinkActive="active">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+        </svg>
+        <p>Gestionar Citas</p>
+      </a>
 
-    <!-- AÑADIR CITA -->
-    <a  class="aside-tiles" routerLink="/appoiments" routerLinkActive="active">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
-      </svg>
-      <p>Añadir cita</p>
-    </a>
+      <!-- DISPONIBILIDAD -->
+      <a routerLink="/admin/availability" routerLinkActive="active" class="aside-tiles">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M64 480h384c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64z"/>
+        </svg>
+        <p>Disponibilidad</p>
+      </a>
 
-    <!-- COMPLEMENTARIOS -->
-    <h3>Complementarios</h3>
+      <h3>Documentos Médicos</h3>
+      <!-- EXÁMENES -->
+      <a (click)="showComingSoon()" class="aside-tiles" style="cursor: pointer;">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
+        </svg>
+        <p>Exámenes</p>
+      </a>
 
-    <a class="aside-tiles disabled" (click)="showComingSoon()">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
-      </svg>
-      <p>Consentimientos</p>
-    </a>
+      <!-- REMISIONES -->
+      <a (click)="showComingSoon()" class="aside-tiles" style="cursor: pointer;">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231z"/>
+        </svg>
+        <p>Remisiones</p>
+      </a>
 
-    <a class="aside-tiles disabled" (click)="showComingSoon()">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231z"/>
-      </svg>
-      <p>Remisiones</p>
-    </a>
+      <!-- HISTORIA CLÍNICA -->
+      <a (click)="showComingSoon()" class="aside-tiles" style="cursor: pointer;">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
+        </svg>
+        <p>Tratamientos</p>
+      </a>
+    </div>
 
-    <a class="aside-tiles disabled" (click)="showComingSoon()">
-      <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path d="M288 109.3V352c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3z"/>
-      </svg>
-      <p>Exámenes</p>
-    </a>
+    <!-- MENÚ PARA PACIENTES -->
+    <div *ngIf="isPatient()">
+      <!-- INICIO -->
+      <a class="aside-tiles" routerLink="/dashboard-users" routerLinkActive="active">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M128 0c17.3 0 32 14.3 32 32v32h128V32c0-17.7 14.3-32 32-32s32 14.3 32 32v32h48c26.5 0 48 21.5 48 48v48H0v-48C0 85.5 21.5 64 48 64h48V32c0-17.7 14.3-32 32-32zM0 192h448v272c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm80 64c-8.8 0-16 7.2-16 16v96c0 8.8 7.2 16 16 16h96c8.8 0 16-7.2 16-16v-96c0-8.8-7.2-16-16-16H80z"/>
+        </svg>
+        <p>Mi Dashboard</p>
+      </a>
+
+      <h3>Mis Citas</h3>
+      <!-- MIS CITAS -->
+      <a routerLink="/appoiment-users" routerLinkActive="active" class="aside-tiles">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32v144H48c-17.7 0-32 14.3-32 32s14.3 32 32 32h144v144c0 17.7 14.3 32 32 32s32-14.3 32-32V288h144c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
+        </svg>
+        <p>Mis Citas</p>
+      </a>
+
+      <h3>Mis Documentos</h3>
+      <!-- FÓRMULA MÉDICA -->
+      <a routerLink="/formula-users" routerLinkActive="active" class="aside-tiles">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
+        </svg>
+        <p>Mis Fórmulas</p>
+      </a>
+
+      <!-- INCAPACIDAD -->
+      <a [routerLink]="['/incapacidad', currentUser?.cedula || '']" routerLinkActive="active" class="aside-tiles">
+        <svg class="logos-aside" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231z"/>
+        </svg>
+        <p>Mis Incapacidades</p>
+      </a>
+    </div>
 
   </div>
 </aside>

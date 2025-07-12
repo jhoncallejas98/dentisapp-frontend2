@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AvailabilityServices } from '../../../services/availability-services';
+import { AuthServices } from '../../../services/auth-services';
 
 @Component({
   selector: 'app-availability-list',
@@ -14,14 +15,37 @@ import { AvailabilityServices } from '../../../services/availability-services';
 export class AvailabilityList {
   availabilities: any[] = [];
 
-  constructor(public router: Router, private availabilityServices: AvailabilityServices) {
+  constructor(
+    public router: Router, 
+    private availabilityServices: AvailabilityServices,
+    private authServices: AuthServices
+  ) {
     this.loadAvailabilities();
   }
 
   loadAvailabilities() {
+    // Obtener la cédula del doctor actual
+    const currentUser = this.authServices.getCurrentUser();
+    const doctorCedula = currentUser?.cedula;
+    
+    if (!doctorCedula) {
+      console.error('No se pudo obtener la cédula del doctor actual');
+      return;
+    }
+
     (this.availabilityServices as any).getAllAvailabilities().subscribe({
       next: (data: any) => {
-        this.availabilities = Array.isArray(data) ? data : (data.availabilities || []);
+        const allAvailabilities = Array.isArray(data) ? data : (data.availabilities || []);
+        
+        // Filtrar disponibilidades por el doctor actual
+        this.availabilities = allAvailabilities.filter((availability: any) => {
+          const availabilityDoctorCedula = availability.dentist?.cedula || 
+                                          availability.cedulaDentista || 
+                                          availability.dentistId;
+          return availabilityDoctorCedula === doctorCedula;
+        });
+        
+        console.log('Disponibilidades filtradas por doctor:', this.availabilities);
       },
       error: () => {
         this.availabilities = [];

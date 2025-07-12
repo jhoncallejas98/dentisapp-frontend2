@@ -34,6 +34,12 @@ export class AppoimentsServices {
   }
 
   getAppoimentsByCedula(cedula: string) {
-    return this.http.get(`http://localhost:3000/api/appoiment/paciente/${cedula}`, { headers: this.getHeaders() });
+    // Usar el endpoint que existe y filtrar client-side
+    return this.http.get('http://localhost:3000/api/appoiment', { headers: this.getHeaders() });
+  }
+
+  getAppoimentsByDoctor(doctorCedula: string) {
+    // Obtener todas las citas y filtrar por el doctor actual
+    return this.http.get('http://localhost:3000/api/appoiment', { headers: this.getHeaders() });
   }
 }

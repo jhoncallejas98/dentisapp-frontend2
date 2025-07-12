@@ -1,0 +1,217 @@
+<div class="layout-container">
+  <app-aside-bar></app-aside-bar>
+
+  <div class="incapacidad-container">
+    <!-- Header -->
+    <div class="incapacidad-header">
+      <div class="header-content">
+        <h2>Gestión de Incapacidades Médicas</h2>
+        <p>Administra las incapacidades médicas de los pacientes</p>
+      </div>
+      <button class="btn-primary" (click)="toggleForm()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        {{ showForm ? 'Cancelar' : 'Nueva Incapacidad' }}
+      </button>
+    </div>
+
+    <!-- Mensajes de estado -->
+    <div *ngIf="successMessage" class="success-message">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Formulario de nueva incapacidad -->
+    <div *ngIf="showForm" class="form-container">
+      <div class="form-card">
+        <h3>Nueva Incapacidad Médica</h3>
+        <form (ngSubmit)="guardarIncapacidad()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cedulaPaciente">Cédula del Paciente *</label>
+              <input 
+                id="cedulaPaciente"
+                type="text" 
+                [(ngModel)]="incapacidadForm.cedulaPaciente" 
+                name="cedulaPaciente" 
+                required 
+                placeholder="Ingrese la cédula del paciente">
+            </div>
+            <div class="form-group">
+              <label for="tipoIncapacidad">Tipo de Incapacidad</label>
+              <select 
+                id="tipoIncapacidad"
+                [(ngModel)]="incapacidadForm.tipoIncapacidad" 
+                name="tipoIncapacidad">
+                <option value="">Seleccionar</option>
+                <option value="Enfermedad General">Enfermedad General</option>
+                <option value="Accidente de Trabajo">Accidente de Trabajo</option>
+                <option value="Enfermedad Laboral">Enfermedad Laboral</option>
+                <option value="Licencia de Maternidad">Licencia de Maternidad</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fechaInicio">Fecha de Inicio *</label>
+              <input 
+                id="fechaInicio"
+                type="date" 
+                [(ngModel)]="incapacidadForm.fechaInicio" 
+                name="fechaInicio" 
+                required 
+                (change)="calcularDiasIncapacidad()">
+            </div>
+            <div class="form-group">
+              <label for="fechaFin">Fecha de Fin *</label>
+              <input 
+                id="fechaFin"
+                type="date" 
+                [(ngModel)]="incapacidadForm.fechaFin" 
+                name="fechaFin" 
+                required 
+                (change)="calcularDiasIncapacidad()">
+            </div>
+            <div class="form-group">
+              <label for="diasIncapacidad">Días de Incapacidad</label>
+              <input 
+                id="diasIncapacidad"
+                type="number" 
+                [(ngModel)]="incapacidadForm.diasIncapacidad" 
+                name="diasIncapacidad" 
+                readonly>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="diagnostico">Diagnóstico *</label>
+            <textarea 
+              id="diagnostico"
+              [(ngModel)]="incapacidadForm.diagnostico" 
+              name="diagnostico" 
+              required 
+              placeholder="Describa el diagnóstico del paciente"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="observaciones">Observaciones</label>
+            <textarea 
+              id="observaciones"
+              [(ngModel)]="incapacidadForm.observaciones" 
+              name="observaciones" 
+              placeholder="Observaciones adicionales"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save" [disabled]="loading">
+              {{ loading ? 'Guardando...' : '💾 Guardar Incapacidad' }}
+            </button>
+            <button type="button" class="btn-cancel" (click)="toggleForm()">
+              ❌ Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label for="filtroCedula">Filtrar por Cédula:</label>
+        <input 
+          id="filtroCedula"
+          type="text" 
+          [(ngModel)]="filtroCedula" 
+          placeholder="Buscar por cédula...">
+      </div>
+      <div class="filter-group">
+        <label for="filtroTipo">Filtrar por Tipo:</label>
+        <input 
+          id="filtroTipo"
+          type="text" 
+          [(ngModel)]="filtroTipo" 
+          placeholder="Buscar por tipo...">
+      </div>
+      <button class="btn-secondary" (click)="limpiarFiltros()">
+        🔄 Limpiar Filtros
+      </button>
+    </div>
+
+    <!-- Lista de incapacidades -->
+    <div class="incapacidades-list">
+      <!-- Loading -->
+      <div *ngIf="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Cargando incapacidades...</p>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="!loading && incapacidadesFiltradas.length === 0" class="empty-state">
+        <svg class="empty-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
+          <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
+          <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
+        </svg>
+        <h3>No hay incapacidades médicas</h3>
+        <p>{{ filtroCedula || filtroTipo ? 'No se encontraron resultados con los filtros aplicados.' : 'Crea la primera incapacidad médica para comenzar.' }}</p>
+      </div>
+
+      <!-- Lista -->
+      <div *ngIf="!loading && incapacidadesFiltradas.length > 0" class="incapacidades-grid">
+        <div class="incapacidad-card" *ngFor="let incapacidad of incapacidadesFiltradas">
+          <div class="card-header">
+            <div class="paciente-info">
+              <h4>Paciente: {{ incapacidad.cedulaPaciente || incapacidad.documentId }}</h4>
+              <span class="tipo-incapacidad">{{ incapacidad.tipoIncapacidad || 'Sin especificar' }}</span>
+            </div>
+            <div class="card-actions">
+              <button class="btn-icon delete" (click)="eliminarIncapacidad(incapacidad._id)" title="Eliminar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18"></path>
+                  <path d="M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6"></path>
+                  <path d="M19 6l-1-1a2 2 0 0 0-1.41-.59H7.41A2 2 0 0 0 6 5L5 6"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="card-content">
+            <div class="fechas-info">
+              <div class="fecha-item">
+                <span class="label">Inicio:</span>
+                <span class="value">{{ formatDate(incapacidad.fechaInicio) }}</span>
+              </div>
+              <div class="fecha-item">
+                <span class="label">Fin:</span>
+                <span class="value">{{ formatDate(incapacidad.fechaFin) }}</span>
+              </div>
+              <div class="fecha-item">
+                <span class="label">Días:</span>
+                <span class="value">{{ incapacidad.diasIncapacidad }} días</span>
+              </div>
+            </div>
+            
+            <div class="diagnostico-info">
+              <span class="label">Diagnóstico:</span>
+              <p class="diagnostico-text">{{ incapacidad.diagnostico }}</p>
+            </div>
+            
+            <div *ngIf="incapacidad.observaciones" class="observaciones-info">
+              <span class="label">Observaciones:</span>
+              <p class="observaciones-text">{{ incapacidad.observaciones }}</p>
+            </div>
+            
+            <div class="meta-info">
+              <span class="fecha-creacion">Creada: {{ formatDateTime(incapacidad.createdAt || incapacidad.fechaCreacion) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

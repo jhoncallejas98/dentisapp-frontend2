@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthServices } from '../../../services/auth-services';
 import { HistoriaClinicaServices } from '../../../services/historia-clinica-services';
-import { IncapacidadServices } from '../../../services/incapacidad-services';
+import { IncapacidadMedicaServices } from '../../../services/incapacidad-medica-services';
 import { FormulaMedicaServices } from '../../../services/formula-medica-services';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 
@@ -65,6 +65,8 @@ export class HistoriaClinica {
     fechaFin: '',
     diasIncapacidad: '',
     diagnostico: '',
+    motivo: '',
+    tratamiento: '',
     tipoIncapacidad: '',
     observaciones: ''
   };
@@ -89,7 +91,7 @@ export class HistoriaClinica {
     private http: HttpClient, 
     private authServices: AuthServices,
     private historiaClinicaService: HistoriaClinicaServices,
-    private incapacidadService: IncapacidadServices,
+    private incapacidadMedicaService: IncapacidadMedicaServices,
     private formulaService: FormulaMedicaServices,
     private appoimentsService: AppoimentsServices
   ) {
@@ -210,13 +212,18 @@ export class HistoriaClinica {
 
   cargarIncapacidades(cedula: string) {
     console.log('Cargando incapacidades para cédula:', cedula);
-    this.incapacidadService.getIncapacidadesByCedula(cedula).subscribe({
+    this.incapacidadMedicaService.getAllIncapacidadesMedicas().subscribe({
       next: (incapacidades: any) => {
-        console.log('Incapacidades cargadas:', incapacidades);
-        this.incapacidades = Array.isArray(incapacidades) ? incapacidades : [];
+        console.log('Todas las incapacidades:', incapacidades);
+        // Filtrar por cédula del paciente
+        const incapacidadesArray = Array.isArray(incapacidades) ? incapacidades : [];
+        this.incapacidades = incapacidadesArray.filter((inc: any) => 
+          inc.cedulaPaciente === cedula || inc.documentId === cedula
+        );
+        console.log('Incapacidades filtradas:', this.incapacidades);
       },
       error: (err) => {
-        console.log('Error cargando incapacidades:', err);
+        console.error('Error cargando incapacidades:', err);
         this.incapacidades = [];
       }
     });
@@ -245,9 +252,16 @@ export class HistoriaClinica {
   cargarCitasDelPaciente(cedula: string) {
     this.appoimentsService.getAppoimentsByCedula(cedula).subscribe(
       (citas: any) => {
-        this.appointments = Array.isArray(citas) ? citas : [];
+        console.log('Todas las citas obtenidas:', citas);
+        // Filtrar citas por cédula del paciente
+        const citasArray = Array.isArray(citas) ? citas : [];
+        this.appointments = citasArray.filter((cita: any) => 
+          cita.cedulaPaciente === cedula || cita.documentId === cedula || cita.patientCedula === cedula
+        );
+        console.log('Citas filtradas del paciente:', this.appointments);
       },
       (err: any) => {
+        console.error('Error cargando citas:', err);
         this.appointments = [];
       }
     );
@@ -369,32 +383,54 @@ export class HistoriaClinica {
   }
 
   guardarIncapacidad() {
-    if (!this.incapacidadForm.fechaInicio || !this.incapacidadForm.fechaFin || !this.incapacidadForm.diagnostico) {
-      this.errorMessage = 'Por favor complete todos los campos requeridos.';
+    if (!this.incapacidadForm.fechaInicio || !this.incapacidadForm.fechaFin || 
+        !this.incapacidadForm.diagnostico || !this.incapacidadForm.motivo || 
+        !this.incapacidadForm.tratamiento) {
+      alert('Por favor complete todos los campos obligatorios');
       return;
     }
 
-    const incapacidad = {
-      pacienteId: this.paciente._id,
-      cedulaPaciente: this.paciente.cedula,
+    const incapacidadData = {
+      patient: this.paciente._id, // Agregar ID del paciente
+      cedulaPaciente: this.documentId,
       fechaInicio: this.incapacidadForm.fechaInicio,
       fechaFin: this.incapacidadForm.fechaFin,
-      diasIncapacidad: parseInt(this.incapacidadForm.diasIncapacidad),
+      diasIncapacidad: parseInt(this.incapacidadForm.diasIncapacidad) || 0, // Convertir a número
       diagnostico: this.incapacidadForm.diagnostico,
-      tipoIncapacidad: this.incapacidadForm.tipoIncapacidad,
-      observaciones: this.incapacidadForm.observaciones,
-      fechaCreacion: new Date().toISOString()
+      motivo: this.incapacidadForm.motivo,
+      tratamiento: this.incapacidadForm.tratamiento,
+      tipoIncapacidad: this.incapacidadForm.tipoIncapacidad || 'Enfermedad General',
+      observaciones: this.incapacidadForm.observaciones || ''
     };
 
-    this.incapacidadService.createIncapacidad(incapacidad).subscribe({
-      next: (res: any) => {
-        this.successMessage = 'Incapacidad médica guardada correctamente.';
-        this.showIncapacidadForm = false;
+    console.log('Guardando incapacidad:', incapacidadData);
+    console.log('Paciente:', this.paciente);
+
+    this.incapacidadMedicaService.createIncapacidadMedica(incapacidadData).subscribe({
+      next: (response) => {
+        console.log('Incapacidad guardada exitosamente:', response);
+        this.successMessage = 'Incapacidad médica guardada exitosamente';
         this.limpiarFormularioIncapacidad();
-        this.cargarIncapacidades(this.paciente.cedula);
+        this.showIncapacidadForm = false;
+        // Recargar incapacidades
+        this.cargarIncapacidades(this.documentId);
+        
+        // Limpiar mensaje después de 3 segundos
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
       },
       error: (err) => {
-        this.errorMessage = err?.error?.msg || 'Error al guardar la incapacidad médica.';
+        console.error('Error guardando incapacidad:', err);
+        console.error('Detalles del error:', err.error);
+        console.error('Status:', err.status);
+        console.error('StatusText:', err.statusText);
+        this.errorMessage = `Error al guardar la incapacidad médica: ${err.error?.msg || err.message || 'Error desconocido'}`;
+        
+        // Limpiar mensaje después de 5 segundos
+        setTimeout(() => {
+          this.errorMessage = '';
+        }, 5000);
       }
     });
   }
@@ -405,6 +441,8 @@ export class HistoriaClinica {
       fechaFin: '',
       diasIncapacidad: '',
       diagnostico: '',
+      motivo: '',
+      tratamiento: '',
       tipoIncapacidad: '',
       observaciones: ''
     };

@@ -45,14 +45,37 @@ export class AvailabilityServices {
   }
 
   createOrUpdateAvailability(data: any) {
-    return this.http.post('http://localhost:3000/api/disponibilidad', data, { headers: this.getHeaders() });
+    // Preparar el payload correctamente para el backend
+    const payload = { ...data };
+    
+    // Solo convertir a cedulaDentista si NO es un ObjectId válido
+    if (payload.dentist && !/^[a-f\d]{24}$/i.test(payload.dentist)) {
+      console.log('Convirtiendo cedula a cedulaDentista:', payload.dentist);
+      payload.cedulaDentista = payload.dentist;
+      delete payload.dentist;
+    } else if (payload.dentist) {
+      console.log('Usando ObjectId válido:', payload.dentist);
+    }
+    
+    console.log('Payload final para disponibilidad:', payload);
+    return this.http.post('http://localhost:3000/api/disponibilidad', payload, { headers: this.getHeaders() });
   }
 
   getAllAvailabilities() {
     return this.http.get('http://localhost:3000/api/disponibilidad', { headers: this.getHeaders() });
   }
   updateAvailability(id: string, data: any) {
-    return this.http.patch(`http://localhost:3000/api/disponibilidad`, data, { headers: this.getHeaders() });
+    // Preparar el payload correctamente para el backend
+    const payload = { ...data };
+    
+    // Si el dentist no es un ObjectId (24 caracteres hex), usar cedulaDentista
+    if (payload.dentist && !/^[a-f\d]{24}$/i.test(payload.dentist)) {
+      payload.cedulaDentista = payload.dentist;
+      delete payload.dentist;
+    }
+    
+    console.log('Payload para actualizar disponibilidad:', payload);
+    return this.http.patch(`http://localhost:3000/api/disponibilidad`, payload, { headers: this.getHeaders() });
   }
   deleteAvailability(id: string) {
     return this.http.delete(`http://localhost:3000/api/disponibilidad/${id}`, { headers: this.getHeaders() });

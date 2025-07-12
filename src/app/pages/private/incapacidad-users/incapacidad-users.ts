@@ -1,113 +1,116 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsideBar } from "../../../components/aside-bar-dentist/aside-bar";
-import { ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AsideUsers } from "../../../components/aside-users/aside-users";
+import { AuthServices } from '../../../services/auth-services';
+import { IncapacidadMedicaServices } from '../../../services/incapacidad-medica-services';
 
 @Component({
   selector: 'app-incapacidad-users',
-  imports: [CommonModule, AsideBar, FormsModule],
+  imports: [AsideUsers, CommonModule],
   templateUrl: './incapacidad-users.html',
   styleUrl: './incapacidad-users.css'
 })
-export class IncapacidadUsers {
-  // Estado del formulario
-  successMessage = '';
-  errorMessage = '';
-  loading = false;
-
-  // Datos del paciente (recibidos por parámetro)
-  paciente: any = null;
-  pacienteId: string = '';
-  pacienteCedula: string = '';
-
-  // Campos del formulario de incapacidad
-  fechaInicio = '';
-  fechaFin = '';
-  diasIncapacidad = '';
-  diagnostico = '';
-  tipoIncapacidad = '';
-  observaciones = '';
+export class IncapacidadUsers implements OnInit {
+  // Datos del usuario
+  userCedula: string = '';
+  
+  // Datos de incapacidades
+  incapacities: any[] = [];
+  filteredIncapacities: any[] = [];
+  loading: boolean = true;
+  error: string = '';
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient
-  ) {
-    this.route.params.subscribe(params => {
-      this.pacienteId = params['pacienteId'] || '';
-      this.pacienteCedula = params['cedula'] || '';
-      if (this.pacienteId || this.pacienteCedula) {
-        this.cargarDatosPaciente();
+    private authServices: AuthServices,
+    private incapacidadMedicaService: IncapacidadMedicaServices
+  ) {}
+
+  ngOnInit() {
+    this.loadUserData();
+    this.loadIncapacities();
+  }
+
+  loadUserData() {
+    const cedula = this.authServices.getCurrentUserCedula();
+    this.userCedula = cedula || '';
+    if (!this.userCedula) {
+      this.error = 'No se pudo obtener la información del usuario';
+      this.loading = false;
+    }
+  }
+
+  loadIncapacities() {
+    this.loading = true;
+    this.error = '';
+
+    this.incapacidadMedicaService.getAllIncapacidadesMedicas().subscribe({
+      next: (data: any) => {
+        console.log('Todas las incapacidades obtenidas:', data);
+        
+        // Filtrar incapacidades del usuario actual
+        const incapacidadesArray = Array.isArray(data) ? data : [];
+        this.incapacities = incapacidadesArray.filter((inc: any) => 
+          inc.cedulaPaciente === this.userCedula || 
+          inc.documentId === this.userCedula ||
+          inc.patientCedula === this.userCedula
+        );
+        
+        // Ordenar por fecha de inicio (más recientes primero)
+        this.incapacities.sort((a: any, b: any) => {
+          return new Date(b.fechaInicio || b.date).getTime() - new Date(a.fechaInicio || a.date).getTime();
+        });
+        
+        // Asignar directamente a filteredIncapacities
+        this.filteredIncapacities = this.incapacities;
+        
+        console.log('Incapacidades filtradas del usuario:', this.incapacities);
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error cargando incapacidades:', err);
+        this.error = 'Error al cargar las incapacidades: ' + (err.message || 'Error desconocido');
+        this.loading = false;
       }
     });
   }
 
-  cargarDatosPaciente() {
-    // Aquí podrías cargar los datos del paciente si es necesario
-    console.log('Cargando datos del paciente:', this.pacienteId, this.pacienteCedula);
-  }
-
-  getHeaders() {
-    const token = localStorage.getItem('token') ?? '';
-    return new HttpHeaders().set('x-token', token);
-  }
-
-  calcularDias() {
-    if (this.fechaInicio && this.fechaFin) {
-      const inicio = new Date(this.fechaInicio);
-      const fin = new Date(this.fechaFin);
-      const diffTime = Math.abs(fin.getTime() - inicio.getTime());
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 para incluir el día inicial
-      this.diasIncapacidad = diffDays.toString();
+  getStatusClass(incapacidad: any): string {
+    const today = new Date();
+    const fechaFin = new Date(incapacidad.fechaFin);
+    
+    if (fechaFin >= today) {
+      return 'status-activa';
+    } else {
+      return 'status-finalizada';
     }
   }
 
-  guardarIncapacidad() {
-    this.successMessage = '';
-    this.errorMessage = '';
-    this.loading = true;
-
-    if (!this.fechaInicio || !this.fechaFin || !this.diagnostico) {
-      this.errorMessage = 'Por favor complete todos los campos requeridos.';
-      this.loading = false;
-      return;
+  getStatusText(incapacidad: any): string {
+    const today = new Date();
+    const fechaFin = new Date(incapacidad.fechaFin);
+    
+    if (fechaFin >= today) {
+      return 'Activa';
+    } else {
+      return 'Finalizada';
     }
+  }
 
-    const incapacidad = {
-      pacienteId: this.pacienteId,
-      cedulaPaciente: this.pacienteCedula,
-      fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin,
-      diasIncapacidad: parseInt(this.diasIncapacidad),
-      diagnostico: this.diagnostico,
-      tipoIncapacidad: this.tipoIncapacidad,
-      observaciones: this.observaciones,
-      fechaCreacion: new Date().toISOString()
-    };
-
-    console.log('Enviando incapacidad:', incapacidad);
-
-    this.http.post('http://localhost:3000/api/incapacidades', incapacidad, { headers: this.getHeaders() })
-      .subscribe({
-        next: (res: any) => {
-          this.successMessage = 'Incapacidad médica guardada correctamente.';
-          this.loading = false;
-          this.limpiarFormulario();
-        },
-        error: (err) => {
-          this.errorMessage = err?.error?.msg || 'Error al guardar la incapacidad médica.';
-          this.loading = false;
-        }
+  formatDate(dateString: string): string {
+    if (!dateString) return 'Fecha no disponible';
+    
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
       });
-  }
-
-  limpiarFormulario() {
-    this.fechaInicio = '';
-    this.fechaFin = '';
-    this.diasIncapacidad = '';
-    this.diagnostico = '';
-    this.tipoIncapacidad = '';
-    this.observaciones = '';
+    } catch {
+      return 'Fecha no válida';
+    }
   }
 } 

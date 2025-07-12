@@ -9,11 +9,11 @@
   display: flex;
   align-items: flex-start;
   gap: 3rem;
-
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
   box-sizing: border-box;
   background-color: #f9f9f9;
+  overflow: hidden;
 }
 
 /* Sidebar izquierdo */
@@ -25,6 +25,27 @@
   padding: 2rem 1rem;
   box-sizing: border-box;
   flex-shrink: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Scrollbar personalizado para aside */
+.aside-bar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.aside-bar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.aside-bar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.aside-bar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .aside-bar h2 {
@@ -77,6 +98,28 @@
   align-items: center;
   box-sizing: border-box;
   padding-top: 2rem;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar personalizado para main content */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 /* Título principal */

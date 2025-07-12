@@ -4,6 +4,7 @@ import { RouterModule, Router } from '@angular/router';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { FormsModule } from '@angular/forms';
 import { AppoimentsServices } from '../../../services/appoiments-services';
+import { AuthServices } from '../../../services/auth-services';
 
 interface TodayPatient {
   document: string;
@@ -97,52 +98,88 @@ export class DashboardComponent implements OnInit {
     }
   ];
 
-  constructor(private appoimentsService: AppoimentsServices, private router: Router) {}
+  constructor(private appoimentsService: AppoimentsServices, private router: Router, private authServices: AuthServices) {}
 
   ngOnInit() {
     this.cargarPacientesDelDia();
   }
 
+  // Función helper para traducir estados de citas
+  translateStatus(status: string): string {
+    console.log('Traduciendo estado:', status);
+    
+    const statusMap: { [key: string]: string } = {
+      'attended': 'Atendido',
+      'completed': 'Completado',
+      'pending': 'Pendiente',
+      'confirmed': 'Confirmada',
+      'cancelled': 'Cancelada',
+      'asistio': 'Asistió',
+      'pendiente': 'Pendiente',
+      'confirmada': 'Confirmada',
+      'cancelada': 'Cancelada'
+    };
+    
+    const translatedStatus = statusMap[status?.toLowerCase()] || status;
+    console.log('Estado traducido:', translatedStatus);
+    return translatedStatus;
+  }
+
   cargarPacientesDelDia() {
     this.loading = true;
     this.errorMessage = '';
+
+    // Obtener la cédula del doctor actual
+    const currentUser = this.authServices.getCurrentUser();
+    const doctorCedula = currentUser?.cedula;
     
-    console.log('Obteniendo citas usando el servicio...');
+    if (!doctorCedula) {
+      console.error('No se pudo obtener la cédula del doctor actual');
+      this.errorMessage = 'Error al obtener información del usuario';
+      this.loading = false;
+      return;
+    }
+
     this.appoimentsService.getAppoiments().subscribe({
       next: (data: any) => {
-        // Soporta respuesta como { citas: [...] } o array directo
-        const citas = Array.isArray(data) ? data : (data.citas || []);
+        console.log('Todas las citas obtenidas:', data);
         
-        console.log('Todas las citas recibidas:', citas);
-        
-        // Filtrar solo las citas del día actual - versión simplificada
-        const hoy = new Date();
-        const citasDelDia = citas.filter((cita: any) => {
-          if (!cita.date) {
-            return false;
-          }
-          
-          try {
-            const fechaCita = new Date(cita.date);
-            if (isNaN(fechaCita.getTime())) {
-              return false;
-            }
-            
-            // Mostrar citas de los últimos 7 días en lugar de solo hoy
-            const diferenciaDias = Math.floor((hoy.getTime() - fechaCita.getTime()) / (1000 * 60 * 60 * 24));
-            return diferenciaDias >= 0 && diferenciaDias <= 7;
-          } catch (error) {
-            return false;
-          }
+        // Procesar las citas
+        let allAppointments = [];
+        if (Array.isArray(data)) {
+          allAppointments = data;
+        } else if (data && Array.isArray(data.citas)) {
+          allAppointments = data.citas;
+        } else {
+          allAppointments = [];
+        }
+
+        // Filtrar citas por el doctor actual
+        const doctorAppointments = allAppointments.filter((appointment: any) => {
+          const appointmentDoctorCedula = appointment.dentist?.cedula || 
+                                         appointment.cedulaDentista || 
+                                         appointment.dentistId;
+          return appointmentDoctorCedula === doctorCedula;
         });
+
+        console.log('Citas filtradas por doctor:', doctorAppointments);
+
+        // Filtrar citas del día actual
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD
         
-        console.log('Citas filtradas del día:', citasDelDia);
-        this.appointments = citasDelDia;
+        this.appointments = doctorAppointments.filter((appointment: any) => {
+          const appointmentDate = new Date(appointment.date);
+          const appointmentDateString = appointmentDate.toISOString().split('T')[0];
+          return appointmentDateString === todayString;
+        });
+
+        console.log('Pacientes del día para el doctor:', this.appointments);
         this.loading = false;
       },
-      error: (err: any) => {
-        this.errorMessage = err?.error?.msg || 'Error al cargar las citas.';
-        this.appointments = [];
+      error: (err) => {
+        console.error('Error cargando citas:', err);
+        this.errorMessage = 'Error al cargar las citas del día';
         this.loading = false;
       }
     });

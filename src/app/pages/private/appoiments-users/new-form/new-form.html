@@ -1,0 +1,91 @@
+<div class="layout-container">
+<app-aside-users></app-aside-users>
+
+<div id="appointmentContainer">
+    <h1 class="form-title">SOLICITAR CITA ODONTOLÓGICA</h1>
+    <form [formGroup]="formAppoiments" (ngSubmit)="onSubmit()" id="appointmentForm">
+        
+        <div>
+            <label>Cédula del paciente:</label>
+            <input type="text" id="cedula" formControlName="patient" readonly>
+        </div>
+
+        <div>
+        <label>Odontólogo:</label>
+        <select id="odontologistId" formControlName="dentist" required>
+            <option value="">Seleccione..</option>
+            <ng-container *ngFor="let objDoctors of doctors">
+                <option [value]="objDoctors._id">{{objDoctors.name}}</option>
+            </ng-container>
+        </select>
+        </div>
+
+        <div>
+            <label>Fecha:</label>
+            <input type="date" id="date" formControlName="date" required>
+        </div>
+
+        <div class="fechas">
+            <div>
+                <label>Hora:</label>
+                <select id="timeBlock" formControlName="timeBlock" required>
+                    <option value="">Seleccione...</option>
+                    <option *ngFor="let block of availableBlocks" [value]="block">{{ block }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div *ngIf="availableBlocks.length === 0 && formAppoiments.get('dentist')?.value && formAppoiments.get('date')?.value" class="no-availability-message">
+          No hay disponibilidad para el odontólogo seleccionado en la fecha elegida.
+        </div>
+
+        <div style="display: none;">
+            <label>Estado:</label>
+            <select id="status" formControlName="status">
+                <option value="pendiente">Pendiente</option>
+                <option value="confirmada">Confirmada</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+        </div>
+
+        <div class="half-field">
+            <label>Motivo:</label>
+            <textarea id="reason" formControlName="reason" required></textarea>
+        </div>
+
+        <div class="half-field">
+            <label>Notas:</label>
+            <textarea id="notes" formControlName="notes"></textarea>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" [disabled]="submitting || !formAppoiments.valid">
+              {{ appointmentId ? 'Actualizar Cita' : (submitting ? 'Solicitando...' : 'Solicitar Cita') }}
+            </button>
+        </div>
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    </form>
+
+</div>
+</div>
+<style>
+.success-message {
+  color: #166534;
+  background: #dcfce7;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+.error-message {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+</style> 

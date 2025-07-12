@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AppoimentsServices } from '../../../services/appoiments-services';
+import { AuthServices } from '../../../services/auth-services';
 
 interface Appointment {
   id: string;
@@ -34,7 +35,7 @@ export class CalendarComponent implements OnInit {
   weekDays: WeekDay[] = [];
   appointments: Appointment[] = [];
 
-  constructor(private appoimentsService: AppoimentsServices) {}
+  constructor(private appoimentsService: AppoimentsServices, private authServices: AuthServices) {}
 
   ngOnInit(): void {
     this.generateWeekDays();
@@ -64,10 +65,28 @@ export class CalendarComponent implements OnInit {
   }
 
   loadAppointments() {
+    // Obtener la cédula del doctor actual
+    const currentUser = this.authServices.getCurrentUser();
+    const doctorCedula = currentUser?.cedula;
+    
+    if (!doctorCedula) {
+      console.error('No se pudo obtener la cédula del doctor actual');
+      return;
+    }
+
     this.appoimentsService.getAppoiments().subscribe({
       next: (data: any) => {
-        const citas = Array.isArray(data) ? data : (data.citas || []);
-        this.appointments = citas.map((cita: any) => {
+        const allAppointments = Array.isArray(data) ? data : (data.citas || []);
+        
+        // Filtrar citas por el doctor actual
+        const doctorAppointments = allAppointments.filter((appointment: any) => {
+          const appointmentDoctorCedula = appointment.dentist?.cedula || 
+                                         appointment.cedulaDentista || 
+                                         appointment.dentistId;
+          return appointmentDoctorCedula === doctorCedula;
+        });
+
+        this.appointments = doctorAppointments.map((cita: any) => {
           const date = cita.date ? cita.date.substring(0, 10) : '';
           return {
             id: cita._id,
