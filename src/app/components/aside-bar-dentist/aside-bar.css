@@ -1,3 +1,16 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* Overlay con blur y sombra suave */
+.drawer-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30,30,30,0.32);
+  backdrop-filter: blur(3px);
+  z-index: 1001;
+  display: block;
+  transition: background 0.3s;
+}
+
 .aside-bar {
   width: 260px;
   min-height: 100vh;
@@ -7,6 +20,216 @@
   flex-direction: column;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  z-index: 1002;
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+@media (max-width: 900px) {
+  .aside-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    border-radius: 0 28px 28px 0;
+    background: #f8f5f2;
+    max-width: 80vw;
+    min-width: 220px;
+    width: 80vw;
+    padding: 2.2rem 1.2rem 2.2rem 1.2rem;
+    animation: drawerIn 0.35s cubic-bezier(.4,0,.2,1);
+  }
+  .aside-bar.drawer-open {
+    transform: translateX(0);
+  }
+  @keyframes drawerIn {
+    from { transform: translateX(-100%); opacity: 0.7; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .drawer-mobile-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+  .drawer-close {
+    display: block;
+    background: none;
+    border: none;
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    z-index: 1003;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+  .drawer-close:hover {
+    background: #ececec;
+  }
+  .drawer-header {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  .drawer-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #222;
+    margin: 0 0 0.2rem 0;
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+  .drawer-search {
+    margin-bottom: 1.2rem;
+  }
+  .drawer-search-input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    border: 1.5px solid #ccc;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+  .drawer-search-results {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    margin-top: 0.2rem;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .drawer-result-item {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    font-size: 1rem;
+    color: #333;
+    border-radius: 8px;
+    transition: background 0.18s;
+  }
+  .drawer-result-item:last-child { border-bottom: none; }
+  .drawer-result-item:hover { background: #f3e8e1; }
+  .drawer-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .drawer-section {
+    margin-bottom: 1.2rem;
+  }
+  .drawer-section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #b48c5a;
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .drawer-link {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #222;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 0.2rem;
+    transition: background 0.18s, color 0.18s;
+    background: none;
+  }
+  .drawer-link.active, .drawer-link:active, .drawer-link:hover {
+    background: #f3e8e1;
+    color: #b48c5a;
+  }
+  .drawer-icon.material-icons {
+    font-family: 'Material Icons';
+    font-size: 1.45rem;
+    color: #b48c5a;
+    vertical-align: middle;
+    margin-right: 0.1rem;
+    transition: color 0.18s;
+  }
+  .drawer-logout {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+  .drawer-btn-logout {
+    background: #fff;
+    color: #b91c1c;
+    border: 1.5px solid #b91c1c;
+    border-radius: 10px;
+    padding: 0.8rem 1.7rem;
+    font-weight: 800;
+    font-size: 1.08rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: background 0.2s, color 0.2s;
+  }
+  .drawer-btn-logout:hover {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .drawer-btn-logout .drawer-icon {
+    font-size: 1.3rem;
+    color: #b91c1c;
+  }
+  .mobile-only { display: block !important; }
+  .desktop-only { display: none !important; }
+}
+
+@media (min-width: 901px) {
+  .drawer-overlay, .drawer-close, .mobile-only, .drawer-mobile-content { display: none !important; }
+  .desktop-only { display: block !important; }
+  .aside-bar {
+    position: static;
+    transform: none !important;
+    border-radius: 0;
+    width: 260px;
+    min-width: 220px;
+    max-width: 320px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    background: #f3e8e1;
+    padding: 2rem 1.5rem;
+  }
+}
+
+.logout-mobile {
+  margin-top: 2rem;
+  text-align: center;
+}
+.btn-logout {
+  background: #fff;
+  color: #b91c1c;
+  border: 1.5px solid #b91c1c;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-logout:hover {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.btn-logout .logout-icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
 }
 
 .aside-bar h2 {

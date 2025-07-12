@@ -744,3 +744,16 @@ textarea {
     flex: 1 1 100%;
   }
 }
+
+/* Mejorar selects e inputs en mobile */
+@media (max-width: 600px) {
+  select, input, textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    font-size: 1rem;
+  }
+  .content-area, .content-container {
+    overflow: visible !important;
+  }
+}

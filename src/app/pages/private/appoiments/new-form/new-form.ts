@@ -6,6 +6,7 @@ import { JsonPipe, CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AsideBar } from "../../../../components/aside-bar-dentist/aside-bar";
 import { AvailabilityServices } from '../../../../services/availability-services';
+import { DateUtilsService } from '../../../../services/date-utils.service';
 
 @Component({
   selector: 'app-new-form',
@@ -24,11 +25,31 @@ successMessage = '';
 errorMessage = '';
 availableBlocks: string[] = [];
 
+  // Helper method para manejar fechas de manera consistente
+  private formatDate(dateString: string): string {
+    if (!dateString) return '';
+    
+    // Si ya está en formato YYYY-MM-DD, devolverlo directamente
+    if (typeof dateString === 'string' && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return dateString;
+    }
+    
+    // Si no, convertirla de manera segura
+    try {
+      const date = new Date(dateString);
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      console.error('Error formateando fecha:', error);
+      return dateString;
+    }
+  }
+
 
   constructor(
     private appoimentsServices: AppoimentsServices,
     private dentistServices: DentistServices,
     private availabilityServices: AvailabilityServices,
+    private dateUtilsService: DateUtilsService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -71,8 +92,17 @@ availableBlocks: string[] = [];
     const raw = this.formAppoiments.value;
     console.log('Datos raw del formulario:', raw);
     
+    // Manejar la fecha correctamente para evitar problemas de zona horaria
+    let fechaProcesada = raw.date;
+    if (raw.date) {
+      // Usar el helper method para formatear la fecha correctamente
+      fechaProcesada = this.dateUtilsService.formatDate(raw.date);
+      console.log('Fecha original:', raw.date);
+      console.log('Fecha procesada:', fechaProcesada);
+    }
+    
     const cita: any = {
-      date: raw.date,
+      date: fechaProcesada,
       timeBlock: raw.timeBlock,
       status: raw.status,
       reason: raw.reason,

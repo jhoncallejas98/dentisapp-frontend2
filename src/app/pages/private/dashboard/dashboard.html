@@ -1,6 +1,4 @@
 <div class="layout-container">
-  <app-aside-bar></app-aside-bar>
-
   <div class="dashboard-container">
     <!-- Header simple -->
     <div class="dashboard-header">
@@ -17,7 +15,6 @@
       </button>
     </div>
 
-
     <!-- Pacientes del día -->
     <div class="section-container">
       <div class="section-header">
@@ -26,7 +23,8 @@
       </div>
 
       <div class="patients-table-wrapper">
-        <table class="patients-table" *ngIf="appointments.length > 0">
+        <!-- Tabla para desktop -->
+        <table class="patients-table desktop-only" *ngIf="appointments.length > 0">
           <thead>
             <tr>
               <th>Documento</th>
@@ -67,6 +65,66 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Cards para mobile -->
+        <div class="patients-cards mobile-only" *ngIf="appointments.length > 0">
+          <div class="patient-card" *ngFor="let appointment of appointments">
+            <div class="card-header">
+              <div class="patient-info">
+                <div class="patient-avatar">
+                  {{ getPatientInitial(appointment.patient) }}
+                </div>
+                <div class="patient-details">
+                  <h4>{{ appointment.patient.name || appointment.patient }}</h4>
+                  <p class="document">{{ appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient }}</p>
+                </div>
+              </div>
+              <div class="appointment-time">
+                <span class="time">{{ appointment.timeBlock }}</span>
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <div class="appointment-details">
+                <div class="detail-item">
+                  <span class="label">Motivo:</span>
+                  <span class="value">{{ appointment.reason }}</span>
+                </div>
+                <div class="detail-item">
+                  <span class="label">Estado:</span>
+                  <span class="status-badge"
+                    [ngClass]="{
+                      'badge-green': appointment.status === 'confirmada' || appointment.status === 'confirmed' || appointment.status === 'attended' || appointment.status === 'completed',
+                      'badge-yellow': appointment.status === 'pendiente' || appointment.status === 'pending',
+                      'badge-red': appointment.status === 'cancelada' || appointment.status === 'cancelled'
+                    }">
+                    {{ translateStatus(appointment.status) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-actions">
+              <a class="btn-view" [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                Ver Historia
+              </a>
+              <button class="btn-primary" 
+                      (click)="atenderPaciente(appointment)"
+                      [disabled]="appointment.status === 'attended' || appointment.status === 'completed'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4"></path>
+                  <path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z"></path>
+                  <path d="M3 12c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2z"></path>
+                </svg>
+                Atender
+              </button>
+            </div>
+          </div>
+        </div>
         <div *ngIf="!loading && appointments.length === 0" class="no-patients-message">
           No hay pacientes agendados para el día de hoy.
         </div>

@@ -120,52 +120,101 @@
 }
 
 
-@media (max-width: 768px) {
-  .who-we-are h2 {
-    font-size: 2.5rem;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-container {
+    animation: fadeInUp 1s ease-out;
+}
+
+@media (max-width: 1024px) {
+  .who-we-are {
+    padding: 2.5rem 1rem;
+  }
+  .who-container {
+    max-width: 98vw;
   }
   .values {
-    display: grid;
-    grid-template-columns: 1fr;
-    justify-content: center;
-    gap: 2rem;
-    margin: 1rem auto 0 auto;
-    padding: 0 1rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
   }
-  .main-container {
-    margin-left: 3rem;
-    margin-right: 3rem;
 }
-  .who-we-are p {
-    font-size: 1rem;
-  }
 
+@media (max-width: 768px) {
+  .who-we-are {
+    padding: 1.5rem 0.5rem;
+  }
+  .who-we-are h2 {
+    font-size: 2rem;
+  }
+  .who-container {
+    max-width: 100vw;
+    padding: 0 0.5rem;
+  }
+  .values {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
   .values > div {
-    padding: 1.5rem;
-
+    padding: 1rem;
   }
-
-  .values h3 {
-    font-size: 1.2rem;
-    text-align: center;
-  }
-
-  .values p,
-  .values ul {
-    font-size: 0.9rem;
-  }
-
   .cta-scroll {
-    padding: 0.8rem 2rem;
+    width: 100%;
     font-size: 1rem;
+    padding: 0.8rem 0;
   }
-  
+}
+
+@media (max-width: 576px) {
+  .who-we-are {
+    padding: 1rem 0.2rem;
+  }
+  .who-we-are h2 {
+    font-size: 1.3rem;
+  }
+  .who-we-are p {
+    font-size: 0.95rem;
+  }
+  .values > div {
+    padding: 0.7rem;
+  }
+  .cta-scroll {
+    font-size: 0.95rem;
+    padding: 0.7rem 0;
+  }
 }
 
 @media (max-width: 390px) {
-  .values {
-    gap: 1.5rem;
+  .who-we-are {
+    padding: 0.5rem 0.1rem;
   }
+  .who-we-are h2 {
+    font-size: 1.1rem;
+  }
+  .who-we-are p {
+    font-size: 0.85rem;
+  }
+  .values > div {
+    padding: 0.4rem;
+  }
+  .cta-scroll {
+    font-size: 0.9rem;
+    padding: 0.5rem 0;
+  }
+}
+
+body, html {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 @media (max-width: 320px) {

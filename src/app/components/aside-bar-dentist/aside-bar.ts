@@ -1,72 +1,113 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthServices } from '../../services/auth-services';
 
 @Component({
   selector: 'app-aside-bar',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, FormsModule],
   standalone: true,
   templateUrl: './aside-bar.html',
-  styleUrl: './aside-bar.css'
+  styleUrls: ['./aside-bar.css']
 })
 export class AsideBar implements OnInit {
+  @Input() menuOpen: boolean = false;
+  @Output() closeMenu = new EventEmitter<void>();
+
   currentUser: any = null;
   welcomeMessage: string = '';
   userRole: string = '';
+  searchTerm: string = '';
+  searchResults: any[] = [];
 
-  constructor(private authServices: AuthServices) {}
+  constructor(private authServices: AuthServices, private router: Router) {}
 
   ngOnInit() {
     this.loadCurrentUser();
   }
 
   loadCurrentUser() {
-    // Obtener el usuario del localStorage o del servicio de autenticación
     const userStr = localStorage.getItem('user');
-    console.log('Usuario en localStorage:', userStr);
-    
     if (userStr) {
       this.currentUser = JSON.parse(userStr);
       this.userRole = this.currentUser.role || '';
-      console.log('Usuario parseado:', this.currentUser);
-      console.log('Rol del usuario:', this.userRole);
       this.generateWelcomeMessage();
     } else {
-      console.log('No hay usuario en localStorage');
       this.welcomeMessage = 'Bienvenido,';
     }
   }
 
   generateWelcomeMessage() {
-    console.log('Generando mensaje de bienvenida para:', this.currentUser);
-    
     if (!this.currentUser) {
       this.welcomeMessage = 'Bienvenido,';
       return;
     }
-
     const { role, name } = this.currentUser;
     let cleanName = name || '';
-    
-    console.log('Rol:', role, 'Nombre:', cleanName);
-
-    // Saludo simple para todos los usuarios
     this.welcomeMessage = cleanName ? `Bienvenido\n${cleanName}` : 'Bienvenido,';
-    
-    console.log('Mensaje generado:', this.welcomeMessage);
   }
 
   showComingSoon() {
     alert("✨ Próximamente disponible");
   }
 
-  // Métodos para verificar el rol del usuario
   isDentist(): boolean {
     return this.userRole === 'dentist' || this.userRole === 'admin';
   }
 
   isPatient(): boolean {
     return this.userRole === 'patient';
+  }
+
+  isMobile(): boolean {
+    return window.innerWidth <= 900;
+  }
+
+  openMenu() {
+    // No-op, controlado por input
+  }
+  closeMenuDrawer() {
+    this.closeMenu.emit();
+    this.searchResults = [];
+    this.searchTerm = '';
+  }
+  toggleMenu() {
+    if (this.menuOpen) {
+      this.closeMenuDrawer();
+    } else {
+      // No-op, controlado por input
+    }
+  }
+
+  onSearchInput() {
+    if (!this.isDentist()) return;
+    if (!this.searchTerm.trim()) {
+      this.searchResults = [];
+      return;
+    }
+    this.authServices.getAllUsers().subscribe({
+      next: (users: any) => {
+        const patients = Array.isArray(users) ? users.filter(u => u.role === 'patient') : [];
+        this.searchResults = patients.filter(patient => 
+          patient.cedula && patient.cedula.includes(this.searchTerm)
+        );
+      },
+      error: (err) => {
+        this.searchResults = [];
+      }
+    });
+  }
+  openPatientHistory(patient: any) {
+    const cedula = patient.cedula || patient.documentId || patient._id;
+    this.router.navigate(['/historia-clinica', cedula]);
+    this.closeMenuDrawer();
+  }
+  logout() {
+    this.authServices.deleteLocalStorage('token');
+    this.authServices.deleteLocalStorage('user');
+    this.authServices.deleteLocalStorage('userId');
+    this.router.navigateByUrl('home');
+    this.closeMenuDrawer();
   }
 }

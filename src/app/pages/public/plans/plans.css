@@ -1,3 +1,18 @@
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-container {
+    animation: fadeInUp 1s ease-out;
+}
+
 .page-plans .planes-header {
     background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
@@ -10,18 +25,18 @@
 
 
 .plans-section {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1rem 3.5rem 1rem;
     width: 100%;
+    background: #fff;
 }
 
 .plans-section h2 {
     font-size: 3rem;
-    font-weight: 800;
+    font-weight: 900;
     text-align: center;
-    margin-bottom: 1rem;
-    color: #1a1a1a;
-    position: relative;
-    transition: transform 0.3s ease, color 0.3s ease;
+    margin-bottom: 1.2rem;
+    color: #222;
+    letter-spacing: -1px;
     margin-top: 0;
 }
 
@@ -47,13 +62,12 @@
 }
 
 .plans-section p {
-    font-size: 1rem;
-    line-height: 1.6;
-    max-width: 1000px;
-    margin: 0 auto 8rem auto;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 900px;
+    margin: 0 auto 3rem auto;
     color: #444;
     text-align: center;
-    transition: color 0.3s ease;
 }
 
 .plans-section p:hover {
@@ -62,130 +76,148 @@
 
 .plans {
     display: flex;
-    justify-content: space-evenly;
-    flex-wrap: nowrap; /* Cambia a nowrap para mantener las tarjetas en una sola fila */
-    gap: 1.5rem;
-    max-width: 1400px;
+    justify-content: center;
+    gap: 2.5rem;
+    max-width: 1200px;
     margin: 0 auto;
+    flex-wrap: wrap;
 }
 
 .plan-card {
-    flex: 1 1 30%;
-    min-width: 300px;
-    background: #eadbd0; /* Fondo de las tarjetas, como en la imagen */
-    padding: 2rem;
-    border-radius: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #eadbd0;
+    border-radius: 1.3rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+    min-width: 290px;
+    max-width: 340px;
+    width: 100%;
+    transition: box-shadow 0.3s, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #eadbd0;
 }
 
 .plan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+    transform: translateY(-6px) scale(1.03);
+    border-color: #000;
 }
 
 .plan-card h3 {
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
-    color: #1a1a1a;
-    text-align: center;
+    color: #000;
+    font-weight: 800;
+    letter-spacing: 0.5px;
 }
 
 .plan-card .price {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #333;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #222;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.2rem;
 }
 
 .plan-card ul {
     list-style: none;
     padding-left: 0;
     margin-bottom: 1.5rem;
+    width: 100%;
 }
 
 .plan-card li {
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     color: #555;
-    margin-bottom: 0.5rem;
-    padding-left: 1.5rem;
+    margin-bottom: 0.7rem;
+    padding-left: 1.7rem;
     position: relative;
 }
 
 .plan-card li::before {
-    content: "✔️";
+    content: "\2714\fe0f";
     position: absolute;
     left: 0;
-    color: #38b000;
+    color: #eab308;
+    font-size: 1.1rem;
 }
 
 .cta-plan {
     display: block;
     margin: 0 auto;
-    padding: 0.8rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
+    padding: 0.9rem 2.2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
     border: none;
-    background: #1a1a1a;
-    color: white;
+    background: #222;
+    color: #fff;
     border-radius: 50px;
     cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
+    transition: transform 0.3s, background 0.3s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    letter-spacing: 0.5px;
 }
 
 .cta-plan:hover {
-    transform: scale(1.05);
-    background: #333;
+    transform: scale(1.07);
+    background: #444;
 }
 
 /* iPads y tablets (hasta 1024px) */
 @media (max-width: 1024px) {
-    .plans {
-        flex-wrap: wrap; /* Permite que las tarjetas se acomoden mejor */
-        justify-content: center;
-        gap: 2rem;
+    .plans-section {
+        padding: 2rem 0.5rem 2.5rem 0.5rem;
     }
-
-    .plan-card {
-        flex: 1 1 45%; /* Hace que las tarjetas ocupen más espacio en pantalla */
+    .plans {
+        gap: 1.5rem;
     }
 }
 
 /* Celulares grandes (hasta 768px) */
 @media (max-width: 768px) {
+    .plans-section {
+        padding: 1.2rem 0.2rem 1.5rem 0.2rem;
+    }
     .plans-section h2 {
-        font-size: 2.5rem;
+        font-size: 1.7rem;
     }
-
     .plans-section p {
-        font-size: 0.9rem;
-        margin-bottom: 4rem;
+        font-size: 0.98rem;
+        margin-bottom: 1.2rem;
     }
-
     .plans {
-        flex-direction: column; /* Poner las tarjetas en columna */
+        flex-direction: column;
         align-items: center;
+        gap: 1rem;
     }
-
     .plan-card {
-        width: 80%;
+        width: 98%;
         max-width: 400px;
+        min-width: 180px;
+        padding: 1.2rem 0.7rem 1.2rem 0.7rem;
     }
 }
 
 /* Celulares medianos y pequeños (hasta 576px) */
 @media (max-width: 576px) {
+    .plans-section {
+        padding: 0.7rem 0.1rem 1rem 0.1rem;
+    }
     .plans-section h2 {
-        font-size: 2rem;
+        font-size: 1.2rem;
     }
-
     .plans-section p {
-        font-size: 0.85rem;
-        margin-bottom: 2rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.7rem;
     }
-
     .plan-card {
-        width: 90%;
+        width: 99%;
+        padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+    }
+    .cta-plan {
+        font-size: 0.95rem;
+        padding: 0.6rem 1.2rem;
     }
 }
 
@@ -215,5 +247,23 @@
         font-size: 0.9rem;
         padding: 0.7rem 1.5rem;
     }
+}
+
+@media (max-width: 390px) {
+  .plans-section h2 {
+    font-size: 1rem;
+  }
+  .plan-card {
+    padding: 0.5rem 0.1rem 0.5rem 0.1rem;
+  }
+  .cta-plan {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.7rem;
+  }
+}
+
+body, html {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 

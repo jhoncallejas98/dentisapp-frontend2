@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { AuthServices } from '../../../services/auth-services';
+import { DateUtilsService } from '../../../services/date-utils.service';
 
 interface Appointment {
   id: string;
@@ -35,7 +36,11 @@ export class CalendarComponent implements OnInit {
   weekDays: WeekDay[] = [];
   appointments: Appointment[] = [];
 
-  constructor(private appoimentsService: AppoimentsServices, private authServices: AuthServices) {}
+  constructor(
+    private appoimentsService: AppoimentsServices, 
+    private authServices: AuthServices,
+    private dateUtilsService: DateUtilsService
+  ) {}
 
   ngOnInit(): void {
     this.generateWeekDays();
@@ -87,7 +92,8 @@ export class CalendarComponent implements OnInit {
         });
 
         this.appointments = doctorAppointments.map((cita: any) => {
-          const date = cita.date ? cita.date.substring(0, 10) : '';
+          // Usar el servicio para manejar fechas de manera consistente
+          const date = this.dateUtilsService.formatDate(cita.date);
           return {
             id: cita._id,
             date,

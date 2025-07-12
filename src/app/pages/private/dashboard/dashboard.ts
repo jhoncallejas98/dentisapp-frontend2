@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { FormsModule } from '@angular/forms';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { AuthServices } from '../../../services/auth-services';
+import { DateUtilsService } from '../../../services/date-utils.service';
 
 interface TodayPatient {
   document: string;
@@ -43,7 +43,7 @@ interface Appointment {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, AsideBar, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -98,7 +98,12 @@ export class DashboardComponent implements OnInit {
     }
   ];
 
-  constructor(private appoimentsService: AppoimentsServices, private router: Router, private authServices: AuthServices) {}
+  constructor(
+    private appoimentsService: AppoimentsServices, 
+    private router: Router, 
+    private authServices: AuthServices,
+    private dateUtilsService: DateUtilsService
+  ) {}
 
   ngOnInit() {
     this.cargarPacientesDelDia();
@@ -165,13 +170,13 @@ export class DashboardComponent implements OnInit {
         console.log('Citas filtradas por doctor:', doctorAppointments);
 
         // Filtrar citas del día actual
-        const today = new Date();
-        const todayString = today.toISOString().split('T')[0]; // YYYY-MM-DD
+        const todayString = this.dateUtilsService.getTodayString();
         
         this.appointments = doctorAppointments.filter((appointment: any) => {
-          const appointmentDate = new Date(appointment.date);
-          const appointmentDateString = appointmentDate.toISOString().split('T')[0];
-          return appointmentDateString === todayString;
+          // Usar el servicio para manejar fechas de manera consistente
+          const appointmentDateString = this.dateUtilsService.formatDate(appointment.date);
+          console.log('Comparando fechas - Hoy:', todayString, 'Cita:', appointmentDateString);
+          return this.dateUtilsService.areDatesEqual(appointmentDateString, todayString);
         });
 
         console.log('Pacientes del día para el doctor:', this.appointments);
@@ -240,6 +245,14 @@ export class DashboardComponent implements OnInit {
       return this.clinicalRecords[this.selectedPatient.document];
     }
     return null;
+  }
+
+  getPatientInitial(patient: any): string {
+    const name = patient?.name || patient;
+    if (typeof name === 'string' && name.length > 0) {
+      return name.charAt(0).toUpperCase();
+    }
+    return 'P';
   }
 
   // Abrir modal de ver historia clínica

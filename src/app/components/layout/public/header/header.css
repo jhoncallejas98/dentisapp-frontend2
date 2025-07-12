@@ -11,42 +11,49 @@ body {
 /* Navbar principal */
 .navbar {
   background-color: #f3e8e1;
-  padding: 1rem 2rem;
+  padding: 1.2rem 2.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
   z-index: 10;
+  /* Sin border-bottom */
 }
 
-.navbar .logo {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
+.logo {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #222;
+  letter-spacing: -1px;
+  display: flex;
+  align-items: center;
 }
 
 /* Menú horizontal */
 .header-selection ul {
   list-style: none;
   display: flex;
-  gap: 2rem;
+  gap: 2.2rem;
   margin: 0;
   padding: 0;
 }
 
 .header-selection li a {
   text-decoration: none;
-  color: #333;
+  color: #222;
   padding: 0.5rem 1.2rem;
   border-radius: 999px;
-  font-weight: 500;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background-color 0.25s, color 0.25s, text-decoration 0.25s;
+  position: relative;
 }
 
 .header-selection a:hover,
 .header-selection a.active {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #ececec;
   color: #000;
+  text-decoration: underline;
 }
 
 /* Estilo específico si estás en la página de login */
@@ -62,7 +69,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  color: #333;
+  color: #222;
 }
 
 /* Menú hamburguesa oculto por defecto */
@@ -72,7 +79,7 @@ body {
   top: 100%;
   right: 0;
   background-color: #f3e8e1;
-  width: 100%;
+  width: 100vw;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -93,34 +100,44 @@ body {
 
 .menu a {
   text-decoration: none;
-  color: #333;
+  color: #222;
   font-size: 1.2rem;
   font-weight: 500;
   padding: 0.5rem 1.5rem;
   display: inline-block;
   border-radius: 999px;
-  transition: background 0.3s;
+  transition: background 0.3s, text-decoration 0.25s;
 }
 
 .menu a:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #ececec;
   color: #000;
+  text-decoration: underline;
 }
 
 /* RESPONSIVO */
+@media (max-width: 900px) {
+  .header-selection ul {
+    gap: 1.2rem;
+  }
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+  .logo {
+    font-size: 1.8rem;
+  }
+}
+
 @media (max-width: 768px) {
   .header-selection {
     display: none;
   }
-
   .hamburger {
     display: block;
   }
-
   .menu {
     display: none;
   }
-
   .menu.active {
     display: block;
   }

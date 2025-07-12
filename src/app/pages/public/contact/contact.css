@@ -3,308 +3,271 @@
     color: #fff;
 }
 
-/* Contact Section */
-.contact-section {
-    padding: 2rem 1rem;
-    text-align: center;
+/* Hero Section - Una sola página */
+.hero-contact {
+    background: #faf8f5;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 1rem 0;
 }
 
-.contact-section h2 {
-    font-size: 2.5rem;
-    font-weight: 800;
+.hero-overlay {
+    text-align: center;
+    color: #1a1a1a;
+    z-index: 2;
+    position: relative;
+    max-width: 1200px;
+    padding: 0 2rem;
+    width: 100%;
+    margin-top: -2rem;
+}
+
+.hero-overlay h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero-overlay p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #666;
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+/* Content Grid - Layout Horizontal */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+/* Left Content */
+.left-content {
+    text-align: left;
+    padding-top: 2rem;
+}
+
+.left-content h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
     margin-bottom: 1rem;
     color: #1a1a1a;
-    position: relative;
-    transition: transform 0.3s ease, color 0.3s ease;
-    margin-top: 0;
+    animation: fadeInUp 1s ease-out;
 }
 
-.contact-section h2:hover {
-    transform: scale(1.05);
-    color: #222;
+.left-content p {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    color: #666;
+    animation: fadeInUp 1s ease-out 0.2s both;
 }
 
-.contact-section h2::after {
-    content: '';
-    width: 50px;
-    height: 3px;
-    background: #222;
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: width 0.3s ease;
-}
-
-.contact-section h2:hover::after {
-    width: 70px;
-}
-
-.contact-section p {
-    font-size: 1rem;
-    line-height: 1.6;
-    max-width: 1000px;
-    margin: 0 auto 1.5rem auto;
-    color: #444;
-    transition: color 0.3s ease;
-}
-
-.contact-section p:hover {
-    color: #222;
-}
-
-/* Contact Cards */
-.contact-cards {
+/* Team Info */
+.team-info {
     display: flex;
-    justify-content: space-evenly;
-    flex-wrap: nowrap;
-    gap: 5rem;
-    max-width: 1400px;
-    margin: 0 auto;
+    justify-content: center;
 }
 
-.contact-card {
-    flex: 1 1 30%;
-    min-width: 300px;
+.team-card {
     background: #eadbd0;
-    padding: 2rem;
-    border-radius: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    max-width: 480px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0,0,0,0.05);
+    animation: fadeInUp 1s ease-out 0.4s both;
 }
 
-.contact-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.contact-image {
-    width: 150px;
-    height: 150px;
+.team-image {
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     overflow: hidden;
-    margin: 0 auto 1rem;
+    margin: 0 auto 1.5rem auto;
+    border: 3px solid #1a1a1a;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
-.contact-image img {
+.team-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
 }
-.contact-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+
+.team-card h3 {
+    font-size: 1.9rem;
+    margin-bottom: 0.6rem;
     color: #1a1a1a;
+    font-weight: 800;
+    text-align: center;
 }
 
-.contact-card .title {
+.team-card .title {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.team-card .specialties {
     font-size: 1rem;
-    color: #333;
-    margin-bottom: 1rem;
-}
-
-.contact-card .info {
-    font-size: 0.9rem;
     color: #555;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    text-align: center;
 }
 
-/* Form Contact Section */
-.form-contact-section {
-    max-width: 900px;
-    margin: 1.5rem auto;
-    padding: 1rem;
-    background-color: #dddddd;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-    text-align: left;
-}
-
-.form-contact-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.3rem;
-    color: #1a1a1a;
-    justify-self: center;
-}
-
-.form-contact-section p {
-    font-size: 0.85rem;
-    color: #444;
+.contact-info {
     margin-bottom: 0.8rem;
-    text-align-last: center;
 }
 
-/* Contact Form */
-.contact-form {
+.contact-item {
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
     gap: 0.8rem;
-    align-items: flex-end;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    color: #1a1a1a;
+    padding: 0.3rem 0;
 }
 
-.contact-form .row {
+.contact-item .icon {
+    font-size: 1.2rem;
+    min-width: 22px;
+    color: #1a1a1a;
+}
+
+
+
+.hero-stats {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    width: 100%;
-    align-items: flex-end;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: fadeInUp 1s ease-out 0.3s both;
 }
 
-.contact-form .field {
-    flex: 1;
-    min-width: 150px;
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.contact-form .field.wide {
-    flex: 2;
-    min-width: 250px;
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    min-width: 80px;
 }
 
-.contact-form .field.btn-field {
-    flex: 0 0 auto;
-    min-width: auto;
-}
-
-.contact-form label {
-    display: block;
-    font-size: 0.85rem;
-    color: #333;
-    margin-bottom: 0.2rem;
+.stat-label {
+    font-size: 1rem;
+    color: #666;
     font-weight: 500;
 }
 
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 0.85rem;
-    background-color: #fdfdfd;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none;
-    border-color: #222;
-    box-shadow: 0 0 5px rgba(34, 34, 34, 0.2);
+.main-container {
+    animation: fadeInUp 1s ease-out;
 }
 
-.contact-form textarea {
-    resize: vertical;
-    min-height: 50px;
-    max-height: 80px;
-}
 
-.contact-form button[type="submit"] {
-    padding: 0.5rem 1.2rem;
-    background-color: #222;
-    color: white;
-    font-weight: 500;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.contact-form button[type="submit"]:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-}
-
-/* Tablets y dispositivos medianos (hasta 1024px) */
+/* Responsive Design */
 @media (max-width: 1024px) {
-    .contact-section {
-        padding: 1.5rem;
-    }
-
-    .contact-cards {
-        flex-wrap: wrap; /* Permite acomodar las tarjetas mejor */
-        justify-content: center;
-        gap: 2rem;
-    }
-
-    .contact-card {
-        flex: 1 1 45%;
-    }
-
-    .form-contact-section {
-        max-width: 750px;
-    }
+  .content-grid {
+    gap: 2rem;
+  }
+  .team-card {
+    max-width: 400px;
+    padding: 2rem;
+  }
 }
 
-/* Celulares grandes y medianos (hasta 768px) */
 @media (max-width: 768px) {
-    .contact-section {
-        display: flex;
-        flex-direction: column; /* Para móviles */
-        align-items: center; 
-        margin-left: 4rem;
-        margin-right: 2rem;
-    }
-    .contact-section h2 {
-        font-size: 2rem;
-    }
-
-    .contact-section p {
-        font-size: 0.9rem;
-    }
-
-    .contact-cards {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .contact-card {
-        width: 80%;
-        max-width: 400px;
-        
-    }
-
-    .form-contact-section {
-        width: 90%;
-        max-width: 500px;
-    }
+  .hero-contact {
+    padding: 0.5rem 0;
+    min-height: 100vh;
+  }
+  .content-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .left-content {
+    text-align: center;
+    padding-top: 0;
+  }
+  .team-card {
+    margin: 0 auto;
+    max-width: 350px;
+    padding: 1.5rem;
+  }
+  .team-image {
+    width: 100px;
+    height: 100px;
+  }
 }
 
-/* Celulares pequeños (hasta 375px, iPhone SE) */
-@media (max-width: 400px) {
-    .contact-section {
-        display: flex;
-        flex-direction: column; /* Para móviles */
-        align-items: center; 
-        margin-left: 5rem;
-        margin-right: 3rem;
-    }
-    
-    .contact-section h2 {
-        font-size: 1.8rem;
-    }
+@media (max-width: 576px) {
+  .hero-contact {
+    padding: 0.2rem 0;
+  }
+  .team-card {
+    max-width: 98vw;
+    padding: 1rem;
+  }
+  .team-image {
+    width: 80px;
+    height: 80px;
+  }
+  .left-content h1 {
+    font-size: 1.3rem;
+  }
+  .left-content p {
+    font-size: 1rem;
+  }
+}
 
-    .contact-section p {
-        font-size: 0.8rem;
-    }
+@media (max-width: 390px) {
+  .team-card {
+    padding: 0.5rem;
+  }
+  .team-image {
+    width: 60px;
+    height: 60px;
+  }
+  .left-content h1 {
+    font-size: 1.1rem;
+  }
+  .left-content p {
+    font-size: 0.9rem;
+  }
+}
 
-    .contact-cards {
-        gap: 1rem;
-    }
-
-    .contact-card {
-        width: 80%;
-        padding: 1.5rem;
-   
-    }
-
-    .form-contact-section {
-        max-width: 350px;
-    }
-
-    .contact-form button[type="submit"] {
-        font-size: 0.8rem;
-        padding: 0.6rem 1rem;
-    }
+body, html {
+  max-width: 100vw;
+  overflow-x: hidden;
 }

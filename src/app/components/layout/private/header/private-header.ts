@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,17 +12,28 @@ import { AuthServices } from '../../../../services/auth-services';
     styleUrls: ['./private-header.css']
 })
 export class PrivateHeader {
-    menuOpen = false;
+    @Input() menuOpen: boolean = false;
+    @Output() toggleMenu = new EventEmitter<void>();
+
     searchTerm: string = '';
     searchResults: any[] = [];
+    isDentist: boolean = false;
 
-    constructor(private authServices: AuthServices, private router: Router) {}
+    constructor(private authServices: AuthServices, private router: Router) {
+        const userRole = this.authServices.getCurrentUserRole();
+        this.isDentist = userRole === 'dentist';
+    }
 
-    toggleMenu() {
-        this.menuOpen = !this.menuOpen;
+    onHamburgerClick() {
+        this.toggleMenu.emit();
     }
 
     onSearchInput() {
+        // Solo permitir búsqueda si es dentista
+        if (!this.isDentist) {
+            return;
+        }
+
         if (!this.searchTerm.trim()) {
             this.searchResults = [];
             return;
