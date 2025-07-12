@@ -309,6 +309,34 @@ body {
   color: #0c5460;
 }
 
+.badge-green {
+  background: #43a047;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-block;
+}
+.badge-yellow {
+  background: #ffb300;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-block;
+}
+.badge-red {
+  background: #e53935;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 16px;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-block;
+}
+
 /* === BOTONES === */
 .btn-primary {
   padding: 0.75rem 1.5rem;
@@ -328,6 +356,37 @@ body {
 
 .btn-primary:hover {
   background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  background-color: #9ca3af !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+  transform: none !important;
+}
+
+.btn-primary:disabled:hover {
+  background-color: #9ca3af !important;
+  transform: none !important;
+}
+
+.btn-view {
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  margin: 0 2px;
+  font-family: 'Inter', sans-serif;
+}
+.btn-view:hover {
+  background: #5a6268;
   transform: translateY(-1px);
 }
 

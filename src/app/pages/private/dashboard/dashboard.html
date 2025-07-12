@@ -22,23 +22,97 @@
     <div class="section-container">
       <div class="section-header">
         <h3>Pacientes del Día</h3>
-        <span class="date">{{ today | date:'EEEE, dd MMMM' }}</span>
+        <span class="date">{{ today | date:'EEEE, dd MMMM':'':'es' }}</span>
       </div>
 
-      <div class="patients-list">
-        <div class="patient-item" *ngFor="let patient of todayPatients">
-          <div class="patient-info">
-            <div class="avatar">{{ patient.initials }}</div>
-            <div class="patient-details">
-              <h4>{{ patient.name }}</h4>
-              <span>{{ patient.time }}</span>
-            </div>
-          </div>
-          <div class="patient-status">
-            <span class="status-badge" [class]="patient.status">{{ patient.statusText }}</span>
-          </div>
+      <div class="patients-table-wrapper">
+        <table class="patients-table" *ngIf="appointments.length > 0">
+          <thead>
+            <tr>
+              <th>Documento</th>
+              <th>Nombre Completo</th>
+              <th>Hora Cita</th>
+              <th>Motivo</th>
+              <th>Estado</th>
+              <th>Historia Clínica</th>
+              <th>Atender</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let appointment of appointments">
+              <td>{{ appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient }}</td>
+              <td>{{ appointment.patient.name || appointment.patient }}</td>
+              <td>{{ appointment.timeBlock }}</td>
+              <td>{{ appointment.reason }}</td>
+              <td>
+                <span class="status-badge"
+                  [ngClass]="{
+                    'badge-green': appointment.status === 'confirmada' || appointment.status === 'confirmed' || appointment.status === 'attended' || appointment.status === 'completed',
+                    'badge-yellow': appointment.status === 'pendiente' || appointment.status === 'pending',
+                    'badge-red': appointment.status === 'cancelada' || appointment.status === 'cancelled'
+                  }">
+                  {{ appointment.status === 'attended' ? 'Atendido' : 
+                     appointment.status === 'completed' ? 'Completado' : 
+                     appointment.status === 'pending' ? 'Pendiente' : 
+                     appointment.status === 'confirmed' ? 'Confirmada' : 
+                     appointment.status }}
+                </span>
+              </td>
+              <td>
+                <a class="btn-view" [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]">Ver</a>
+              </td>
+              <td>
+                <button class="btn-primary" 
+                        (click)="atenderPaciente(appointment)"
+                        [disabled]="appointment.status === 'attended' || appointment.status === 'completed'">
+                  Atender
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="!loading && appointments.length === 0" class="no-patients-message">
+          No hay pacientes agendados para el día de hoy.
         </div>
+        <div *ngIf="loading" class="loading-message">Cargando pacientes...</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
       </div>
     </div>
   </div>
 </div>
+
+<style>
+.no-patients-message {
+  text-align: center;
+  color: #888;
+  font-size: 1.15rem;
+  margin: 2rem 0;
+}
+.loading-message {
+  text-align: center;
+  color: #222;
+  font-size: 1.1rem;
+  margin: 2rem 0;
+}
+.error-message {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+.btn-disabled {
+  background-color: #9ca3af !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+.btn-disabled:hover {
+  background-color: #9ca3af !important;
+  transform: none !important;
+}
+</style>

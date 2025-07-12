@@ -3,7 +3,7 @@
 
   <div class="availability-container">
     <div class="header-section">
-      <h2>Disponibilidad del Odontólogo</h2>
+      <h2>Disponibilidad de Odontólogos</h2>
       <button class="btn-primary" (click)="addNewAvailability()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -13,60 +13,42 @@
       </button>
     </div>
 
-    <div class="availability-grid">
+    <div class="availability-cards">
       <div *ngFor="let availability of availabilities" class="availability-card">
         <div class="card-header">
           <h3>{{ availability.diaSemana }}</h3>
-          <div class="status-toggle">
-            <label class="switch">
-              <input 
-                type="checkbox" 
-                [checked]="availability.activo"
-                (change)="toggleAvailability(availability.id)"
-              >
-              <span class="slider"></span>
-            </label>
-            <span class="status-text" [class]="getStatusClass(availability.activo)">
-              {{ getStatusText(availability.activo) }}
-            </span>
-          </div>
+          <span class="status-badge" [ngClass]="getStatusClass(availability.activo)">
+            {{ getStatusText(availability.activo) }}
+          </span>
         </div>
-
         <div class="card-content">
-          <div class="time-info">
-            <div class="time-range">
-              <span class="time-label">Horario:</span>
-              <span class="time-value">{{ availability.horaInicio }} - {{ availability.horaFin }}</span>
-            </div>
-            <div class="blocks-info">
-              <span class="blocks-label">Bloques disponibles:</span>
-              <span class="blocks-count">{{ availability.bloquesDisponibles.length }}</span>
-            </div>
+          <div class="info-row">
+            <span class="label">Odontólogo:</span>
+            <span class="value">{{ availability.dentist?.name || availability.dentist }}</span>
           </div>
-
-          <div class="time-blocks">
-            <div class="blocks-grid">
-              <span 
-                *ngFor="let block of availability.bloquesDisponibles.slice(0, 6)" 
-                class="time-block"
-              >
-                {{ block }}
-              </span>
-              <span *ngIf="availability.bloquesDisponibles.length > 6" class="more-blocks">
-                +{{ availability.bloquesDisponibles.length - 6 }} más
-              </span>
-            </div>
+          <div class="info-row">
+            <span class="label">Horario:</span>
+            <span class="value">{{ availability.horaInicio }} - {{ availability.horaFin }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Bloques disponibles:</span>
+            <span class="value">{{ availability.bloquesDisponibles?.length || 0 }}</span>
           </div>
         </div>
-
         <div class="card-actions">
-          <button class="btn-icon" (click)="editAvailability(availability.id)" title="Editar">
+          <button class="btn-icon" (click)="editAvailability(availability._id)" title="Editar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
               <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
             </svg>
           </button>
-          <button class="btn-icon delete" (click)="deleteAvailability(availability.id)" title="Eliminar">
+          <button class="btn-icon" (click)="toggleAvailability(availability._id)" title="Activar/Inactivar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+          </button>
+          <button class="btn-icon delete" (click)="deleteAvailability(availability._id)" title="Eliminar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="3,6 5,6 21,6"></polyline>
               <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
@@ -88,4 +70,105 @@
       <button class="btn-primary" (click)="addNewAvailability()">Crear Disponibilidad</button>
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+.availability-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.availability-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.availability-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem 0.5rem 1.5rem;
+  background: linear-gradient(135deg, #999999 0%, #666666 100%);
+  color: white;
+}
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-badge.activo {
+  background: #43a047;
+  color: #fff;
+}
+.status-badge.inactivo {
+  background: #e53935;
+  color: #fff;
+}
+.card-content {
+  padding: 1.2rem 1.5rem 0.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+.label {
+  color: #666;
+  font-weight: 500;
+}
+.value {
+  color: #222;
+  font-weight: 600;
+}
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background-color: white;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  border: 1px solid #e9ecef;
+}
+.btn-icon:hover {
+  background-color: #e9ecef;
+  color: #333;
+}
+.btn-icon.delete:hover {
+  background-color: #f8d7da;
+  color: #dc3545;
+  border-color: #f5c6cb;
+}
+</style> 

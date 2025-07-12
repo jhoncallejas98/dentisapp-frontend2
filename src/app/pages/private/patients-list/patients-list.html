@@ -19,39 +19,51 @@
 
 
     <!-- Lista de pacientes -->
-    <div class="patients-list">
-      <div class="patient-item" *ngFor="let patient of patients">
-        <div class="patient-info">
-          <div class="avatar">{{ patient.initials }}</div>
-          <div class="patient-details">
-            <h4>{{ patient.name }}</h4>
-            <p>{{ patient.document }}</p>
-          </div>
-        </div>
-        
-        <div class="patient-contact">
-          <span>{{ patient.phone }}</span>
-        </div>
-        
-        <div class="patient-status">
-          <span class="status-badge" [class]="patient.status">{{ patient.statusText }}</span>
-        </div>
-        
-        <div class="patient-actions">
-          <button class="btn-icon" title="Ver detalles">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </button>
-          <button class="btn-icon" title="Editar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
+    <div class="patients-list-container">
+      <h2>Pacientes</h2>
+      <table class="patients-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Email</th>
+            <th>Historia Clínica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of patients">
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.cedula || patient.documentId || patient._id }}</td>
+            <td>{{ patient.email }}</td>
+            <td>
+              <button class="btn-view" [routerLink]="['/historia-clinica', patient.cedula || patient.documentId || patient._id]">
+                Ver
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+.btn-view {
+  background: #000000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  margin: 0 2px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.btn-view:hover {
+  background: #333333;
+  transform: translateY(-1px);
+}
+</style> 

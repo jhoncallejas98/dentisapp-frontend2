@@ -20,6 +20,7 @@ import { PatientsListComponent } from './pages/private/patients-list/patients-li
 import { EditAvailability } from './pages/private/edit-availability/edit-availability';
 import { AvailabilityList } from './pages/private/availability-list/availability-list';
 import { CalendarComponent } from './pages/private/calendar/calendar';
+import { IncapacidadUsers } from './pages/private/incapacidad-users/incapacidad-users';
 
 export const routes: Routes = [
   {
@@ -38,12 +39,13 @@ export const routes: Routes = [
     path: '',
     component: PrivateLayout,
     children: [
-      { path: "historia-clinica", component: HistoriaClinica, canActivate: [authGuard] },
+      { path: "historia-clinica/:documento", component: HistoriaClinica, canActivate: [authGuard] },
       { path: 'formula-medica', component: FormulaMedica, canActivate: [authGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
       { path: 'dashboard-users', component: DashboardUsers, canActivate: [authGuard] },
       { path: 'formula-users', component: FormulaUsers, canActivate: [authGuard] },
-      { path: 'disponibilidad', component: Odontologodisponible, canActivate: [authGuard] },
+      { path: 'disponibilidad', component: EditAvailability, canActivate: [authGuard] },
+      { path: 'disponibilidad/:id', component: EditAvailability, canActivate: [authGuard] },
 
       // Rutas para el admin
       { path: "admin/disponibilidad", component: Odontologodisponible, canActivate: [authGuard] },
@@ -61,7 +63,8 @@ export const routes: Routes = [
       { path: "calendar", component: CalendarComponent, canActivate: [authGuard] },
       { path: "appoiments", component: AppoimentsComponent, canActivate: [authGuard] },
       { path: "appoiments/new", component: AppoimentsNewForm, canActivate: [authGuard] },
-      { path: "patients", component: PatientsListComponent, canActivate: [authGuard] }
+      { path: "patients", component: PatientsListComponent, canActivate: [authGuard] },
+      { path: "incapacidad/:cedula", component: IncapacidadUsers, canActivate: [authGuard] }
     ]
   },
   { path: "**", redirectTo: "home", pathMatch: "full" }

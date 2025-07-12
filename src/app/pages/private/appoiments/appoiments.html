@@ -18,51 +18,47 @@
     </div>
 
     <!-- Filtros simples -->
-    <div class="filters-section">
-      <div class="search-container">
-        <input type="text" placeholder="Buscar paciente..." class="search-input">
-      </div>
-      <div class="filter-buttons">
-        <button class="filter-btn active">Todas</button>
-        <button class="filter-btn">Confirmadas</button>
-        <button class="filter-btn">Pendientes</button>
-        <button class="filter-btn">Canceladas</button>
-      </div>
-    </div>
+    <!-- Eliminado: barra de búsqueda y botones de filtro -->
 
     <!-- Lista de citas -->
     <div class="appointments-list">
       <div class="appointment-item" *ngFor="let appointment of appointments">
         <div class="appointment-time">
-          <span class="time">{{ appointment.time }}</span>
-          <span class="date">{{ appointment.date }}</span>
+          <span class="time">{{ appointment.timeBlock }}</span>
+          <span class="date">{{ appointment.date | date:'yyyy-MM-dd' }}</span>
         </div>
         
         <div class="appointment-details">
           <div class="patient-info">
-            <div class="avatar">{{ appointment.initials }}</div>
             <div class="patient-details-text">
-              <h4>{{ appointment.patientName }}</h4>
-              <p>{{ appointment.treatment }}</p>
+              <h4>{{ appointment.patient?.name || appointment.patient }}</h4>
+              <p>Odontólogo: {{ appointment.dentist?.name || appointment.dentist }}</p>
+              <p>Motivo: {{ appointment.reason }}</p>
+              <p *ngIf="appointment.notes">Notas: {{ appointment.notes }}</p>
             </div>
           </div>
         </div>
         
         <div class="appointment-status">
-          <span class="status-badge" [class]="appointment.status">{{ appointment.statusText }}</span>
+          <span class="status-badge" [ngClass]="{
+            'badge-yellow': appointment.status === 'pendiente',
+            'badge-green': appointment.status === 'confirmada',
+            'badge-red': appointment.status === 'cancelada'
+          }">{{ appointment.status }}</span>
         </div>
         
         <div class="appointment-actions">
-          <button class="btn-icon" title="Ver detalles">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </button>
-          <button class="btn-icon" title="Editar">
+          <button class="btn-icon" title="Editar" (click)="editAppointment(appointment._id)">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
               <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </button>
+          <button class="btn-icon" title="Eliminar" (click)="deleteAppointment(appointment._id)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18"></path>
+              <path d="M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6"></path>
+              <path d="M19 6l-1-1a2 2 0 0 0-1.41-.59H7.41A2 2 0 0 0 6 5L5 6"></path>
             </svg>
           </button>
         </div>

@@ -1,47 +1,72 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 
 @Component({
   selector: 'app-add-patient',
   standalone: true,
-  imports: [CommonModule, FormsModule, AsideBar],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, AsideBar],
   templateUrl: './add-patient.html',
-  styleUrls: ['./add-patient.css']
+  styleUrl: './add-patient.css'
 })
 export class AddPatient {
-  patient = {
-    nombre: '',
-    apellido: '',
-    email: '',
-    telefono: '',
-    fechaNacimiento: '',
-    genero: '',
-    direccion: '',
-    documento: '',
-    tipoDocumento: '',
-    ocupacion: '',
-    estadoCivil: '',
-    nombreContacto: '',
-    telefonoContacto: '',
-    parentescoContacto: '',
-    alergias: '',
-    medicamentos: '',
-    antecedentes: ''
-  };
+  userForm: FormGroup;
+  errorMessage: string = '';
+  successMessage: string = '';
+  submitting: boolean = false;
 
-  constructor(public router: Router) {}
+  constructor(private fb: FormBuilder, private http: HttpClient) {
+    this.userForm = this.fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(7)]],
+      cedula: ['', Validators.required],
+      role: ['patient', Validators.required],
+      specialty: ['']
+    });
 
-  onSubmit() {
-    // Aquí irá la lógica para guardar el paciente
-    console.log('Paciente a guardar:', this.patient);
-    // Por ahora solo redirigimos a la lista de pacientes
-    this.router.navigate(['/admin/patients']);
+    // Validación dinámica de especialidad
+    this.userForm.get('role')?.valueChanges.subscribe(role => {
+      const specialtyControl = this.userForm.get('specialty');
+      if (role === 'dentist') {
+        specialtyControl?.setValidators([Validators.required]);
+      } else {
+        specialtyControl?.clearValidators();
+      }
+      specialtyControl?.updateValueAndValidity();
+    });
   }
 
-  showComingSoon() {
-    alert('Funcionalidad próximamente disponible');
+  onSubmit() {
+    this.errorMessage = '';
+    this.successMessage = '';
+    if (this.userForm.invalid) return;
+    
+    this.submitting = true;
+    const formValue = this.userForm.value;
+    let userData: any = {
+      name: formValue.name,
+      email: formValue.email,
+      password: formValue.password,
+      cedula: formValue.cedula,
+      role: formValue.role
+    };
+    if (formValue.role === 'dentist') {
+      userData.dentistData = { specialty: formValue.specialty };
+    }
+    this.http.post('http://localhost:3000/api/users', userData).subscribe({
+      next: (res: any) => {
+        this.successMessage = 'Usuario registrado exitosamente.';
+        this.userForm.reset({ role: 'patient' });
+        this.submitting = false;
+      },
+      error: (err) => {
+        this.errorMessage = err?.error?.msg || 'Error al registrar usuario.';
+        this.submitting = false;
+      }
+    });
   }
 } 

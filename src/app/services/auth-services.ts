@@ -55,4 +55,30 @@ export class AuthServices {
     const token = localStorage.getItem('token') ?? ''; //obtiene el token del localstorage 
     return  new HttpHeaders().set('X-Token', token) // envuelve el token en un header como en postma,tipo http... 
   }
+
+  getAllUsers() {
+    return this.http.get('http://localhost:3000/api/users', { headers: this.getHeaders() });
+  }
+
+  getCurrentUserId(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id || null;
+    } catch {
+      return null;
+    }
+  }
+
+  getCurrentUserCedula(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.cedula || null;
+    } catch {
+      return null;
+    }
+  }
 }

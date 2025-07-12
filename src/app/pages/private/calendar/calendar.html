@@ -2,7 +2,7 @@
   <app-aside-bar></app-aside-bar>
 
   <div class="calendar-container">
-    <!-- Header simple -->
+    <!-- Header fijo -->
     <div class="calendar-header">
       <div class="header-content">
         <h2>Calendario</h2>
@@ -23,31 +23,34 @@
       </div>
     </div>
 
-    <!-- Calendario semanal -->
-    <div class="calendar-grid">
-      <!-- Horarios -->
-      <div class="time-slots">
-        <div class="time-slot" *ngFor="let time of timeSlots">
-          {{ time }}
-        </div>
-      </div>
-
-      <!-- Días de la semana -->
-      <div class="week-days">
-        <div class="day-column" *ngFor="let day of weekDays">
-          <div class="day-header">
-            <span class="day-name">{{ day.name }}</span>
-            <span class="day-date">{{ day.date }}</span>
+    <!-- Contenido con scroll -->
+    <div class="calendar-content">
+      <!-- Calendario semanal -->
+      <div class="calendar-grid">
+        <!-- Horarios -->
+        <div class="time-slots">
+          <div class="time-slot" *ngFor="let time of timeSlots">
+            {{ time }}
           </div>
-          
-          <div class="day-slots">
-            <div class="time-slot" *ngFor="let time of timeSlots">
-              <div class="appointment-card" 
-                   *ngFor="let appointment of getAppointmentsForDayAndTime(day.date, time)"
-                   [class]="appointment.status">
-                <div class="appointment-time">{{ appointment.time }}</div>
-                <div class="appointment-patient">{{ appointment.patientName }}</div>
-                <div class="appointment-treatment">{{ appointment.treatment }}</div>
+        </div>
+
+        <!-- Días de la semana -->
+        <div class="week-days">
+          <div class="day-column" *ngFor="let day of weekDays">
+            <div class="day-header">
+              <span class="day-name">{{ day.name }}</span>
+              <span class="day-date">{{ day.date }}</span>
+            </div>
+            
+            <div class="day-slots">
+              <div class="time-slot" *ngFor="let time of timeSlots">
+                <div class="appointment-card" 
+                     *ngFor="let appointment of getAppointmentsForDayAndTime(day.date, time)"
+                     [class]="appointment.status">
+                  <div class="appointment-time">{{ appointment.time }}</div>
+                  <div class="appointment-patient">{{ appointment.patientName }}</div>
+                  <div class="appointment-treatment">{{ appointment.treatment }}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -55,7 +58,7 @@
       </div>
     </div>
 
-    <!-- Resumen semanal -->
-
+    <!-- Botones fijos fuera del scroll -->
+    <!-- Eliminado: botón de Nueva Cita -->
   </div>
 </div> 

@@ -2,15 +2,18 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
+import { AppoimentsServices } from '../../../services/appoiments-services';
+import { Router } from '@angular/router';
 
 interface Appointment {
-  time: string;
+  _id: string;
+  patient: any;
+  dentist: any;
   date: string;
-  initials: string;
-  patientName: string;
-  treatment: string;
+  timeBlock: string;
+  reason: string;
+  notes?: string;
   status: string;
-  statusText: string;
 }
 
 @Component({
@@ -21,42 +24,45 @@ interface Appointment {
   styleUrl: './appoiments.css'
 })
 export class AppoimentsComponent {
-  appointments: Appointment[] = [
-    {
-      time: '09:00',
-      date: 'Hoy',
-      initials: 'MG',
-      patientName: 'María González',
-      treatment: 'Ortodoncia - Ajuste de brackets',
-      status: 'confirmed',
-      statusText: 'Confirmada'
-    },
-    {
-      time: '11:30',
-      date: 'Hoy',
-      initials: 'CR',
-      patientName: 'Carlos Rodríguez',
-      treatment: 'Limpieza dental profunda',
-      status: 'pending',
-      statusText: 'Pendiente'
-    },
-    {
-      time: '15:00',
-      date: 'Hoy',
-      initials: 'AP',
-      patientName: 'Ana Pérez',
-      treatment: 'Extracción de muela del juicio',
-      status: 'cancelled',
-      statusText: 'Cancelada'
-    },
-    {
-      time: '17:30',
-      date: 'Hoy',
-      initials: 'LG',
-      patientName: 'Laura Garzón',
-      treatment: 'Consulta de rutina',
-      status: 'completed',
-      statusText: 'Completada'
+  appointments: Appointment[] = [];
+
+  constructor(private appoimentsService: AppoimentsServices, private router: Router) {
+    this.loadAppointments();
+  }
+
+  loadAppointments() {
+    this.appoimentsService.getAppoiments().subscribe({
+      next: (data: any) => {
+        // Soporta respuesta como { citas: [...] } o array directo
+        if (Array.isArray(data)) {
+          this.appointments = data;
+        } else if (data && Array.isArray(data.citas)) {
+          this.appointments = data.citas;
+        } else {
+          this.appointments = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando citas', err);
+        this.appointments = [];
+      }
+    });
+  }
+
+  deleteAppointment(id: string) {
+    if (confirm('¿Seguro que deseas eliminar esta cita?')) {
+      this.appoimentsService.deleteAppoiment(id).subscribe({
+        next: () => {
+          this.loadAppointments();
+        },
+        error: (err) => {
+          console.error('Error eliminando cita', err);
+        }
+      });
     }
-  ];
+  }
+
+  editAppointment(id: string) {
+    this.router.navigate(['/appoiments/edit', id]);
+  }
 }

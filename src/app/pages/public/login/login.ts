@@ -27,6 +27,9 @@ export class Login {
     this.authServices.loginUser(this.formData.value).subscribe({
       next: (data: any) => {
         this.authServices.saveLocalStorage('token',data.token) // almacena el token en el local storage
+        if (data.user && data.user._id) {
+          this.authServices.saveLocalStorage('userId', data.user._id);
+        }
         this.router.navigateByUrl('dashboard')
       },
       error: (error) => {

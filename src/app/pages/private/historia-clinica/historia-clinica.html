@@ -1,77 +1,632 @@
 <div class="layout-container">
+  <app-aside-bar></app-aside-bar>
+  <main class="main-content">
+    <!-- Header con título y búsqueda -->
+    <div class="page-header">
+      <div class="header-top">
+        <h1 class="page-title">GESTIÓN DEL PACIENTE</h1>
+        
+        <!-- Búsqueda de paciente por cédula (solo si no hay paciente seleccionado) -->
+        <div class="search-patient-container" *ngIf="!paciente">
+          <label for="cedulaBusqueda">Buscar paciente por cédula:</label>
+          <input id="cedulaBusqueda" type="text" [(ngModel)]="cedulaBusqueda" name="cedulaBusqueda" [readonly]="buscandoPaciente" placeholder="Ingrese la cédula...">
+          <button type="button" (click)="buscarPacientePorDocumento(cedulaBusqueda)" [disabled]="buscandoPaciente || !cedulaBusqueda">{{ buscandoPaciente ? 'Buscando...' : 'Buscar' }}</button>
+        </div>
+      </div>
+      
+      <!-- Información del paciente -->
+      <div *ngIf="paciente" class="paciente-info">
+        <div class="paciente-header">
+          <h3>{{ paciente.name }}</h3>
+          <div class="paciente-details">
+            <span>{{ paciente.email }}</span>
+            <span>CC: {{ paciente.cedula }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="pacienteError" class="error-message">{{ pacienteError }}</div>
+    </div>
 
-<app-aside-bar></app-aside-bar>
+    <!-- Navegación por pestañas (fuera de la card) -->
+    <div class="tabs-container" *ngIf="paciente">
+      <div class="tabs-navigation">
+        <button class="tab-button" 
+                [class.active]="activeTab === 'historia'"
+                (click)="setActiveTab('historia')">
+          📋 Historia Clínica
+        </button>
+        <button class="tab-button" 
+                [class.active]="activeTab === 'incapacidad'"
+                (click)="setActiveTab('incapacidad')">
+          🏥 Incapacidad Médica
+        </button>
+        <button class="tab-button" 
+                [class.active]="activeTab === 'formula'"
+                (click)="setActiveTab('formula')">
+          💊 Fórmula Médica
+        </button>
+      </div>
+    </div>
 
-  <main id="historyContainer">
-    <h1 class="form-title">HISTORIA CLÍNICA</h1>
-<form id="historyForm" autocomplete="off">
-  <!-- SECCIÓN: DATOS PERSONALES -->
-  <h3 class="section-title">Datos personales</h3>
-  <div><label>Cédula del paciente:</label><input type="text" formControlName="documentId" required></div>
-  <div><label>Fecha de nacimiento:</label><input type="date" formControlName="birthDate" required></div>
-  <div><label>Edad:</label><input type="number" formControlName="age" readonly></div>
-  <div><label>Correo electrónico:</label><input type="email" formControlName="email" placeholder="correo@ejemplo.com"></div>
-  <div><label>Género:</label>
-    <select formControlName="gender">
-      <option value="">Seleccionar</option>
-      <option value="masculino">Masculino</option>
-      <option value="femenino">Femenino</option>
-      <option value="otro">Otro</option>
-    </select>
-  </div>
-  <div><label>Grupo étnico:</label><input type="text" formControlName="ethnicGroup"></div>
-  <div><label>Tipo de sangre:</label><input type="text" formControlName="bloodType"></div>
+    <!-- Contenido dinámico según la pestaña activa -->
+    <div class="content-container">
+      <!-- Historia Clínica -->
+      <div class="content-card" *ngIf="activeTab === 'historia'">
+        <div class="card-header">
+          <h2 class="card-title">📋 HISTORIA CLÍNICA</h2>
+          <!-- Mensaje según si tiene historia clínica o no -->
+          <div *ngIf="historiaId && !editMode" class="info-message">
+            <span class="icon">✅</span>
+            <span>Historia clínica existente.</span>
+          </div>
+          <div *ngIf="!historiaId && !editMode" class="info-message">
+            <span class="icon">📝</span>
+            <span>Nueva historia clínica.</span>
+          </div>
+        </div>
 
-  <!-- SECCIÓN: COVID -->
-  <h3 class="section-title">Información COVID-19</h3>
-  <div><label>¿Aislamiento por COVID en últimos 15 días?</label>
-    <select formControlName="covidIsolation">
-      <option value="">Seleccionar</option>
-      <option value="true">Sí</option>
-      <option value="false">No</option>
-    </select>
-  </div>
+        <!-- Contenido de la historia clínica -->
+        <div class="card-content">
+          <form id="historyForm" autocomplete="off" (ngSubmit)="saveClinicalData()" [class.disabled-form]="!formularioHabilitado">
+            <!-- SECCIÓN: DATOS PERSONALES -->
+            <h3 class="section-title">Datos personales</h3>
+            <div><label>Cédula del paciente:</label><input type="text" [(ngModel)]="documentId" name="documentId" required readonly></div>
+            <div><label>Fecha de nacimiento:</label><input type="date" [(ngModel)]="birthDate" name="birthDate" [readonly]="!editMode || !formularioHabilitado" required></div>
+            <div><label>Edad:</label><input type="number" [(ngModel)]="age" name="age" [readonly]="!editMode || !formularioHabilitado" placeholder="Ingrese la edad" required></div>
+            <div><label>Correo electrónico:</label><input type="email" [(ngModel)]="email" name="email" [readonly]="!editMode || !formularioHabilitado" placeholder="correo@ejemplo.com"></div>
+            <div><label>Género:</label>
+              <select [(ngModel)]="gender" name="gender" [disabled]="!editMode || !formularioHabilitado">
+                <option value="">Seleccionar</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div><label>Grupo étnico:</label><input type="text" [(ngModel)]="ethnicGroup" name="ethnicGroup" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Tipo de sangre:</label><input type="text" [(ngModel)]="bloodType" name="bloodType" [readonly]="!editMode || !formularioHabilitado"></div>
+            <!-- SECCIÓN: COVID -->
+            <h3 class="section-title">Información COVID-19</h3>
+            <div><label>¿Aislamiento por COVID en últimos 15 días?</label>
+              <select [(ngModel)]="covidIsolation" name="covidIsolation" [disabled]="!editMode || !formularioHabilitado">
+                <option value="">Seleccionar</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <!-- SECCIÓN: CONSULTA -->
+            <h3 class="section-title">Motivo de consulta</h3>
+            <div class="half-field"><label>Motivo de consulta:</label><textarea [(ngModel)]="consultReason" name="consultReason" [readonly]="!editMode || !formularioHabilitado" required></textarea></div>
+            <div class="half-field"><label>Historia de la enfermedad:</label><textarea [(ngModel)]="diseaseHistory" name="diseaseHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <!-- SECCIÓN: ANTECEDENTES -->
+            <h3 class="section-title">Antecedentes</h3>
+            <div class="half-field"><label>Antecedentes personales:</label><textarea [(ngModel)]="personalHistory" name="personalHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <div class="half-field"><label>Antecedentes familiares:</label><textarea [(ngModel)]="familyHistory" name="familyHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <div class="half-field"><label>Medicación actual:</label><textarea [(ngModel)]="currentMeds" name="currentMeds" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <!-- SECCIÓN: HIGIENE ORAL -->
+            <h3 class="section-title">Evaluación oral</h3>
+            <div><label>Hábitos de higiene oral:</label><input type="text" [(ngModel)]="oralHygiene" name="oralHygiene" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div class="half-field"><label>Examen intraoral:</label><textarea [(ngModel)]="intraoralExam" name="intraoralExam" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <div class="half-field"><label>Otros hallazgos clínicos:</label><textarea [(ngModel)]="otherFindings" name="otherFindings" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <!-- SECCIÓN: ACOMPAÑANTE -->
+            <h3 class="section-title">Información del acompañante</h3>
+            <div><label>Nombre del acompañante:</label><input type="text" [(ngModel)]="companionName" name="companionName" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>No. identificación del acompañante:</label><input type="text" [(ngModel)]="companionId" name="companionId" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Parentesco del acompañante:</label><input type="text" [(ngModel)]="companionRelation" name="companionRelation" [readonly]="!editMode || !formularioHabilitado"></div>
+            <!-- SECCIÓN: ACUDIENTE -->
+            <h3 class="section-title">Información del acudiente</h3>
+            <div><label>¿Es el acudiente o responsable?</label>
+              <select [(ngModel)]="isGuardian" name="isGuardian" [disabled]="!editMode || !formularioHabilitado">
+                <option value="">Seleccionar</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div><label>Nombre del acudiente:</label><input type="text" [(ngModel)]="guardianName" name="guardianName" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Identificación del acudiente:</label><input type="text" [(ngModel)]="guardianId" name="guardianId" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Teléfono del acudiente:</label><input type="tel" [(ngModel)]="guardianPhone" name="guardianPhone" [readonly]="!editMode || !formularioHabilitado"></div>
+          </form>
+        </div>
 
-  <!-- SECCIÓN: CONSULTA -->
-  <h3 class="section-title">Motivo de consulta</h3>
-  <div class="half-field"><label>Motivo de consulta:</label><textarea formControlName="consultReason" required></textarea></div>
-  <div class="half-field"><label>Historia de la enfermedad:</label><textarea formControlName="diseaseHistory"></textarea></div>
+        <!-- Botones de acción -->
+        <div class="card-actions">
+          <!-- Si tiene historia clínica y está en modo vista -->
+          <button *ngIf="historiaId && !editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-update" 
+                  (click)="setEditMode()">
+            ✏️ Actualizar
+          </button>
+          
+          <!-- Si no tiene historia clínica y está en modo edición -->
+          <button *ngIf="!historiaId && editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-save" 
+                  (click)="saveClinicalData()">
+            💾 Guardar
+          </button>
+          
+          <!-- Si tiene historia clínica y está en modo edición -->
+          <button *ngIf="historiaId && editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-save" 
+                  (click)="saveClinicalData()">
+            💾 Guardar
+          </button>
+          
+          <!-- Botón cancelar solo cuando está en modo edición -->
+          <button *ngIf="editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-cancel" 
+                  (click)="setViewMode()">
+            ❌ Cancelar
+          </button>
+        </div>
+      </div>
 
-  <!-- SECCIÓN: ANTECEDENTES -->
-  <h3 class="section-title">Antecedentes</h3>
-  <div class="half-field"><label>Antecedentes personales:</label><textarea formControlName="personalHistory"></textarea></div>
-  <div class="half-field"><label>Antecedentes familiares:</label><textarea formControlName="familyHistory"></textarea></div>
-  <div class="half-field"><label>Medicación actual:</label><textarea formControlName="currentMeds"></textarea></div>
+      <!-- Incapacidades Médicas -->
+      <div class="content-card" *ngIf="activeTab === 'incapacidad'">
+        <div class="card-header">
+          <h2 class="card-title">🏥 INCAPACIDADES MÉDICAS</h2>
+        </div>
+        <div class="card-content">
+          <!-- Lista de incapacidades existentes -->
+          <div *ngIf="incapacidades.length > 0" class="incapacidades-list-horizontal">
+            <h3>Incapacidades Registradas</h3>
+            <div class="incapacidad-card-horizontal" *ngFor="let incapacidad of incapacidades">
+              <div class="incapacidad-main">
+                <div class="incapacidad-meta">
+                  <span class="incapacidad-date">{{ incapacidad.fechaInicio | date:'dd/MM/yyyy' }} - {{ incapacidad.fechaFin | date:'dd/MM/yyyy' }}</span>
+                  <span class="incapacidad-days">{{ incapacidad.diasIncapacidad }} días</span>
+                </div>
+                <div class="incapacidad-details">
+                  <span><strong>Diagnóstico:</strong> {{ incapacidad.diagnostico }}</span>
+                  <span><strong>Tipo:</strong> {{ incapacidad.tipoIncapacidad }}</span>
+                  <span *ngIf="incapacidad.observaciones"><strong>Observaciones:</strong> {{ incapacidad.observaciones }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <!-- SECCIÓN: HIGIENE ORAL -->
-  <h3 class="section-title">Evaluación oral</h3>
-  <div><label>Hábitos de higiene oral:</label><input type="text" formControlName="oralHygiene"></div>
-  <div class="half-field"><label>Examen intraoral:</label><textarea formControlName="intraoralExam"></textarea></div>
-  <div class="half-field"><label>Otros hallazgos clínicos:</label><textarea formControlName="otherFindings"></textarea></div>
+          <!-- Formulario de nueva incapacidad -->
+          <div *ngIf="showIncapacidadForm" class="form-container">
+            <h3>Nueva Incapacidad Médica</h3>
+            <form (ngSubmit)="guardarIncapacidad()" class="incapacidad-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Fecha de inicio:</label>
+                  <input type="date" [(ngModel)]="incapacidadForm.fechaInicio" name="fechaInicio" required (change)="calcularDiasIncapacidad()">
+                </div>
+                <div class="form-group">
+                  <label>Fecha de fin:</label>
+                  <input type="date" [(ngModel)]="incapacidadForm.fechaFin" name="fechaFin" required (change)="calcularDiasIncapacidad()">
+                </div>
+                <div class="form-group">
+                  <label>Días de incapacidad:</label>
+                  <input type="number" [(ngModel)]="incapacidadForm.diasIncapacidad" name="diasIncapacidad" readonly>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Diagnóstico:</label>
+                <textarea [(ngModel)]="incapacidadForm.diagnostico" name="diagnostico" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Tipo de incapacidad:</label>
+                <select [(ngModel)]="incapacidadForm.tipoIncapacidad" name="tipoIncapacidad">
+                  <option value="">Seleccionar</option>
+                  <option value="Enfermedad General">Enfermedad General</option>
+                  <option value="Accidente de Trabajo">Accidente de Trabajo</option>
+                  <option value="Enfermedad Laboral">Enfermedad Laboral</option>
+                  <option value="Licencia de Maternidad">Licencia de Maternidad</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Observaciones:</label>
+                <textarea [(ngModel)]="incapacidadForm.observaciones" name="observaciones"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-save">💾 Guardar Incapacidad</button>
+                <button type="button" class="btn-cancel" (click)="toggleIncapacidadForm()">❌ Cancelar</button>
+              </div>
+            </form>
+          </div>
 
-  <!-- SECCIÓN: ACOMPAÑANTE -->
-  <h3 class="section-title">Información del acompañante</h3>
-  <div><label>Nombre del acompañante:</label><input type="text" formControlName="companionName"></div>
-  <div><label>No. identificación del acompañante:</label><input type="text" formControlName="companionId"></div>
-  <div><label>Parentesco del acompañante:</label><input type="text" formControlName="companionRelation"></div>
+          <!-- Botón para agregar nueva incapacidad -->
+          <div *ngIf="!showIncapacidadForm" class="add-button-container">
+            <button class="btn-add" (click)="toggleIncapacidadForm()">
+              ➕ Agregar Incapacidad
+            </button>
+          </div>
+        </div>
+      </div>
 
-  <!-- SECCIÓN: ACUDIENTE -->
-  <h3 class="section-title">Información del acudiente</h3>
-  <div><label>¿Es el acudiente o responsable?</label>
-    <select formControlName="isGuardian">
-      <option value="">Seleccionar</option>
-      <option value="true">Sí</option>
-      <option value="false">No</option>
-    </select>
-  </div>
-  <div><label>Nombre del acudiente:</label><input type="text" formControlName="guardianName"></div>
-  <div><label>Identificación del acudiente:</label><input type="text" formControlName="guardianId"></div>
-  <div><label>Teléfono del acudiente:</label><input type="tel" formControlName="guardianPhone"></div>
+      <!-- Fórmulas Médicas -->
+      <div class="content-card" *ngIf="activeTab === 'formula'">
+        <div class="card-header">
+          <h2 class="card-title">💊 FÓRMULAS MÉDICAS</h2>
+        </div>
+        <div class="card-content">
+          <!-- Lista de fórmulas existentes -->
+          <div *ngIf="formulas.length > 0" class="formulas-list-horizontal">
+            <h3>Fórmulas Registradas</h3>
+            <div class="formula-card-horizontal" *ngFor="let formula of formulas">
+              <div class="formula-main">
+                <div class="formula-medicine-big">{{ formula.medicamento }}</div>
+                <div class="formula-meta">
+                  <span class="formula-date">{{ formula.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
+                  <span class="formula-dentist">👨‍⚕️ {{ formula.cedulaDentista }}</span>
+                </div>
+                <div class="formula-details">
+                  <span><strong>Dosis:</strong> {{ formula.dosis }}</span>
+                  <span><strong>Frecuencia:</strong> {{ formula.frecuencia }}</span>
+                  <span *ngIf="formula.duracionDias"><strong>Duración:</strong> {{ formula.duracionDias }} días</span>
+                </div>
+                <div *ngIf="formula.instrucciones" class="formula-instrucciones">
+                  <strong>Instrucciones:</strong> {{ formula.instrucciones }}
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <!-- BOTÓN -->
-  <div class="button-container">
-    <button type="submit">Guardar Historia Clínica</button>
-  </div>
-</form>
+          <!-- Formulario de nueva fórmula -->
+          <div *ngIf="showFormulaForm" class="form-container">
+            <h3>Nueva Fórmula Médica</h3>
+            <form (ngSubmit)="guardarFormula()" #formulaFormRef="ngForm" autocomplete="off" class="formula-form">
+              <div class="form-group">
+                <label for="medicamento">Medicamento:</label>
+                <input type="text" [(ngModel)]="formulaForm.medicamento" name="medicamento" required>
+              </div>
+              <div class="form-group">
+                <label for="dosis">Dosis:</label>
+                <input type="text" [(ngModel)]="formulaForm.dosis" name="dosis" required>
+              </div>
+              <div class="form-group">
+                <label for="frecuencia">Frecuencia:</label>
+                <input type="text" [(ngModel)]="formulaForm.frecuencia" name="frecuencia" required>
+              </div>
+              <div class="form-group">
+                <label for="duracionDias">Duración (días):</label>
+                <input type="number" [(ngModel)]="formulaForm.duracionDias" name="duracionDias" required min="1">
+              </div>
+              <div class="form-group">
+                <label for="instrucciones">Instrucciones:</label>
+                <textarea [(ngModel)]="formulaForm.instrucciones" name="instrucciones"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-save">💾 Guardar Fórmula</button>
+                <button type="button" class="btn-cancel" (click)="toggleFormulaForm()">❌ Cancelar</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Botón para agregar nueva fórmula -->
+          <div *ngIf="!showFormulaForm" class="add-button-container">
+            <button class="btn-add" (click)="toggleFormulaForm()">
+              ➕ Agregar Fórmula
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debug info (oculto en producción) -->
+    <div style="display: none; background: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 5px; font-size: 12px;">
+      Debug: historiaId={{historiaId}}, editMode={{editMode}}, formularioHabilitado={{formularioHabilitado}}
+    </div>
+    
+    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </main>
 </div>
+
+<style>
+#historyContainer {
+  max-width: 900px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  border: 1.5px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+.history-header {
+  padding: 1rem 2.5rem 0.8rem 2.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 22px 22px 0 0;
+  flex-shrink: 0;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.history-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.history-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.history-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.history-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.history-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.history-actions {
+  padding: 1.5rem 2.5rem 2rem 2.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 0 0 22px 22px;
+  flex-shrink: 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #181818;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+.search-patient-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.search-patient-container input {
+  flex: 1;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 1.08rem;
+  background: #f7f7f7;
+  transition: border 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.search-patient-container input:focus {
+  border-color: #000;
+  outline: none;
+  background: #fff;
+  box-shadow: 0 0 0 2px #00000010;
+}
+.search-patient-container button {
+  padding: 0.7rem 1.5rem;
+  background: #181818;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.08rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.search-patient-container button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
+}
+.paciente-info {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
+  color: #222;
+}
+
+.paciente-header h3 {
+  margin: 0 0 0.4rem 0;
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.paciente-details {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.paciente-details span {
+  background: #e2e8f0;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+/* Estilos para las pestañas de navegación */
+.tabs-navigation {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background: #fff;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.tab-button:hover {
+  background: #f1f5f9;
+  color: #3b82f6;
+}
+
+.tab-button.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.info-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.info-message .icon {
+  font-size: 0.9rem;
+}
+
+.info-message:has(.icon:contains("✅")) {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.info-message:has(.icon:contains("📝")) {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+.disabled-form {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.success-message {
+  color: #166534;
+  background: #dcfce7;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+.error-message {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 0.7rem;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+.btn-update, .btn-create, .btn-save, .btn-cancel {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.btn-update {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-update:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-create {
+  background: #10b981;
+  color: white;
+}
+
+.btn-create:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.btn-save {
+  background: #059669;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #047857;
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.btn-incapacidad {
+  background: #8b5cf6;
+  color: white;
+}
+
+.btn-incapacidad:hover {
+  background: #7c3aed;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tabs-navigation {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .tab-button {
+    font-size: 0.8rem;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .paciente-details {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+</style>

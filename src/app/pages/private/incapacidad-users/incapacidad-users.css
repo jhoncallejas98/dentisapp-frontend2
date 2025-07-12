@@ -1,0 +1,225 @@
+.incapacidad-container {
+  max-width: 900px;
+  margin: 20px auto;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  border: 1.5px solid #ececec;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+.incapacidad-header {
+  padding: 1rem 2.5rem 0.8rem 2.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 22px 22px 0 0;
+  flex-shrink: 0;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #181818;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.5px;
+}
+
+.paciente-info {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.incapacidad-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem 2.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.incapacidad-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.incapacidad-content::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.incapacidad-content::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.incapacidad-content::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.7rem 1rem;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  transition: border 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f610;
+}
+
+.form-group input[readonly] {
+  background: #f9fafb;
+  color: #6b7280;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.incapacidad-actions {
+  padding: 1.5rem 2.5rem 2rem 2.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 0 0 22px 22px;
+  flex-shrink: 0;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-save,
+.btn-clear {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 180px;
+  justify-content: center;
+}
+
+.btn-save {
+  background: #10b981;
+  color: white;
+}
+
+.btn-save:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.btn-save:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-clear {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-clear:hover:not(:disabled) {
+  background: #4b5563;
+  transform: translateY(-1px);
+}
+
+.btn-clear:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.success-message {
+  color: #166534;
+  background: #dcfce7;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  border: 1px solid #bbf7d0;
+}
+
+.error-message {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  border: 1px solid #fecaca;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .incapacidad-container {
+    margin: 10px;
+    height: calc(100vh - 20px);
+  }
+  
+  .incapacidad-header,
+  .incapacidad-content,
+  .incapacidad-actions {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

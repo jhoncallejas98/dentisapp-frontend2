@@ -2,7 +2,9 @@
   <app-aside-bar></app-aside-bar>
 
   <form class="availability-form" (ngSubmit)="onSubmit()">
-    <h2>Editar Disponibilidad</h2>
+    <h2>Crear/Editar Disponibilidad</h2>
+
+    <!-- Eliminar el campo de odontólogo, solo el doctor logueado puede crear su disponibilidad -->
 
     <!-- Día de la semana -->
     <label for="diaSemana">Día de la semana</label>
@@ -14,7 +16,6 @@
       <option value="Jueves">Jueves</option>
       <option value="Viernes">Viernes</option>
       <option value="Sábado">Sábado</option>
-      <option value="Por Asignar">Por Asignar</option>
     </select>
 
     <!-- Horario -->
@@ -30,7 +31,6 @@
           required 
         />
       </div>
-      
       <div class="time-input">
         <label for="horaFin">Hora de fin</label>
         <input 
@@ -44,26 +44,9 @@
       </div>
     </div>
 
-    <!-- Bloques disponibles -->
-    <div class="time-slots-section">
-      <label>Bloques disponibles</label>
-      <div class="time-slots-grid">
-        <button 
-          type="button"
-          *ngFor="let slot of allTimeSlots" 
-          class="time-slot"
-          [class.selected]="isTimeSlotSelected(slot)"
-          [class.available]="isTimeSlotInRange(slot)"
-          (click)="toggleTimeSlot(slot)"
-          [disabled]="!isTimeSlotInRange(slot)"
-        >
-          {{ slot }}
-        </button>
-      </div>
-      <p class="help-text">
-        Selecciona los bloques de tiempo que estarán disponibles para citas.
-        Los bloques fuera del rango de tiempo no están disponibles.
-      </p>
+    <div class="info-blocks">
+      <span class="label">Bloques generados:</span>
+      <span class="value">{{ availability.bloquesDisponibles?.length || 0 }}</span>
     </div>
 
     <!-- Activo -->
@@ -74,7 +57,108 @@
 
     <div class="form-actions">
       <button type="button" class="btn-secondary" (click)="onCancel()">Cancelar</button>
-      <button type="submit" class="btn-primary">Actualizar Disponibilidad</button>
+      <button type="submit" class="btn-primary">Guardar Disponibilidad</button>
     </div>
+    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </form>
-</div> 
+</div>
+
+<style>
+.availability-form {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.availability-form label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.3rem;
+}
+.availability-form select, .availability-form input[type="time"] {
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  margin-bottom: 0.7rem;
+}
+.time-range {
+  display: flex;
+  gap: 1.5rem;
+}
+.time-input {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.info-blocks {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+.label {
+  color: #666;
+  font-weight: 500;
+}
+.value {
+  color: #222;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+.btn-primary {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover {
+  background: #0056b3;
+}
+.btn-secondary {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-secondary:hover {
+  background: #bdbdbd;
+}
+.success-message {
+  color: #388e3c;
+  background: #e8f5e9;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+.error-message {
+  color: #b91c1c;
+  background: #fee2e2;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  margin-top: 1rem;
+  text-align: center;
+}
+</style> 

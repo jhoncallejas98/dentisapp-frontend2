@@ -1,1 +1,124 @@
-<p>incapacidad-users works!</p>
+<div class="layout-container">
+  <app-aside-bar></app-aside-bar>
+  <main class="incapacidad-container">
+    <!-- Header -->
+    <div class="incapacidad-header">
+      <h1 class="form-title">INCAPACIDAD MÉDICA</h1>
+      <div class="paciente-info" *ngIf="pacienteCedula">
+        <span>Cédula del paciente: {{ pacienteCedula }}</span>
+      </div>
+    </div>
+
+    <!-- Contenido con scroll -->
+    <div class="incapacidad-content">
+      <form (ngSubmit)="guardarIncapacidad()" #incapacidadForm="ngForm">
+        <!-- Fechas -->
+        <div class="form-section">
+          <h3 class="section-title">Período de Incapacidad</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fechaInicio">Fecha de inicio:</label>
+              <input 
+                type="date" 
+                id="fechaInicio"
+                [(ngModel)]="fechaInicio" 
+                name="fechaInicio" 
+                required
+                (change)="calcularDias()">
+            </div>
+            <div class="form-group">
+              <label for="fechaFin">Fecha de fin:</label>
+              <input 
+                type="date" 
+                id="fechaFin"
+                [(ngModel)]="fechaFin" 
+                name="fechaFin" 
+                required
+                (change)="calcularDias()">
+            </div>
+            <div class="form-group">
+              <label for="diasIncapacidad">Días de incapacidad:</label>
+              <input 
+                type="number" 
+                id="diasIncapacidad"
+                [(ngModel)]="diasIncapacidad" 
+                name="diasIncapacidad" 
+                readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diagnóstico -->
+        <div class="form-section">
+          <h3 class="section-title">Diagnóstico</h3>
+          <div class="form-group">
+            <label for="diagnostico">Diagnóstico principal:</label>
+            <textarea 
+              id="diagnostico"
+              [(ngModel)]="diagnostico" 
+              name="diagnostico" 
+              required
+              rows="3"
+              placeholder="Describa el diagnóstico..."></textarea>
+          </div>
+        </div>
+
+        <!-- Tipo de incapacidad -->
+        <div class="form-section">
+          <h3 class="section-title">Tipo de Incapacidad</h3>
+          <div class="form-group">
+            <label for="tipoIncapacidad">Tipo:</label>
+            <select 
+              id="tipoIncapacidad"
+              [(ngModel)]="tipoIncapacidad" 
+              name="tipoIncapacidad">
+              <option value="">Seleccionar tipo</option>
+              <option value="enfermedad_general">Enfermedad General</option>
+              <option value="accidente_laboral">Accidente Laboral</option>
+              <option value="enfermedad_profesional">Enfermedad Profesional</option>
+              <option value="maternidad">Maternidad</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="form-section">
+          <h3 class="section-title">Observaciones</h3>
+          <div class="form-group">
+            <label for="observaciones">Observaciones adicionales:</label>
+            <textarea 
+              id="observaciones"
+              [(ngModel)]="observaciones" 
+              name="observaciones" 
+              rows="4"
+              placeholder="Observaciones adicionales..."></textarea>
+          </div>
+        </div>
+
+        <!-- Mensajes -->
+        <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+      </form>
+    </div>
+
+    <!-- Botones fijos -->
+    <div class="incapacidad-actions">
+      <button 
+        type="button" 
+        class="btn-save" 
+        (click)="guardarIncapacidad()"
+        [disabled]="loading || !incapacidadForm.valid">
+        {{ loading ? 'Guardando...' : '💾 Guardar Incapacidad' }}
+      </button>
+      
+      <button 
+        type="button" 
+        class="btn-clear" 
+        (click)="limpiarFormulario()"
+        [disabled]="loading">
+        🗑️ Limpiar
+      </button>
+    </div>
+  </main>
+</div>
