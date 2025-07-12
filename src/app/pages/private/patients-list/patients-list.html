@@ -17,11 +17,10 @@
       </button>
     </div>
 
-
     <!-- Lista de pacientes -->
     <div class="patients-list-container">
-      <h2>Pacientes</h2>
-      <table class="patients-table">
+      <!-- Tabla para desktop -->
+      <table class="patients-table desktop-only">
         <thead>
           <tr>
             <th>Nombre</th>
@@ -43,6 +42,33 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Cards para mobile -->
+      <div class="patients-cards mobile-only">
+        <div class="patient-card" *ngFor="let patient of patients">
+          <div class="card-header">
+            <div class="patient-info">
+              <h3>{{ patient.name }}</h3>
+              <p class="patient-document">{{ patient.cedula || patient.documentId || patient._id }}</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="patient-detail">
+              <span class="label">Email:</span>
+              <span class="value">{{ patient.email }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="btn-view" [routerLink]="['/historia-clinica', patient.cedula || patient.documentId || patient._id]">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              Ver Historia
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

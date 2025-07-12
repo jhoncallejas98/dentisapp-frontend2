@@ -380,6 +380,48 @@ body {
   color: #666;
 }
 
+@media (max-width: 768px) {
+  .no-data-message {
+    padding: 2rem 0.5rem;
+  }
+  
+  .no-data-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .no-data-message h3 {
+    font-size: 1rem;
+    margin: 0 0 0.4rem 0;
+  }
+  
+  .no-data-message p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .no-data-message {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .no-data-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .no-data-message h3 {
+    font-size: 0.9rem;
+    margin: 0 0 0.3rem 0;
+  }
+  
+  .no-data-message p {
+    font-size: 0.75rem;
+  }
+}
+
 .no-data-icon {
   width: 64px;
   height: 64px;
@@ -473,17 +515,7 @@ body {
     width: 100%;
     justify-content: space-between;
   }
-  
-  .appointment-card {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-  
-  .appointment-status {
-    align-self: flex-end;
-  }
-  
+  /* Eliminar overrides de .appointment-card, .appointment-time, .appointment-info, .status-badge, .content-card, .card-header, .card-content, .mobile-hide */
   .document-card {
     flex-direction: column;
     align-items: flex-start;
@@ -526,10 +558,11 @@ body {
   .content-column, .content-card {
     width: 100%;
     min-width: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     box-sizing: border-box;
   }
   .header-content h2, .header-content p {
     font-size: 1.1rem;
   }
+  /* Eliminar overrides de .appointment-card, .appointment-time, .appointment-info, .status-badge, .content-card, .card-header, .card-content, .mobile-hide */
 }

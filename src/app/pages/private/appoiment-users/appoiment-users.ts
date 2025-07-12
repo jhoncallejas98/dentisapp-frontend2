@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AsideUsers } from "../../../components/aside-users/aside-users";
 import { AuthServices } from '../../../services/auth-services';
 import { AppoimentsServices } from '../../../services/appoiments-services';
@@ -8,7 +8,7 @@ import { DentistServices } from '../../../services/dentist-services';
 
 @Component({
   selector: 'app-appoiment-users',
-  imports: [AsideUsers, CommonModule],
+  imports: [AsideUsers, CommonModule, RouterModule],
   templateUrl: './appoiment-users.html',
   styleUrl: './appoiment-users.css'
 })

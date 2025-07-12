@@ -1,81 +1,11 @@
 /* Estilos generales */
-.layout-container {
-  display: flex;
-  height: 100vh;
-  background-color: #f5f5f5;
-  overflow: hidden;
-}
-
-/* === ASIDE === */
-.aside-bar {
-  background-color: #e9dcd2;
-  width: 250px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  color: black;
-  overflow-y: auto;
-  height: 100vh;
-}
-
-/* Scrollbar personalizado para aside */
-.aside-bar::-webkit-scrollbar {
-  width: 6px;
-}
-
-.aside-bar::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 3px;
-}
-
-.aside-bar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-.aside-bar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-.aside-bar h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-left: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.aside-bar h3 {
-  font-size: 1rem;
-  margin: 1rem 0 0.5rem 0.5rem;
-  font-weight: 600;
-}
-
-.aside-tiles {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: black;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  margin: 0.2rem 0.5rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.aside-tiles:hover,
-.aside-tiles.active {
-  background-color: #6a5f57;
-  transform: translateX(2px);
-}
-
-.logos-aside {
-  width: 1.2rem;
-  height: 1.2rem;
-  margin-right: 0.5rem;
+:host {
+  display: block;
+  height: 100%;
 }
 
 /* === MAIN CONTENT === */
 .main-content {
-  flex: 1;
   height: 100vh;
   background-color: #f5f5f5;
   display: flex;
@@ -198,7 +128,6 @@
   font-weight: 500;
   color: #6c757d;
   transition: all 0.3s ease;
-  border-bottom: 3px solid transparent;
 }
 
 .tab-button:hover {
@@ -207,27 +136,26 @@
 }
 
 .tab-button.active {
-  background-color: white;
-  color: #3498db;
-  border-bottom-color: #3498db;
+  background-color: #007bff;
+  color: white;
+  border-bottom: 3px solid #0056b3;
 }
 
-/* Contenedor de contenido */
+/* Contenido principal */
 .content-container {
   flex: 1;
-  margin: 0 15px 15px 15px;
   overflow: hidden;
 }
 
-/* Contenido principal con scroll */
 .content-area {
   flex: 1;
+  height: 0;
+  min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden;
   padding: 0 15px 15px 15px;
 }
 
-/* Scrollbar personalizado para content area */
+/* Scrollbar personalizado para content-area */
 .content-area::-webkit-scrollbar {
   width: 8px;
 }
@@ -246,480 +174,449 @@
   background: #94a3b8;
 }
 
+/* Cards de contenido */
 .content-card {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 20px;
   overflow: hidden;
 }
 
 .card-header {
+  background: #f5e9e2; /* beige de la app */
   padding: 15px 20px;
   border-bottom: 1px solid #e9ecef;
-  background: #f8f9fa;
-  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .card-title {
   margin: 0;
   color: #2c3e50;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .info-message {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 8px;
-  padding: 6px 10px;
-  background: #d4edda;
-  color: #155724;
-  border-radius: 4px;
-  font-size: 13px;
+  gap: 8px;
+  color: #28a745;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .info-message .icon {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .card-content {
-  flex: 1;
   padding: 20px;
-  overflow-y: auto;
+  min-height: 200px;
 }
 
-/* Placeholder content para otros módulos */
 .placeholder-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   text-align: center;
   padding: 40px 20px;
   color: #6c757d;
 }
 
 .placeholder-icon {
-  font-size: 36px;
-  margin-bottom: 15px;
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.5;
 }
 
 .placeholder-content h3 {
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   color: #495057;
   font-size: 18px;
 }
 
 .placeholder-content p {
-  margin: 0 0 15px 0;
+  margin: 0;
   font-size: 14px;
 }
 
 .btn-add {
-  padding: 10px 20px;
-  background-color: #28a745;
+  background: #28a745;
   color: white;
   border: none;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 500;
   font-size: 14px;
+  font-weight: 500;
   transition: background-color 0.3s;
 }
 
 .btn-add:hover {
-  background-color: #218838;
+  background: #218838;
 }
 
-/* Botones de acción */
 .card-actions {
+  background: #f8f9fa;
   padding: 15px 20px;
   border-top: 1px solid #e9ecef;
-  background: #f8f9fa;
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: flex-end;
-  flex-shrink: 0;
 }
 
 .btn-save {
-  padding: 8px 16px;
-  background-color: #28a745;
+  background: #28a745;
   color: white;
   border: none;
+  padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
   font-weight: 500;
-  font-size: 13px;
   transition: background-color 0.3s;
 }
 
 .btn-save:hover {
-  background-color: #218838;
+  background: #218838;
 }
 
 .btn-update {
-  padding: 8px 16px;
-  background-color: #ffc107;
+  background: #ffc107;
   color: #212529;
   border: none;
+  padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
   font-weight: 500;
-  font-size: 13px;
   transition: background-color 0.3s;
 }
 
 .btn-update:hover {
-  background-color: #e0a800;
+  background: #e0a800;
 }
 
 .btn-cancel {
-  padding: 8px 16px;
-  background-color: #dc3545;
+  background: #dc3545;
   color: white;
   border: none;
+  padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
   font-weight: 500;
-  font-size: 13px;
   transition: background-color 0.3s;
 }
 
 .btn-cancel:hover {
-  background-color: #c82333;
+  background: #c82333;
 }
 
-/* Formulario */
+/* Formulario de historia clínica */
 #historyForm {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
 }
 
 #historyForm > div {
-  flex: 1 1 200px;
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .half-field {
-  flex: 1 1 45%;
-  display: flex;
-  flex-direction: column;
+  grid-column: 1 / -1;
 }
 
 label {
-  font-size: 12px;
   font-weight: 500;
-  margin-bottom: 4px;
   color: #333;
+  font-size: 14px;
+  margin-bottom: 4px;
 }
 
 input, select, textarea {
-  padding: 8px 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background-color: #f3f4f6;
-  font-size: 13px;
-  color: #111;
-  transition: all 0.25s ease;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s;
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: #6d28d9;
-  background-color: #fff;
-  box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.2);
   outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 textarea {
-  min-height: 80px;
   resize: vertical;
+  min-height: 80px;
 }
 
 .section-title {
-  flex: 1 1 100%;
-  font-size: 1rem;
+  grid-column: 1 / -1;
+  font-size: 16px;
   font-weight: 600;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  color: #4b5563;
-  border-bottom: 2px solid #e5e7eb;
-  padding-bottom: 0.3rem;
+  color: #2c3e50;
+  margin: 20px 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e9ecef;
 }
 
-/* Mensajes */
 .success-message {
-  background-color: #d4edda;
+  background: #d4edda;
   color: #155724;
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 4px;
   margin: 10px 0;
   border: 1px solid #c3e6cb;
-  font-size: 13px;
 }
 
 .error-message {
-  background-color: #f8d7da;
+  background: #f8d7da;
   color: #721c24;
-  padding: 10px;
+  padding: 12px 16px;
   border-radius: 4px;
   margin: 10px 0;
   border: 1px solid #f5c6cb;
-  font-size: 13px;
 }
 
-/* Listas y formularios para incapacidades y fórmulas */
+/* Listas de documentos */
 .list-container {
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .list-container h3 {
   color: #2c3e50;
-  margin-bottom: 12px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .list-item {
   background: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
 }
 
 .item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 6px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
   border-bottom: 1px solid #dee2e6;
 }
 
 .item-date {
   font-weight: 600;
   color: #495057;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .item-days, .item-medicine {
-  background: #3498db;
+  background: #007bff;
   color: white;
-  padding: 3px 6px;
-  border-radius: 3px;
-  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: 500;
 }
 
 .item-content p {
-  margin: 3px 0;
+  margin: 5px 0;
+  font-size: 14px;
   color: #6c757d;
-  font-size: 13px;
 }
 
 .item-content strong {
   color: #495057;
 }
 
-/* Formularios */
+/* Formularios de incapacidades y fórmulas */
 .form-container {
   background: #f8f9fa;
   border: 1px solid #e9ecef;
   border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 15px;
+  padding: 20px;
+  margin-top: 20px;
 }
 
 .form-container h3 {
   color: #2c3e50;
-  margin-bottom: 15px;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .incapacidad-form, .formula-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 15px;
 }
 
 .form-row {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
 }
 
 .form-group {
-  flex: 1;
-  min-width: 150px;
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .form-group label {
   font-weight: 500;
   color: #333;
-  margin-bottom: 4px;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 6px 10px;
+  padding: 8px 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 13px;
-  transition: border-color 0.3s;
+  font-size: 14px;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-  border-color: #3498db;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .form-group textarea {
-  min-height: 60px;
   resize: vertical;
+  min-height: 80px;
 }
 
 .form-actions {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   justify-content: flex-end;
-  margin-top: 8px;
+  margin-top: 20px;
 }
 
 .add-button-container {
-  display: flex;
-  justify-content: center;
-  padding: 15px;
+  text-align: center;
+  margin-top: 20px;
 }
 
+/* Listas horizontales */
 .formulas-list-horizontal {
+  margin-top: 20px;
+}
+
+.formula-card-horizontal {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.formula-main {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  max-height: 350px;
-  overflow-y: auto;
+  gap: 10px;
 }
-.formula-card-horizontal {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  border: 1px solid #e9ecef;
-  padding: 18px 22px;
-  gap: 24px;
-  min-width: 0;
-}
-.formula-main {
-  flex: 1;
-  min-width: 0;
-}
-.formula-medicine-big {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #000;
-  margin-bottom: 6px;
-}
+
 .formula-meta {
   display: flex;
-  gap: 18px;
-  font-size: 0.95rem;
-  color: #64748b;
-  margin-bottom: 6px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #6c757d;
 }
+
 .formula-details {
   display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  font-size: 0.98rem;
-  color: #334155;
-  margin-bottom: 4px;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
 }
+
+.formula-details span {
+  color: #495057;
+}
+
+.formula-details strong {
+  color: #2c3e50;
+}
+
 .formula-instrucciones {
-  font-size: 0.97rem;
-  color: #475569;
-  margin-top: 2px;
+  background: #e9ecef;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #495057;
 }
 
 .incapacidades-list-horizontal {
+  margin-top: 20px;
+}
+
+.incapacidad-card-horizontal {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.incapacidad-main {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  max-height: 350px;
-  overflow-y: auto;
+  gap: 10px;
 }
-.incapacidad-card-horizontal {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  border: 1px solid #e9ecef;
-  padding: 18px 22px;
-  gap: 24px;
-  min-width: 0;
-}
-.incapacidad-main {
-  flex: 1;
-  min-width: 0;
-}
+
 .incapacidad-meta {
   display: flex;
-  gap: 18px;
-  font-size: 0.95rem;
-  color: #64748b;
-  margin-bottom: 6px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #6c757d;
 }
+
 .incapacidad-details {
   display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  font-size: 0.98rem;
-  color: #334155;
-  margin-bottom: 4px;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
 }
 
-/* === RESPONSIVE === */
+.incapacidad-details span {
+  color: #495057;
+}
+
+.incapacidad-details strong {
+  color: #2c3e50;
+}
+
+/* Responsive */
 @media (max-width: 1024px) {
-  .layout-container {
-    flex-direction: column;
-  }
-
-  .aside-bar {
-    width: 100%;
-    height: auto;
-    max-height: 200px;
-  }
-
-  .main-content {
-    margin-left: 0;
-  }
-
   .header-top {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .search-patient-container {
-    flex-direction: column;
-    align-items: stretch;
+    justify-content: center;
   }
 
   .tabs-navigation {
@@ -727,12 +624,11 @@ textarea {
   }
 
   .tab-button {
-    border-bottom: none;
-    border-right: 3px solid transparent;
+    border-bottom: 1px solid #e9ecef;
   }
 
   .tab-button.active {
-    border-right-color: #3498db;
+    border-bottom: 3px solid #0056b3;
   }
 
   .card-actions {
@@ -740,20 +636,38 @@ textarea {
   }
 
   #historyForm > div,
-  .half-field {
-    flex: 1 1 100%;
+  .form-row {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Mejorar selects e inputs en mobile */
 @media (max-width: 600px) {
   select, input, textarea {
-    width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-    font-size: 1rem;
+    font-size: 16px; /* Evita zoom en iOS */
   }
-  .content-area, .content-container {
-    overflow: visible !important;
+
+  .main-content {
+    height: 100dvh;
+  }
+  .content-area {
+    max-height: calc(100dvh - 180px);
+    /* Ajusta 180px según el alto de tu header/tabs */
+  }
+
+  .page-header {
+    margin: 10px;
+    padding: 10px 15px;
+  }
+
+  .tabs-container {
+    margin: 0 10px 10px 10px;
+  }
+
+  .card-content {
+    padding: 15px;
+  }
+
+  .form-container {
+    padding: 15px;
   }
 }

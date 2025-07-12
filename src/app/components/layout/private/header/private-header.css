@@ -18,6 +18,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 2rem;
 }
 
 .navbar__left .logo-site {
@@ -200,6 +201,29 @@ body {
     height: 24px;
     fill: #333;
     transition: fill 0.2s;
+}
+
+/* Clases de visibilidad responsive */
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
+@media (max-width: 900px) {
+    .mobile-only {
+        display: block;
+    }
+    
+    .desktop-only {
+        display: none;
+    }
+    
+    .navbar__center {
+        display: none;
+    }
 }
 
 .logout-icon:hover {

@@ -1,96 +1,108 @@
-<div class="layout-container">
-  <app-aside-users></app-aside-users>
-
-  <div class="appointments-container">
-    <!-- Header simple -->
-    <div class="appointments-header">
-      <div class="header-content">
-        <h2>Mis Citas</h2>
-        <p>Gestiona tus citas médicas</p>
-      </div>
-      <button class="btn-primary" routerLink="/appoiments-users/new">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        Solicitar Cita
-      </button>
+<div class="appoiment-container">
+  <!-- Header -->
+  <div class="appoiment-header">
+    <div class="header-content">
+      <h2>Mis Citas</h2>
+      <p>Gestiona tus citas odontológicas</p>
     </div>
+    <button class="btn-primary" routerLink="/appoiments-users/new-form">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Solicitar Cita
+    </button>
+  </div>
 
-    <!-- Loading State -->
-    <div *ngIf="loading" class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>Cargando tus citas...</p>
-    </div>
+  <!-- Estados de carga y error -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Cargando citas...</p>
+  </div>
 
-    <!-- Error State -->
-    <div *ngIf="error && !loading" class="error-container">
-      <p class="error-message">{{ error }}</p>
-    </div>
+  <div *ngIf="error && !loading" class="error-container">
+    <p class="error-message">{{ error }}</p>
+    <button class="btn-primary" (click)="loadUserAppointments()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 2v6h-6"></path>
+        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+        <path d="M3 22v-6h6"></path>
+        <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+      </svg>
+      Reintentar
+    </button>
+  </div>
 
-    <!-- Appointments List -->
-    <div *ngIf="!loading && !error" class="appointments-list">
-      <!-- No Appointments -->
-      <div *ngIf="appointments.length === 0" class="no-appointments-message">
-        <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-          <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
-          <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
-          <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
-        </svg>
-        <h3>No tienes citas programadas</h3>
-        <p>Cuando solicites una cita, aparecerá aquí con todos los detalles.</p>
-        <button class="btn-primary" routerLink="/appoiments-users/new">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Solicitar mi primera cita
-        </button>
-      </div>
+  <!-- Mensaje cuando no hay citas -->
+  <div *ngIf="!loading && !error && appointments.length === 0" class="no-data-container">
+    <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+      <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
+      <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
+      <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
+    </svg>
+    <h2>No tienes citas programadas</h2>
+    <p>Solicita tu primera cita para comenzar tu tratamiento dental.</p>
+    <button class="btn-primary" routerLink="/appoiments-users/new-form">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Solicitar Primera Cita
+    </button>
+  </div>
 
-             <!-- Appointments -->
-       <div class="appointment-item" *ngFor="let appointment of appointments">
+  <!-- Lista de citas -->
+  <div *ngIf="!loading && !error && appointments.length > 0" class="appointments-list">
+    <div class="appointment-card" *ngFor="let appointment of appointments">
+      <div class="card-header">
         <div class="appointment-time">
           <span class="time">{{ formatTime(appointment.date) }}</span>
           <span class="date">{{ formatDate(appointment.date) }}</span>
+          <span class="mobile-info">{{ getDentistName(appointment) }}</span>
         </div>
-        
-        <div class="appointment-details">
-          <div class="appointment-info">
-            <h4>{{ getDentistName(appointment) }}</h4>
-            <p>Motivo: {{ appointment.reason || 'Consulta general' }}</p>
-            <p *ngIf="appointment.notes">Notas: {{ appointment.notes }}</p>
-          </div>
-        </div>
-        
         <div class="appointment-status">
-          <span class="status-badge" [ngClass]="{
-            'badge-yellow': getStatusText(appointment.status, appointment.date) === 'Pendiente',
-            'badge-green': getStatusText(appointment.status, appointment.date) === 'Asistió',
-            'badge-red': getStatusText(appointment.status, appointment.date) === 'Cancelada',
-            'badge-gray': getStatusText(appointment.status, appointment.date) === 'Pasada'
-          }">
+          <span class="status-badge" [ngClass]="getStatusClass(appointment.status)">
             {{ getStatusText(appointment.status, appointment.date) }}
           </span>
         </div>
-        
-        <div class="appointment-actions">
-          <button class="btn-icon" title="Ver detalles" (click)="viewAppointment(appointment)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-              <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-          </button>
-          <button class="btn-icon" 
-                  [title]="getCancelButtonTitle(appointment)" 
-                  (click)="cancelAppointment(appointment._id, appointment.date)" 
-                  [disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled' || isPastAppointment(appointment.date)">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18"></path>
-              <path d="M6 6l12 12"></path>
-            </svg>
-          </button>
+      </div>
+      
+      <div class="card-body mobile-hide">
+        <div class="appointment-details">
+          <div class="detail-item">
+            <span class="label">Odontólogo:</span>
+            <span class="value">{{ getDentistName(appointment) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Motivo:</span>
+            <span class="value">{{ appointment.reason || appointment.motivo || 'Consulta general' }}</span>
+          </div>
+          <div class="detail-item mobile-hide" *ngIf="appointment.notes || appointment.observaciones">
+            <span class="label">Notas:</span>
+            <span class="value">{{ appointment.notes || appointment.observaciones }}</span>
+          </div>
         </div>
+      </div>
+      
+      <div class="card-actions">
+        <button class="btn-view" (click)="viewAppointment(appointment)" title="Ver detalles">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          Ver Detalles
+        </button>
+        <button 
+          class="btn-cancel" 
+          (click)="cancelAppointment(appointment._id, appointment.date)"
+          [disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled' || isPastAppointment(appointment.date)"
+          [title]="getCancelButtonTitle(appointment)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+          Cancelar
+        </button>
       </div>
     </div>
   </div>

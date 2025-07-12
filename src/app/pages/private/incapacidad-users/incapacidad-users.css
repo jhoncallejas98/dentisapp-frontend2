@@ -253,12 +253,12 @@ body {
 }
 
 .card-header {
+  background: #f5e9e2; /* beige de la app */
+  padding: 15px 20px;
+  border-bottom: 1px solid #e9ecef;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
-  background: #f3e8e1;
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .incapacidad-status {

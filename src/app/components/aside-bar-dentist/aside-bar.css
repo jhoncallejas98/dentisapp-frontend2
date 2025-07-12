@@ -201,6 +201,9 @@
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
     background: #f3e8e1;
     padding: 2rem 1.5rem;
+    flex-shrink: 0;
+    height: auto;
+    min-height: 100%;
   }
 }
 

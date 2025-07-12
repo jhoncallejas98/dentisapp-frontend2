@@ -26,6 +26,8 @@ interface Appointment {
 })
 export class AppoimentsComponent {
   appointments: Appointment[] = [];
+  loading: boolean = false;
+  error: string = '';
 
   constructor(
     private appoimentsService: AppoimentsServices, 
@@ -57,12 +59,17 @@ export class AppoimentsComponent {
   }
 
   loadAppointments() {
+    this.loading = true;
+    this.error = '';
+    
     // Obtener la cédula del doctor actual
     const currentUser = this.authServices.getCurrentUser();
     const doctorCedula = currentUser?.cedula;
     
     if (!doctorCedula) {
       console.error('No se pudo obtener la cédula del doctor actual');
+      this.error = 'Error al obtener información del usuario';
+      this.loading = false;
       return;
     }
 
@@ -87,9 +94,12 @@ export class AppoimentsComponent {
         });
 
         console.log('Citas filtradas por doctor:', this.appointments);
+        this.loading = false;
       },
       error: (err) => {
         console.error('Error cargando citas', err);
+        this.error = 'Error al cargar las citas: ' + (err.message || 'Error desconocido');
+        this.loading = false;
       }
     });
   }

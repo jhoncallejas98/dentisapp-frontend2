@@ -1,335 +1,323 @@
-<div class="layout-container">
-  <main class="main-content">
-    <!-- Header con título y búsqueda -->
-    <div class="page-header">
-      <div class="header-top">
-        <h1 class="page-title">GESTIÓN DEL PACIENTE</h1>
-        
-        <!-- Búsqueda de paciente por cédula (solo si no hay paciente seleccionado) -->
-        <div class="search-patient-container" *ngIf="!paciente">
-          <label for="cedulaBusqueda">Buscar paciente por cédula:</label>
-          <input id="cedulaBusqueda" type="text" [(ngModel)]="cedulaBusqueda" name="cedulaBusqueda" [readonly]="buscandoPaciente" placeholder="Ingrese la cédula...">
-          <button type="button" (click)="buscarPacientePorDocumento(cedulaBusqueda)" [disabled]="buscandoPaciente || !cedulaBusqueda">{{ buscandoPaciente ? 'Buscando...' : 'Buscar' }}</button>
-        </div>
-      </div>
+<main class="main-content">
+  <!-- Header con título y búsqueda -->
+  <div class="page-header">
+    <div class="header-top">
+      <h1 class="page-title">GESTIÓN DEL PACIENTE</h1>
       
-      <!-- Información del paciente -->
-      <div *ngIf="paciente" class="paciente-info">
-        <div class="paciente-header">
-          <h3>{{ paciente.name }}</h3>
-          <div class="paciente-details">
-            <span>{{ paciente.email }}</span>
-            <span>CC: {{ paciente.cedula }}</span>
-          </div>
-        </div>
-      </div>
-      
-      <div *ngIf="pacienteError" class="error-message">{{ pacienteError }}</div>
-    </div>
-
-    <!-- Navegación por pestañas (fuera de la card) -->
-    <div class="tabs-container" *ngIf="paciente">
-      <div class="tabs-navigation">
-        <button class="tab-button" 
-                [class.active]="activeTab === 'historia'"
-                (click)="setActiveTab('historia')">
-          📋 Historia Clínica
-        </button>
-        <button class="tab-button" 
-                [class.active]="activeTab === 'incapacidad'"
-                (click)="setActiveTab('incapacidad')">
-          🏥 Incapacidad Médica
-        </button>
-        <button class="tab-button" 
-                [class.active]="activeTab === 'formula'"
-                (click)="setActiveTab('formula')">
-          💊 Fórmula Médica
-        </button>
+      <!-- Búsqueda de paciente por cédula (solo si no hay paciente seleccionado) -->
+      <div class="search-patient-container" *ngIf="!paciente">
+        <label for="cedulaBusqueda">Buscar paciente por cédula:</label>
+        <input id="cedulaBusqueda" type="text" [(ngModel)]="cedulaBusqueda" name="cedulaBusqueda" [readonly]="buscandoPaciente" placeholder="Ingrese la cédula...">
+        <button type="button" (click)="buscarPacientePorDocumento(cedulaBusqueda)" [disabled]="buscandoPaciente || !cedulaBusqueda">{{ buscandoPaciente ? 'Buscando...' : 'Buscar' }}</button>
       </div>
     </div>
+    
+    <!-- Información del paciente -->
+    <div *ngIf="paciente" class="paciente-info">
+      <div class="paciente-header">
+        <h3>{{ paciente.name }}</h3>
+        <div class="paciente-details">
+          <span>{{ paciente.email }}</span>
+          <span>CC: {{ paciente.cedula }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="pacienteError" class="error-message">{{ pacienteError }}</div>
+  </div>
 
-    <!-- Contenido principal con scroll -->
-    <div class="content-area">
-      <!-- Contenido dinámico según la pestaña activa -->
-      <div class="content-container">
-        <!-- Historia Clínica -->
-        <div class="content-card" *ngIf="activeTab === 'historia'">
-          <div class="card-header">
-            <h2 class="card-title">📋 HISTORIA CLÍNICA</h2>
-            <!-- Mensaje según si tiene historia clínica o no -->
-            <div *ngIf="historiaId && !editMode" class="info-message">
-              <span class="icon">✅</span>
-              <span>Historia clínica existente.</span>
+  <!-- Navegación por pestañas (fuera de la card) -->
+  <div class="tabs-container" *ngIf="paciente">
+    <div class="tabs-navigation">
+      <button class="tab-button" 
+              [class.active]="activeTab === 'historia'"
+              (click)="setActiveTab('historia')">
+        📋 Historia Clínica
+      </button>
+      <button class="tab-button" 
+              [class.active]="activeTab === 'incapacidad'"
+              (click)="setActiveTab('incapacidad')">
+        🏥 Incapacidad Médica
+      </button>
+      <button class="tab-button" 
+              [class.active]="activeTab === 'formula'"
+              (click)="setActiveTab('formula')">
+        💊 Fórmula Médica
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido principal con scroll -->
+  <div class="content-area">
+    <!-- Contenido dinámico según la pestaña activa -->
+    <div class="content-container">
+      <!-- Historia Clínica -->
+      <div class="content-card" *ngIf="activeTab === 'historia'">
+        <div class="card-header">
+          <h2 class="card-title">📋 HISTORIA CLÍNICA</h2>
+          <!-- Mensaje según si tiene historia clínica o no -->
+          <div *ngIf="historiaId && !editMode" class="info-message">
+            <span class="icon">✅</span>
+            <span>Historia clínica existente.</span>
+          </div>
+          <div *ngIf="!historiaId && !editMode" class="info-message">
+            <span class="icon">📝</span>
+            <span>Nueva historia clínica.</span>
+          </div>
+        </div>
+
+        <!-- Contenido de la historia clínica -->
+        <div class="card-content">
+          <form id="historyForm" autocomplete="off" (ngSubmit)="saveClinicalData()" [class.disabled-form]="!formularioHabilitado">
+            <!-- SECCIÓN: DATOS PERSONALES -->
+            <h3 class="section-title">Datos personales</h3>
+            <div><label>Cédula del paciente:</label><input type="text" [(ngModel)]="documentId" name="documentId" required readonly></div>
+            <div><label>Fecha de nacimiento:</label><input type="date" [(ngModel)]="birthDate" name="birthDate" [readonly]="!editMode || !formularioHabilitado" required></div>
+            <div><label>Edad:</label><input type="number" [(ngModel)]="age" name="age" [readonly]="!editMode || !formularioHabilitado" placeholder="Ingrese la edad" required></div>
+            <div><label>Correo electrónico:</label><input type="email" [(ngModel)]="email" name="email" [readonly]="!editMode || !formularioHabilitado" placeholder="correo@ejemplo.com"></div>
+            <div><label>Género:</label>
+              <select [(ngModel)]="gender" name="gender" [disabled]="!editMode || !formularioHabilitado">
+                <option value="">Seleccionar</option>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+                <option value="otro">Otro</option>
+              </select>
             </div>
-            <div *ngIf="!historiaId && !editMode" class="info-message">
-              <span class="icon">📝</span>
-              <span>Nueva historia clínica.</span>
+            <div><label>Grupo étnico:</label><input type="text" [(ngModel)]="ethnicGroup" name="ethnicGroup" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Tipo de sangre:</label><input type="text" [(ngModel)]="bloodType" name="bloodType" [readonly]="!editMode || !formularioHabilitado"></div>
+            <!-- SECCIÓN: COVID -->
+            <h3 class="section-title">Información COVID-19</h3>
+            <div><label>¿Aislamiento por COVID en últimos 15 días?</label>
+              <select [(ngModel)]="covidIsolation" name="covidIsolation" [disabled]="!editMode || !formularioHabilitado">
+                <option value="">Seleccionar</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <!-- SECCIÓN: CONSULTA -->
+            <h3 class="section-title">Motivo de consulta</h3>
+            <div class="half-field"><label>Motivo de consulta:</label><textarea [(ngModel)]="consultReason" name="consultReason" [readonly]="!editMode || !formularioHabilitado" required></textarea></div>
+            <div class="half-field"><label>Historia de la enfermedad:</label><textarea [(ngModel)]="diseaseHistory" name="diseaseHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <!-- SECCIÓN: ANTECEDENTES -->
+            <h3 class="section-title">Antecedentes</h3>
+            <div class="half-field"><label>Antecedentes personales:</label><textarea [(ngModel)]="personalHistory" name="personalHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <div class="half-field"><label>Antecedentes familiares:</label><textarea [(ngModel)]="familyHistory" name="familyHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <div class="half-field"><label>Medicación actual:</label><textarea [(ngModel)]="currentMeds" name="currentMeds" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <!-- SECCIÓN: HIGIENE ORAL -->
+            <h3 class="section-title">Evaluación oral</h3>
+            <div><label>Hábitos de higiene oral:</label><input type="text" [(ngModel)]="oralHygiene" name="oralHygiene" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div class="half-field"><label>Examen intraoral:</label><textarea [(ngModel)]="intraoralExam" name="intraoralExam" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <div class="half-field"><label>Otros hallazgos clínicos:</label><textarea [(ngModel)]="otherFindings" name="otherFindings" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
+            <!-- SECCIÓN: ACOMPAÑANTE -->
+            <h3 class="section-title">Información del acompañante</h3>
+            <div><label>Nombre del acompañante:</label><input type="text" [(ngModel)]="companionName" name="companionName" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>No. identificación del acompañante:</label><input type="text" [(ngModel)]="companionId" name="companionId" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Parentesco del acompañante:</label><input type="text" [(ngModel)]="companionRelation" name="companionRelation" [readonly]="!editMode || !formularioHabilitado"></div>
+            <!-- SECCIÓN: ACUDIENTE -->
+            <h3 class="section-title">Información del acudiente</h3>
+            <div><label>¿Es el acudiente o responsable?</label>
+              <select [(ngModel)]="isGuardian" name="isGuardian" [disabled]="!editMode || !formularioHabilitado">
+                <option value="">Seleccionar</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div><label>Nombre del acudiente:</label><input type="text" [(ngModel)]="guardianName" name="guardianName" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Identificación del acudiente:</label><input type="text" [(ngModel)]="guardianId" name="guardianId" [readonly]="!editMode || !formularioHabilitado"></div>
+            <div><label>Teléfono del acudiente:</label><input type="tel" [(ngModel)]="guardianPhone" name="guardianPhone" [readonly]="!editMode || !formularioHabilitado"></div>
+          </form>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="card-actions">
+          <!-- Si tiene historia clínica y está en modo vista -->
+          <button *ngIf="historiaId && !editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-update" 
+                  (click)="setEditMode()">
+            ✏️ Actualizar
+          </button>
+          
+          <!-- Si no tiene historia clínica y está en modo edición -->
+          <button *ngIf="!historiaId && editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-save" 
+                  (click)="saveClinicalData()">
+            💾 Guardar
+          </button>
+          
+          <!-- Si tiene historia clínica y está en modo edición -->
+          <button *ngIf="historiaId && editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-save" 
+                  (click)="saveClinicalData()">
+            💾 Guardar
+          </button>
+          
+          <!-- Botón cancelar solo cuando está en modo edición -->
+          <button *ngIf="editMode && formularioHabilitado" 
+                  type="button" 
+                  class="btn-cancel" 
+                  (click)="setViewMode()">
+            ❌ Cancelar
+          </button>
+        </div>
+      </div>
+
+      <!-- Incapacidades Médicas -->
+      <div class="content-card" *ngIf="activeTab === 'incapacidad'">
+        <div class="card-header">
+          <h2 class="card-title">🏥 INCAPACIDADES MÉDICAS</h2>
+        </div>
+        <div class="card-content">
+          <!-- Lista de incapacidades existentes -->
+          <div *ngIf="incapacidades.length > 0" class="incapacidades-list-horizontal">
+            <h3>Incapacidades Registradas</h3>
+            <div class="incapacidad-card-horizontal" *ngFor="let incapacidad of incapacidades">
+              <div class="incapacidad-main">
+                <div class="incapacidad-meta">
+                  <span class="incapacidad-date">{{ incapacidad.fechaInicio | date:'dd/MM/yyyy' }} - {{ incapacidad.fechaFin | date:'dd/MM/yyyy' }}</span>
+                  <span class="incapacidad-days">{{ incapacidad.diasIncapacidad }} días</span>
+                </div>
+                <div class="incapacidad-details">
+                  <span><strong>Diagnóstico:</strong> {{ incapacidad.diagnostico }}</span>
+                  <span><strong>Motivo:</strong> {{ incapacidad.motivo }}</span>
+                  <span><strong>Tratamiento:</strong> {{ incapacidad.tratamiento }}</span>
+                  <span><strong>Tipo:</strong> {{ incapacidad.tipoIncapacidad }}</span>
+                  <span *ngIf="incapacidad.observaciones"><strong>Observaciones:</strong> {{ incapacidad.observaciones }}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Contenido de la historia clínica -->
-          <div class="card-content">
-            <form id="historyForm" autocomplete="off" (ngSubmit)="saveClinicalData()" [class.disabled-form]="!formularioHabilitado">
-              <!-- SECCIÓN: DATOS PERSONALES -->
-              <h3 class="section-title">Datos personales</h3>
-              <div><label>Cédula del paciente:</label><input type="text" [(ngModel)]="documentId" name="documentId" required readonly></div>
-              <div><label>Fecha de nacimiento:</label><input type="date" [(ngModel)]="birthDate" name="birthDate" [readonly]="!editMode || !formularioHabilitado" required></div>
-              <div><label>Edad:</label><input type="number" [(ngModel)]="age" name="age" [readonly]="!editMode || !formularioHabilitado" placeholder="Ingrese la edad" required></div>
-              <div><label>Correo electrónico:</label><input type="email" [(ngModel)]="email" name="email" [readonly]="!editMode || !formularioHabilitado" placeholder="correo@ejemplo.com"></div>
-              <div><label>Género:</label>
-                <select [(ngModel)]="gender" name="gender" [disabled]="!editMode || !formularioHabilitado">
+          <!-- Formulario de nueva incapacidad -->
+          <div *ngIf="showIncapacidadForm" class="form-container">
+            <h3>Nueva Incapacidad Médica</h3>
+            <form (ngSubmit)="guardarIncapacidad()" class="incapacidad-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Fecha de inicio:</label>
+                  <input type="date" [(ngModel)]="incapacidadForm.fechaInicio" name="fechaInicio" required (change)="calcularDiasIncapacidad()">
+                </div>
+                <div class="form-group">
+                  <label>Fecha de fin:</label>
+                  <input type="date" [(ngModel)]="incapacidadForm.fechaFin" name="fechaFin" required (change)="calcularDiasIncapacidad()">
+                </div>
+                <div class="form-group">
+                  <label>Días de incapacidad:</label>
+                  <input type="number" [(ngModel)]="incapacidadForm.diasIncapacidad" name="diasIncapacidad" readonly>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Diagnóstico:</label>
+                <textarea [(ngModel)]="incapacidadForm.diagnostico" name="diagnostico" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Motivo:</label>
+                <textarea [(ngModel)]="incapacidadForm.motivo" name="motivo" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Tratamiento:</label>
+                <textarea [(ngModel)]="incapacidadForm.tratamiento" name="tratamiento" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Tipo de incapacidad:</label>
+                <select [(ngModel)]="incapacidadForm.tipoIncapacidad" name="tipoIncapacidad">
                   <option value="">Seleccionar</option>
-                  <option value="masculino">Masculino</option>
-                  <option value="femenino">Femenino</option>
-                  <option value="otro">Otro</option>
+                  <option value="Enfermedad General">Enfermedad General</option>
+                  <option value="Accidente de Trabajo">Accidente de Trabajo</option>
+                  <option value="Enfermedad Laboral">Enfermedad Laboral</option>
+                  <option value="Licencia de Maternidad">Licencia de Maternidad</option>
                 </select>
               </div>
-              <div><label>Grupo étnico:</label><input type="text" [(ngModel)]="ethnicGroup" name="ethnicGroup" [readonly]="!editMode || !formularioHabilitado"></div>
-              <div><label>Tipo de sangre:</label><input type="text" [(ngModel)]="bloodType" name="bloodType" [readonly]="!editMode || !formularioHabilitado"></div>
-              <!-- SECCIÓN: COVID -->
-              <h3 class="section-title">Información COVID-19</h3>
-              <div><label>¿Aislamiento por COVID en últimos 15 días?</label>
-                <select [(ngModel)]="covidIsolation" name="covidIsolation" [disabled]="!editMode || !formularioHabilitado">
-                  <option value="">Seleccionar</option>
-                  <option value="true">Sí</option>
-                  <option value="false">No</option>
-                </select>
+              <div class="form-group">
+                <label>Observaciones:</label>
+                <textarea [(ngModel)]="incapacidadForm.observaciones" name="observaciones"></textarea>
               </div>
-              <!-- SECCIÓN: CONSULTA -->
-              <h3 class="section-title">Motivo de consulta</h3>
-              <div class="half-field"><label>Motivo de consulta:</label><textarea [(ngModel)]="consultReason" name="consultReason" [readonly]="!editMode || !formularioHabilitado" required></textarea></div>
-              <div class="half-field"><label>Historia de la enfermedad:</label><textarea [(ngModel)]="diseaseHistory" name="diseaseHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
-              <!-- SECCIÓN: ANTECEDENTES -->
-              <h3 class="section-title">Antecedentes</h3>
-              <div class="half-field"><label>Antecedentes personales:</label><textarea [(ngModel)]="personalHistory" name="personalHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
-              <div class="half-field"><label>Antecedentes familiares:</label><textarea [(ngModel)]="familyHistory" name="familyHistory" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
-              <div class="half-field"><label>Medicación actual:</label><textarea [(ngModel)]="currentMeds" name="currentMeds" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
-              <!-- SECCIÓN: HIGIENE ORAL -->
-              <h3 class="section-title">Evaluación oral</h3>
-              <div><label>Hábitos de higiene oral:</label><input type="text" [(ngModel)]="oralHygiene" name="oralHygiene" [readonly]="!editMode || !formularioHabilitado"></div>
-              <div class="half-field"><label>Examen intraoral:</label><textarea [(ngModel)]="intraoralExam" name="intraoralExam" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
-              <div class="half-field"><label>Otros hallazgos clínicos:</label><textarea [(ngModel)]="otherFindings" name="otherFindings" [readonly]="!editMode || !formularioHabilitado"></textarea></div>
-              <!-- SECCIÓN: ACOMPAÑANTE -->
-              <h3 class="section-title">Información del acompañante</h3>
-              <div><label>Nombre del acompañante:</label><input type="text" [(ngModel)]="companionName" name="companionName" [readonly]="!editMode || !formularioHabilitado"></div>
-              <div><label>No. identificación del acompañante:</label><input type="text" [(ngModel)]="companionId" name="companionId" [readonly]="!editMode || !formularioHabilitado"></div>
-              <div><label>Parentesco del acompañante:</label><input type="text" [(ngModel)]="companionRelation" name="companionRelation" [readonly]="!editMode || !formularioHabilitado"></div>
-              <!-- SECCIÓN: ACUDIENTE -->
-              <h3 class="section-title">Información del acudiente</h3>
-              <div><label>¿Es el acudiente o responsable?</label>
-                <select [(ngModel)]="isGuardian" name="isGuardian" [disabled]="!editMode || !formularioHabilitado">
-                  <option value="">Seleccionar</option>
-                  <option value="true">Sí</option>
-                  <option value="false">No</option>
-                </select>
+              <div class="form-actions">
+                <button type="submit" class="btn-save">💾 Guardar Incapacidad</button>
+                <button type="button" class="btn-cancel" (click)="toggleIncapacidadForm()">❌ Cancelar</button>
               </div>
-              <div><label>Nombre del acudiente:</label><input type="text" [(ngModel)]="guardianName" name="guardianName" [readonly]="!editMode || !formularioHabilitado"></div>
-              <div><label>Identificación del acudiente:</label><input type="text" [(ngModel)]="guardianId" name="guardianId" [readonly]="!editMode || !formularioHabilitado"></div>
-              <div><label>Teléfono del acudiente:</label><input type="tel" [(ngModel)]="guardianPhone" name="guardianPhone" [readonly]="!editMode || !formularioHabilitado"></div>
             </form>
           </div>
 
-          <!-- Botones de acción -->
-          <div class="card-actions">
-            <!-- Si tiene historia clínica y está en modo vista -->
-            <button *ngIf="historiaId && !editMode && formularioHabilitado" 
-                    type="button" 
-                    class="btn-update" 
-                    (click)="setEditMode()">
-              ✏️ Actualizar
-            </button>
-            
-            <!-- Si no tiene historia clínica y está en modo edición -->
-            <button *ngIf="!historiaId && editMode && formularioHabilitado" 
-                    type="button" 
-                    class="btn-save" 
-                    (click)="saveClinicalData()">
-              💾 Guardar
-            </button>
-            
-            <!-- Si tiene historia clínica y está en modo edición -->
-            <button *ngIf="historiaId && editMode && formularioHabilitado" 
-                    type="button" 
-                    class="btn-save" 
-                    (click)="saveClinicalData()">
-              💾 Guardar
-            </button>
-            
-            <!-- Botón cancelar solo cuando está en modo edición -->
-            <button *ngIf="editMode && formularioHabilitado" 
-                    type="button" 
-                    class="btn-cancel" 
-                    (click)="setViewMode()">
-              ❌ Cancelar
+          <!-- Botón para agregar nueva incapacidad -->
+          <div *ngIf="!showIncapacidadForm" class="add-button-container">
+            <button class="btn-add" (click)="toggleIncapacidadForm()">
+              ➕ Agregar Incapacidad
             </button>
           </div>
         </div>
+      </div>
 
-        <!-- Incapacidades Médicas -->
-        <div class="content-card" *ngIf="activeTab === 'incapacidad'">
-          <div class="card-header">
-            <h2 class="card-title">🏥 INCAPACIDADES MÉDICAS</h2>
-          </div>
-          <div class="card-content">
-            <!-- Lista de incapacidades existentes -->
-            <div *ngIf="incapacidades.length > 0" class="incapacidades-list-horizontal">
-              <h3>Incapacidades Registradas</h3>
-              <div class="incapacidad-card-horizontal" *ngFor="let incapacidad of incapacidades">
-                <div class="incapacidad-main">
-                  <div class="incapacidad-meta">
-                    <span class="incapacidad-date">{{ incapacidad.fechaInicio | date:'dd/MM/yyyy' }} - {{ incapacidad.fechaFin | date:'dd/MM/yyyy' }}</span>
-                    <span class="incapacidad-days">{{ incapacidad.diasIncapacidad }} días</span>
-                  </div>
-                  <div class="incapacidad-details">
-                    <span><strong>Diagnóstico:</strong> {{ incapacidad.diagnostico }}</span>
-                    <span><strong>Motivo:</strong> {{ incapacidad.motivo }}</span>
-                    <span><strong>Tratamiento:</strong> {{ incapacidad.tratamiento }}</span>
-                    <span><strong>Tipo:</strong> {{ incapacidad.tipoIncapacidad }}</span>
-                    <span *ngIf="incapacidad.observaciones"><strong>Observaciones:</strong> {{ incapacidad.observaciones }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Formulario de nueva incapacidad -->
-            <div *ngIf="showIncapacidadForm" class="form-container">
-              <h3>Nueva Incapacidad Médica</h3>
-              <form (ngSubmit)="guardarIncapacidad()" class="incapacidad-form">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label>Fecha de inicio:</label>
-                    <input type="date" [(ngModel)]="incapacidadForm.fechaInicio" name="fechaInicio" required (change)="calcularDiasIncapacidad()">
-                  </div>
-                  <div class="form-group">
-                    <label>Fecha de fin:</label>
-                    <input type="date" [(ngModel)]="incapacidadForm.fechaFin" name="fechaFin" required (change)="calcularDiasIncapacidad()">
-                  </div>
-                  <div class="form-group">
-                    <label>Días de incapacidad:</label>
-                    <input type="number" [(ngModel)]="incapacidadForm.diasIncapacidad" name="diasIncapacidad" readonly>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Diagnóstico:</label>
-                  <textarea [(ngModel)]="incapacidadForm.diagnostico" name="diagnostico" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Motivo:</label>
-                  <textarea [(ngModel)]="incapacidadForm.motivo" name="motivo" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Tratamiento:</label>
-                  <textarea [(ngModel)]="incapacidadForm.tratamiento" name="tratamiento" required></textarea>
-                </div>
-                <div class="form-group">
-                  <label>Tipo de incapacidad:</label>
-                  <select [(ngModel)]="incapacidadForm.tipoIncapacidad" name="tipoIncapacidad">
-                    <option value="">Seleccionar</option>
-                    <option value="Enfermedad General">Enfermedad General</option>
-                    <option value="Accidente de Trabajo">Accidente de Trabajo</option>
-                    <option value="Enfermedad Laboral">Enfermedad Laboral</option>
-                    <option value="Licencia de Maternidad">Licencia de Maternidad</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Observaciones:</label>
-                  <textarea [(ngModel)]="incapacidadForm.observaciones" name="observaciones"></textarea>
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn-save">💾 Guardar Incapacidad</button>
-                  <button type="button" class="btn-cancel" (click)="toggleIncapacidadForm()">❌ Cancelar</button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Botón para agregar nueva incapacidad -->
-            <div *ngIf="!showIncapacidadForm" class="add-button-container">
-              <button class="btn-add" (click)="toggleIncapacidadForm()">
-                ➕ Agregar Incapacidad
-              </button>
-            </div>
-          </div>
+      <!-- Fórmulas Médicas -->
+      <div class="content-card" *ngIf="activeTab === 'formula'">
+        <div class="card-header">
+          <h2 class="card-title">💊 FÓRMULAS MÉDICAS</h2>
         </div>
-
-        <!-- Fórmulas Médicas -->
-        <div class="content-card" *ngIf="activeTab === 'formula'">
-          <div class="card-header">
-            <h2 class="card-title">💊 FÓRMULAS MÉDICAS</h2>
-          </div>
-          <div class="card-content">
-            <!-- Lista de fórmulas existentes -->
-            <div *ngIf="formulas.length > 0" class="formulas-list-horizontal">
-              <h3>Fórmulas Registradas</h3>
-              <div class="formula-card-horizontal" *ngFor="let formula of formulas">
-                <div class="formula-main">
-                  <div class="formula-medicine-big">{{ formula.medicamento }}</div>
-                  <div class="formula-meta">
-                    <span class="formula-date">{{ formula.fecha | date:'dd/MM/yyyy HH:mm' }}</span>
-                    <span class="formula-dentist">👨‍⚕️ {{ formula.cedulaDentista }}</span>
-                  </div>
-                  <div class="formula-details">
-                    <span><strong>Dosis:</strong> {{ formula.dosis }}</span>
-                    <span><strong>Frecuencia:</strong> {{ formula.frecuencia }}</span>
-                    <span *ngIf="formula.duracionDias"><strong>Duración:</strong> {{ formula.duracionDias }} días</span>
-                  </div>
-                  <div *ngIf="formula.instrucciones" class="formula-instrucciones">
-                    <strong>Instrucciones:</strong> {{ formula.instrucciones }}
-                  </div>
+        <div class="card-content">
+          <!-- Lista de fórmulas existentes -->
+          <div *ngIf="formulas.length > 0" class="formulas-list-horizontal">
+            <h3>Fórmulas Registradas</h3>
+            <div class="formula-card-horizontal" *ngFor="let formula of formulas">
+              <div class="formula-main">
+                <div class="formula-meta">
+                  <span class="formula-date">{{ formula.fecha | date:'dd/MM/yyyy' }}</span>
+                  <span class="formula-dentist">{{ formula.dentist?.name || 'Odontólogo no especificado' }}</span>
+                </div>
+                <div class="formula-details">
+                  <span><strong>Medicamento:</strong> {{ formula.medicamento }}</span>
+                  <span><strong>Dosis:</strong> {{ formula.dosis }}</span>
+                  <span><strong>Frecuencia:</strong> {{ formula.frecuencia }}</span>
+                  <span><strong>Duración:</strong> {{ formula.duracionDias }} días</span>
+                  <span *ngIf="formula.instrucciones"><strong>Instrucciones:</strong> {{ formula.instrucciones }}</span>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Formulario de nueva fórmula -->
-            <div *ngIf="showFormulaForm" class="form-container">
-              <h3>Nueva Fórmula Médica</h3>
-              <form (ngSubmit)="guardarFormula()" #formulaFormRef="ngForm" autocomplete="off" class="formula-form">
-                <div class="form-group">
-                  <label for="medicamento">Medicamento:</label>
-                  <input type="text" [(ngModel)]="formulaForm.medicamento" name="medicamento" required>
-                </div>
-                <div class="form-group">
-                  <label for="dosis">Dosis:</label>
-                  <input type="text" [(ngModel)]="formulaForm.dosis" name="dosis" required>
-                </div>
-                <div class="form-group">
-                  <label for="frecuencia">Frecuencia:</label>
-                  <input type="text" [(ngModel)]="formulaForm.frecuencia" name="frecuencia" required>
-                </div>
-                <div class="form-group">
-                  <label for="duracionDias">Duración (días):</label>
-                  <input type="number" [(ngModel)]="formulaForm.duracionDias" name="duracionDias" required min="1">
-                </div>
-                <div class="form-group">
-                  <label for="instrucciones">Instrucciones:</label>
-                  <textarea [(ngModel)]="formulaForm.instrucciones" name="instrucciones"></textarea>
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn-save">💾 Guardar Fórmula</button>
-                  <button type="button" class="btn-cancel" (click)="toggleFormulaForm()">❌ Cancelar</button>
-                </div>
-              </form>
-            </div>
+          <!-- Formulario de nueva fórmula -->
+          <div *ngIf="showFormulaForm" class="form-container">
+            <h3>Nueva Fórmula Médica</h3>
+            <form (ngSubmit)="guardarFormula()" class="formula-form">
+              <div class="form-group">
+                <label>Medicamento:</label>
+                <input type="text" [(ngModel)]="formulaForm.medicamento" name="medicamento" required>
+              </div>
+              <div class="form-group">
+                <label>Dosis:</label>
+                <input type="text" [(ngModel)]="formulaForm.dosis" name="dosis" required>
+              </div>
+              <div class="form-group">
+                <label>Frecuencia:</label>
+                <input type="text" [(ngModel)]="formulaForm.frecuencia" name="frecuencia" required>
+              </div>
+              <div class="form-group">
+                <label>Duración (días):</label>
+                <input type="number" [(ngModel)]="formulaForm.duracionDias" name="duracionDias" required>
+              </div>
+              <div class="form-group">
+                <label>Instrucciones adicionales:</label>
+                <textarea [(ngModel)]="formulaForm.instrucciones" name="instrucciones"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-save">💾 Guardar Fórmula</button>
+                <button type="button" class="btn-cancel" (click)="toggleFormulaForm()">❌ Cancelar</button>
+              </div>
+            </form>
+          </div>
 
-            <!-- Botón para agregar nueva fórmula -->
-            <div *ngIf="!showFormulaForm" class="add-button-container">
-              <button class="btn-add" (click)="toggleFormulaForm()">
-                ➕ Agregar Fórmula
-              </button>
-            </div>
+          <!-- Botón para agregar nueva fórmula -->
+          <div *ngIf="!showFormulaForm" class="add-button-container">
+            <button class="btn-add" (click)="toggleFormulaForm()">
+              ➕ Agregar Fórmula
+            </button>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Debug info (oculto en producción) -->
-    <div style="display: none; background: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 5px; font-size: 12px;">
-      Debug: historiaId={{historiaId}}, editMode={{editMode}}, formularioHabilitado={{formularioHabilitado}}
-    </div>
-    
-    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
-    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-  </main>
-</div>
+  </div>
+</main>
 
 <style>
 #historyContainer {

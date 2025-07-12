@@ -1,6 +1,3 @@
-<div class="layout-container">
-<app-aside-users></app-aside-users>
-
 <div id="appointmentContainer">
     <h1 class="form-title">SOLICITAR CITA ODONTOLÓGICA</h1>
     <form [formGroup]="formAppoiments" (ngSubmit)="onSubmit()" id="appointmentForm">
@@ -67,7 +64,6 @@
         <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
     </form>
 
-</div>
 </div>
 <style>
 .success-message {

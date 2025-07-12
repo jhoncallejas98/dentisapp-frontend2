@@ -1,110 +1,76 @@
 
-<div class="layout-container">
-  <app-aside-users></app-aside-users>
-  
-  <div class="formula-container">
-    <!-- Header -->
-    <div class="formula-header">
-      <div class="header-content">
-        <h1 class="form-title">💊 Mis Fórmulas Médicas</h1>
-        <p class="form-subtitle">Consulta tus medicamentos prescritos</p>
-      </div>
+<div class="formula-container">
+  <!-- Header -->
+  <div class="formula-header">
+    <div class="header-content">
+      <h1 class="form-title">💊 Mis Fórmulas Médicas</h1>
+      <p class="form-subtitle">Consulta tus medicamentos prescritos</p>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Cargando fórmulas médicas...</p>
     </div>
 
-    <!-- Contenido principal -->
-    <div class="main-content">
-      <!-- Loading -->
-      <div *ngIf="loading" class="loading-container">
-        <div class="loading-spinner"></div>
-        <p>Cargando fórmulas médicas...</p>
-      </div>
+    <!-- Error -->
+    <div *ngIf="error && !loading" class="error-container">
+      <p class="error-message">{{ error }}</p>
+      <button class="btn-primary" (click)="loadFormulas()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 2v6h-6"></path>
+          <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+          <path d="M3 22v-6h6"></path>
+          <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+        </svg>
+        Reintentar
+      </button>
+    </div>
 
-      <!-- Error -->
-      <div *ngIf="error && !loading" class="error-container">
-        <p class="error-message">{{ error }}</p>
-        <button class="btn-primary" (click)="loadFormulas()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 2v6h-6"></path>
-            <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
-            <path d="M3 22v-6h6"></path>
-            <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
-          </svg>
-          Reintentar
-        </button>
-      </div>
+    <!-- No data -->
+    <div *ngIf="!loading && !error && formulas.length === 0" class="no-data-container">
+      <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
+        <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
+        <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
+      </svg>
+      <h2>No tienes fórmulas médicas</h2>
+      <p>Las fórmulas aparecerán aquí después de tus consultas.</p>
+    </div>
 
-      <!-- Lista de fórmulas -->
-      <div *ngIf="!loading && !error" class="formulas-content">
-        <!-- Sin fórmulas -->
-        <div *ngIf="formulas.length === 0" class="no-data-container">
-          <div class="no-data-icon">
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-            </svg>
-          </div>
-          <h2>No tienes fórmulas médicas</h2>
-          <p>Las fórmulas médicas aparecerán aquí cuando sean prescritas por tu médico.</p>
+    <!-- Grid de fórmulas -->
+    <div *ngIf="!loading && !error && formulas.length > 0" class="formulas-grid">
+      <div class="formula-card" *ngFor="let formula of formulas">
+        <div class="card-header">
+          <h3>{{ formula.medicamento || formula.medication || 'Medicamento no especificado' }}</h3>
+          <span class="formula-date">{{ formula.fecha | date:'dd/MM/yyyy' }}</span>
         </div>
-
-        <!-- Lista de fórmulas -->
-        <div *ngIf="formulas.length > 0" class="formulas-grid">
-          <div class="formula-card" *ngFor="let formula of formulas">
-            <div class="card-header">
-              <div class="formula-status">
-                {{ getStatusText(formula) }}
-              </div>
-              <div class="formula-duration">
-                {{ formula.duracionDias || formula.duration || 0 }} días
-              </div>
+        <div class="card-content">
+          <div class="formula-dates">
+            <div class="date-item">
+              <span class="date-label">Odontólogo:</span>
+              <span class="date-value">{{ getDentistName(formula) }}</span>
             </div>
-            
-            <div class="card-content">
-              <div class="formula-dates">
-                <div class="date-item">
-                  <span class="date-label">Prescrita:</span>
-                  <span class="date-value">{{ formatDate(formula.fecha || formula.date) }}</span>
-                </div>
-                <div class="date-item">
-                  <span class="date-label">Válida hasta:</span>
-                  <span class="date-value">{{ getExpirationDate(formula) }}</span>
-                </div>
-              </div>
-              
-              <div class="formula-details">
-                <div class="detail-item">
-                  <span class="detail-label">Medicamento:</span>
-                  <span class="detail-value">{{ formula.medicamento || formula.medication || 'No especificado' }}</span>
-                </div>
-                
-                <div class="detail-item">
-                  <span class="detail-label">Prescrito por:</span>
-                  <span class="detail-value">{{ getDentistName(formula) }}</span>
-                </div>
-                
-                <div class="detail-item">
-                  <span class="detail-label">Dosis:</span>
-                  <span class="detail-value">{{ formula.dosis || formula.dosage || 'No especificada' }}</span>
-                </div>
-                
-                <div class="detail-item">
-                  <span class="detail-label">Frecuencia:</span>
-                  <span class="detail-value">{{ formula.frecuencia || formula.frequency || 'No especificada' }}</span>
-                </div>
-                
-                <div class="detail-item" *ngIf="formula.instrucciones || formula.instructions">
-                  <span class="detail-label">Instrucciones:</span>
-                  <span class="detail-value">{{ formula.instrucciones || formula.instructions }}</span>
-                </div>
-                
-                <div class="detail-item" *ngIf="formula.notes">
-                  <span class="detail-label">Notas:</span>
-                  <span class="detail-value">{{ formula.notes }}</span>
-                </div>
-              </div>
+            <div class="date-item">
+              <span class="date-label">Duración:</span>
+              <span class="formula-duration">{{ formula.duracionDias }} días</span>
             </div>
-            
-            <div class="card-footer">
-              <span class="formula-date">Registrada el {{ formatDate(formula.createdAt || formula.fecha || formula.date) }}</span>
+          </div>
+          <div class="formula-details">
+            <div class="detail-item">
+              <span class="detail-label">Dosis:</span>
+              <span class="detail-value">{{ formula.dosis }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Frecuencia:</span>
+              <span class="detail-value">{{ formula.frecuencia }}</span>
+            </div>
+            <div class="detail-item" *ngIf="formula.instrucciones">
+              <span class="detail-label">Instrucciones:</span>
+              <span class="detail-value">{{ formula.instrucciones }}</span>
             </div>
           </div>
         </div>

@@ -1,164 +1,160 @@
-<div class="layout-container">
-  <app-aside-users></app-aside-users>
+<div class="dashboard-container">
+  <!-- Header simple -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h2>Mi Dashboard</h2>
+      <p>Resumen de mis citas y documentos médicos</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary" routerLink="/appoiments-users/new-form">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Solicitar Cita
+      </button>
+    </div>
+  </div>
 
-  <div class="dashboard-container">
-    <!-- Header simple -->
-    <div class="dashboard-header">
-      <div class="header-content">
-        <h2>Mi Dashboard</h2>
-        <p>Resumen de mis citas y documentos médicos</p>
-      </div>
-      <div class="header-actions">
-        <button class="btn-primary" routerLink="/appoiments-users/new-form">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-          </svg>
-          Solicitar Cita
-        </button>
+  <!-- Contenido principal en columnas -->
+  <div class="main-content">
+    <!-- Columna 1: Próximas Citas -->
+    <div class="content-column">
+      <div class="content-card">
+        <div class="card-header">
+          <h3>Próximas Citas</h3>
+          <span class="date">{{ today | date:'EEEE, dd MMMM':'':'es' }}</span>
+        </div>
+        <div class="card-content">
+          <!-- Loading para citas -->
+          <div *ngIf="appointmentsLoading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Cargando citas...</p>
+          </div>
+
+          <!-- Error para citas -->
+          <div *ngIf="appointmentsError && !appointmentsLoading" class="error-container">
+            <p class="error-message">{{ appointmentsError }}</p>
+          </div>
+
+          <!-- Lista de citas -->
+          <div *ngIf="!appointmentsLoading && !appointmentsError">
+            <div *ngIf="appointments.length === 0" class="no-data-message">
+              <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
+                <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
+                <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
+              </svg>
+              <h3>No tienes citas programadas</h3>
+              <p>Agenda tu primera cita para comenzar tu tratamiento dental.</p>
+            </div>
+
+            <div class="appointment-card" *ngFor="let appointment of appointments">
+              <div class="appointment-time">
+                <span class="time">{{ formatTime(appointment.date) }}</span>
+                <span class="date">{{ formatDate(appointment.date) }}</span>
+              </div>
+              
+              <div class="appointment-details">
+                <div class="appointment-info">
+                  <h4>{{ getDentistName(appointment) }}</h4>
+                  <p class="mobile-hide">Motivo: {{ appointment.reason || appointment.motivo || 'Consulta general' }}</p>
+                  <p class="mobile-hide" *ngIf="appointment.notes || appointment.observaciones">Notas: {{ appointment.notes || appointment.observaciones }}</p>
+                </div>
+              </div>
+              
+              <div class="appointment-status">
+                <span class="status-badge" [ngClass]="{
+                  'badge-yellow': getStatusText(appointment.status, appointment.date) === 'Pendiente',
+                  'badge-green': getStatusText(appointment.status, appointment.date) === 'Asistió',
+                  'badge-red': getStatusText(appointment.status, appointment.date) === 'Cancelada',
+                  'badge-gray': getStatusText(appointment.status, appointment.date) === 'Pasada'
+                }">
+                  {{ getStatusText(appointment.status, appointment.date) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Contenido principal en columnas -->
-    <div class="main-content">
-      <!-- Columna 1: Próximas Citas -->
-      <div class="content-column">
-        <div class="content-card">
-          <div class="card-header">
-            <h3>Próximas Citas</h3>
-            <span class="date">{{ today | date:'EEEE, dd MMMM':'':'es' }}</span>
+    <!-- Columna 2: Documentos Médicos -->
+    <div class="content-column">
+      <div class="content-card">
+        <div class="card-header">
+          <h3>Fórmulas Médicas</h3>
+          <button class="btn-text" routerLink="/formula-users">Ver todas</button>
+        </div>
+        <div class="card-content">
+          <!-- Loading para fórmulas -->
+          <div *ngIf="formulasLoading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Cargando fórmulas...</p>
           </div>
-          <div class="card-content">
-            <!-- Loading para citas -->
-            <div *ngIf="appointmentsLoading" class="loading-container">
-              <div class="loading-spinner"></div>
-              <p>Cargando citas...</p>
+
+          <!-- Error para fórmulas -->
+          <div *ngIf="formulasError && !formulasLoading" class="error-container">
+            <p class="error-message">{{ formulasError }}</p>
+          </div>
+
+          <!-- Lista de fórmulas -->
+          <div *ngIf="!formulasLoading && !formulasError">
+            <div *ngIf="formulas.length === 0" class="no-data-message">
+              <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
+              </svg>
+              <h3>No tienes fórmulas médicas</h3>
+              <p>Las fórmulas aparecerán aquí después de tus consultas.</p>
             </div>
 
-            <!-- Error para citas -->
-            <div *ngIf="appointmentsError && !appointmentsLoading" class="error-container">
-              <p class="error-message">{{ appointmentsError }}</p>
-            </div>
-
-            <!-- Lista de citas -->
-            <div *ngIf="!appointmentsLoading && !appointmentsError">
-              <div *ngIf="appointments.length === 0" class="no-data-message">
-                <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                  <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
-                  <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
-                  <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
-                </svg>
-                <h3>No tienes citas programadas</h3>
-                <p>Agenda tu primera cita para comenzar tu tratamiento dental.</p>
-              </div>
-
-              <div class="appointment-card" *ngFor="let appointment of appointments">
-                <div class="appointment-time">
-                  <span class="time">{{ formatTime(appointment.date) }}</span>
-                  <span class="date">{{ formatDate(appointment.date) }}</span>
-                </div>
-                
-                <div class="appointment-details">
-                  <div class="appointment-info">
-                    <h4>{{ getDentistName(appointment) }}</h4>
-                    <p>Motivo: {{ appointment.reason || appointment.motivo || 'Consulta general' }}</p>
-                    <p *ngIf="appointment.notes || appointment.observaciones">Notas: {{ appointment.notes || appointment.observaciones }}</p>
-                  </div>
-                </div>
-                
-                <div class="appointment-status">
-                  <span class="status-badge" [ngClass]="{
-                    'badge-yellow': getStatusText(appointment.status, appointment.date) === 'Pendiente',
-                    'badge-green': getStatusText(appointment.status, appointment.date) === 'Asistió',
-                    'badge-red': getStatusText(appointment.status, appointment.date) === 'Cancelada',
-                    'badge-gray': getStatusText(appointment.status, appointment.date) === 'Pasada'
-                  }">
-                    {{ getStatusText(appointment.status, appointment.date) }}
-                  </span>
-                </div>
+            <div class="document-card" *ngFor="let formula of formulas.slice(0, 3)">
+              <div class="document-info">
+                <h4>Fórmula Médica</h4>
+                <p>{{ formula.medicamento || formula.medication || 'Medicamento no especificado' }}</p>
+                <span class="document-date">{{ formatDate(formula.fecha || formula.date) }}</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Columna 2: Documentos Médicos -->
-      <div class="content-column">
-        <div class="content-card">
-          <div class="card-header">
-            <h3>Fórmulas Médicas</h3>
-            <button class="btn-text" routerLink="/formula-users">Ver todas</button>
-          </div>
-          <div class="card-content">
-            <!-- Loading para fórmulas -->
-            <div *ngIf="formulasLoading" class="loading-container">
-              <div class="loading-spinner"></div>
-              <p>Cargando fórmulas...</p>
-            </div>
-
-            <!-- Error para fórmulas -->
-            <div *ngIf="formulasError && !formulasLoading" class="error-container">
-              <p class="error-message">{{ formulasError }}</p>
-            </div>
-
-            <!-- Lista de fórmulas -->
-            <div *ngIf="!formulasLoading && !formulasError">
-              <div *ngIf="formulas.length === 0" class="no-data-message">
-                <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                  <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
-                </svg>
-                <h3>No tienes fórmulas médicas</h3>
-                <p>Las fórmulas aparecerán aquí después de tus consultas.</p>
-              </div>
-
-              <div class="document-card" *ngFor="let formula of formulas.slice(0, 3)">
-                <div class="document-info">
-                  <h4>Fórmula Médica</h4>
-                  <p>{{ formula.medicamento || formula.medication || 'Medicamento no especificado' }}</p>
-                  <span class="document-date">{{ formatDate(formula.fecha || formula.date) }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- Card de Incapacidades -->
+      <div class="content-card">
+        <div class="card-header">
+          <h3>Incapacidades Médicas</h3>
+          <button class="btn-text" [routerLink]="['/incapacidad', authServices.getCurrentUserCedula()]">Ver todas</button>
         </div>
-
-        <!-- Card de Incapacidades -->
-        <div class="content-card">
-          <div class="card-header">
-            <h3>Incapacidades Médicas</h3>
-            <button class="btn-text" [routerLink]="['/incapacidad', authServices.getCurrentUserCedula()]">Ver todas</button>
+        <div class="card-content">
+          <!-- Loading para incapacidades -->
+          <div *ngIf="incapacitiesLoading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Cargando incapacidades...</p>
           </div>
-          <div class="card-content">
-            <!-- Loading para incapacidades -->
-            <div *ngIf="incapacitiesLoading" class="loading-container">
-              <div class="loading-spinner"></div>
-              <p>Cargando incapacidades...</p>
+
+          <!-- Error para incapacidades -->
+          <div *ngIf="incapacitiesError && !incapacitiesLoading" class="error-container">
+            <p class="error-message">{{ incapacitiesError }}</p>
+          </div>
+
+          <!-- Lista de incapacidades -->
+          <div *ngIf="!incapacitiesLoading && !incapacitiesError">
+            <div *ngIf="incapacities.length === 0" class="no-data-message">
+              <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
+              </svg>
+              <h3>No tienes incapacidades médicas</h3>
+              <p>Las incapacidades aparecerán aquí cuando sean registradas.</p>
             </div>
 
-            <!-- Error para incapacidades -->
-            <div *ngIf="incapacitiesError && !incapacitiesLoading" class="error-container">
-              <p class="error-message">{{ incapacitiesError }}</p>
-            </div>
-
-            <!-- Lista de incapacidades -->
-            <div *ngIf="!incapacitiesLoading && !incapacitiesError">
-              <div *ngIf="incapacities.length === 0" class="no-data-message">
-                <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                  <path d="M64 480H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H288c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32H64C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64z"/>
-                </svg>
-                <h3>No tienes incapacidades médicas</h3>
-                <p>Las incapacidades aparecerán aquí cuando sean registradas.</p>
-              </div>
-
-              <div class="document-card" *ngFor="let incapacity of incapacities.slice(0, 3)">
-                <div class="document-info">
-                  <h4>Incapacidad Médica</h4>
-                  <p>{{ incapacity.motivo || incapacity.reason || 'Motivo no especificado' }}</p>
-                  <span class="document-date">
-                    {{ formatDate(incapacity.fechaInicio || incapacity.date) }} - 
-                    {{ incapacity.diasIncapacidad || incapacity.days || 0 }} días
-                  </span>
-                </div>
+            <div class="document-card" *ngFor="let incapacity of incapacities.slice(0, 3)">
+              <div class="document-info">
+                <h4>Incapacidad Médica</h4>
+                <p>{{ incapacity.motivo || incapacity.reason || 'Motivo no especificado' }}</p>
+                <span class="document-date">
+                  {{ formatDate(incapacity.fechaInicio || incapacity.date) }} - 
+                  {{ incapacity.diasIncapacidad || incapacity.days || 0 }} días
+                </span>
               </div>
             </div>
           </div>

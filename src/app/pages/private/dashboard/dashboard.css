@@ -422,6 +422,17 @@ body {
   display: none;
 }
 
+/* Asegurar que las clases funcionen en todas las resoluciones */
+@media (min-width: 769px) {
+  .desktop-only {
+    display: block !important;
+  }
+  
+  .mobile-only {
+    display: none !important;
+  }
+}
+
 /* === CARDS DE PACIENTES PARA MOBILE === */
 .patients-cards {
   display: flex;
@@ -448,27 +459,13 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  background: #f5e9e2; /* beige de la app */
   border-bottom: 1px solid #e9ecef;
 }
 
 .patient-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-
-.patient-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 1rem;
 }
 
 .patient-details h4 {
@@ -589,11 +586,11 @@ body {
   }
 
   .desktop-only {
-    display: none;
+    display: none !important;
   }
 
   .mobile-only {
-    display: block;
+    display: block !important;
   }
 }
 
