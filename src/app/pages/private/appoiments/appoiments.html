@@ -58,8 +58,8 @@
     <div *ngIf="!loading && !error && appointments.length > 0" class="appointments-list">
       <div class="appointment-item" *ngFor="let appointment of appointments">
         <div class="appointment-time">
-          <span class="time">{{ appointment.timeBlock }}</span>
-          <span class="date">{{ appointment.date | date:'yyyy-MM-dd' }}</span>
+          <span class="date">{{ formatToDDMMYYYY(appointment.date) }}</span>
+          <span class="time">{{ appointment.timeBlock || extractHourFromISO(appointment.date) }}</span>
         </div>
         
         <div class="appointment-details">

@@ -56,8 +56,8 @@
     <div class="appointment-card" *ngFor="let appointment of appointments">
       <div class="card-header">
         <div class="appointment-time">
-          <span class="time">{{ formatTime(appointment.date) }}</span>
-          <span class="date">{{ formatDate(appointment.date) }}</span>
+          <span class="date">{{ formatToDDMMYYYY(appointment.date) }}</span>
+          <span class="time">{{ appointment.timeBlock || extractHourFromISO(appointment.date) }}</span>
           <span class="mobile-info">{{ getDentistName(appointment) }}</span>
         </div>
         <div class="appointment-status">

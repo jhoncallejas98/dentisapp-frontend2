@@ -1,8 +1,5 @@
 <div class="layout-container">
-  <!-- <app-aside-bar></app-aside-bar> -->
-
   <div class="patients-container">
-    <!-- Header simple -->
     <div class="patients-header">
       <div class="header-content">
         <h2>Pacientes</h2>
@@ -17,79 +14,40 @@
       </button>
     </div>
 
-    <!-- Lista de pacientes -->
-    <div class="patients-list-container">
-      <!-- Tabla para desktop -->
-      <table class="patients-table desktop-only">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Cédula</th>
-            <th>Email</th>
-            <th>Historia Clínica</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let patient of patients">
-            <td>{{ patient.name }}</td>
-            <td>{{ patient.cedula || patient.documentId || patient._id }}</td>
-            <td>{{ patient.email }}</td>
-            <td>
-              <button class="btn-view" [routerLink]="['/historia-clinica', patient.cedula || patient.documentId || patient._id]">
-                Ver
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div *ngIf="patients.length === 0" class="no-data-container">
+      <svg class="no-data-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>
+        <rect x="14" y="20" width="20" height="8" rx="2" fill="#e0e0e0"/>
+        <rect x="18" y="28" width="12" height="2" rx="1" fill="#e0e0e0"/>
+      </svg>
+      <h2>No hay pacientes registrados</h2>
+      <p>Agrega tu primer paciente para comenzar a gestionar tu agenda.</p>
+      <button class="btn-primary" routerLink="/admin/patients/add">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Agregar Paciente
+      </button>
+    </div>
 
-      <!-- Cards para mobile -->
-      <div class="patients-cards mobile-only">
-        <div class="patient-card" *ngFor="let patient of patients">
-          <div class="card-header">
-            <div class="patient-info">
-              <h3>{{ patient.name }}</h3>
-              <p class="patient-document">{{ patient.cedula || patient.documentId || patient._id }}</p>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="patient-detail">
-              <span class="label">Email:</span>
-              <span class="value">{{ patient.email }}</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <button class="btn-view" [routerLink]="['/historia-clinica', patient.cedula || patient.documentId || patient._id]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              Ver Historia
-            </button>
-          </div>
+    <div *ngIf="patients.length > 0" class="patients-list">
+      <div class="patient-list-item" *ngFor="let patient of patients">
+        <div class="patient-details-text">
+          <h4>{{ patient.name }}</h4>
+          <p class="patient-document">{{ patient.cedula || patient.documentId || patient._id }}</p>
+          <p class="patient-email">{{ patient.email }}</p>
+        </div>
+        <div class="patient-actions">
+          <button class="btn-view" [routerLink]="['/historia-clinica', patient.cedula || patient.documentId || patient._id]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            Ver
+          </button>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<style>
-.btn-view {
-  background: #000000;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 18px;
-  font-weight: 500;
-  text-decoration: none;
-  display: inline-block;
-  transition: all 0.2s;
-  margin: 0 2px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-}
-.btn-view:hover {
-  background: #333333;
-  transform: translateY(-1px);
-}
-</style> 
+</div> 

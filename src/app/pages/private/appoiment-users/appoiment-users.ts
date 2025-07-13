@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { AsideUsers } from "../../../components/aside-users/aside-users";
 import { AuthServices } from '../../../services/auth-services';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { DentistServices } from '../../../services/dentist-services';
+import { formatToDDMMYYYY, extractHourFromISO } from '../../../services/date-utils.service';
 
 @Component({
   selector: 'app-appoiment-users',
-  imports: [AsideUsers, CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './appoiment-users.html',
   styleUrl: './appoiment-users.css'
 })
@@ -18,6 +18,8 @@ export class AppoimentUsers implements OnInit {
   error: string = '';
   currentUser: any = null;
   dentists: any[] = [];
+  formatToDDMMYYYY = formatToDDMMYYYY;
+  extractHourFromISO = extractHourFromISO;
 
   constructor(
     private authServices: AuthServices,
@@ -53,15 +55,12 @@ export class AppoimentUsers implements OnInit {
   loadUserAppointments() {
     this.loading = true;
     this.error = '';
-    
     const appointmentsObservable = this.authServices.getUserAppointments();
-    
     if (!appointmentsObservable) {
       this.error = 'No se pudo obtener la información del usuario';
       this.loading = false;
       return;
     }
-
     appointmentsObservable.subscribe({
       next: (data: any) => {
         console.log('Citas obtenidas:', data);
@@ -77,84 +76,40 @@ export class AppoimentUsers implements OnInit {
   }
 
   getStatusClass(status: string): string {
-    // Si la cita está cancelada, siempre mostrar como cancelada
     if (status?.toLowerCase() === 'cancelada' || status?.toLowerCase() === 'cancelled') {
       return 'cancelada';
     }
-    
-    // Si la cita está marcada como asistió, siempre mostrar como asistió
     if (status?.toLowerCase() === 'asistio' || status?.toLowerCase() === 'attended') {
       return 'asistio';
     }
-    
-    // Para citas pendientes, verificar si la fecha ya pasó
     if (status?.toLowerCase() === 'pendiente' || status?.toLowerCase() === 'pending') {
       return 'pendiente';
     }
-    
     return 'pendiente';
   }
 
   getStatusText(status: string, appointmentDate?: string): string {
-    // Si la cita está cancelada, siempre mostrar como cancelada
     if (status?.toLowerCase() === 'cancelada' || status?.toLowerCase() === 'cancelled') {
       return 'Cancelada';
     }
-    
-    // Si la cita está marcada como asistió, siempre mostrar como asistió
     if (status?.toLowerCase() === 'asistio' || status?.toLowerCase() === 'attended') {
       return 'Asistió';
     }
-    
-    // Para citas pendientes, verificar si la fecha ya pasó
     if (status?.toLowerCase() === 'pendiente' || status?.toLowerCase() === 'pending') {
       if (appointmentDate) {
         const appointmentDateTime = new Date(appointmentDate);
         const now = new Date();
-        
-        // Si la fecha de la cita ya pasó, mostrar como "Pasada"
         if (appointmentDateTime < now) {
           return 'Pasada';
         }
       }
       return 'Pendiente';
     }
-    
     return 'Pendiente';
-  }
-
-  formatDate(dateString: string): string {
-    if (!dateString) return 'Fecha no disponible';
-    
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    } catch {
-      return 'Fecha no válida';
-    }
-  }
-
-  formatTime(dateString: string): string {
-    if (!dateString) return 'Hora no disponible';
-    
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    } catch {
-      return 'Hora no válida';
-    }
   }
 
   isPastAppointment(appointmentDate: string): boolean {
     if (!appointmentDate) return false;
-    
     try {
       const appointmentDateTime = new Date(appointmentDate);
       const now = new Date();
@@ -168,11 +123,9 @@ export class AppoimentUsers implements OnInit {
     if (appointment.status === 'cancelada' || appointment.status === 'cancelled') {
       return 'Cita ya cancelada';
     }
-    
     if (this.isPastAppointment(appointment.date)) {
       return 'No puedes cancelar una cita que ya pasó';
     }
-    
     return 'Cancelar cita';
   }
 
@@ -180,43 +133,31 @@ export class AppoimentUsers implements OnInit {
     if (appointment.dentistName) return appointment.dentistName;
     if (appointment.dentist && appointment.dentist.name) return appointment.dentist.name;
     if (appointment.doctorName) return appointment.doctorName;
-    
-    // Buscar en la lista de dentistas por cédula
     const dentistCedula = appointment.cedulaDentista || appointment.dentistId;
     if (dentistCedula && this.dentists.length > 0) {
       const dentist = this.dentists.find(d => d.cedula === dentistCedula);
       if (dentist && dentist.name) return dentist.name;
     }
-    
     return 'No especificado';
   }
 
   viewAppointment(appointment: any) {
-    // Aquí podrías implementar la lógica para ver detalles de la cita
-    console.log('Ver detalles de la cita:', appointment);
-    // Por ahora solo mostramos un alert
-    alert(`Detalles de la cita:\nFecha: ${this.formatDate(appointment.date)}\nHora: ${this.formatTime(appointment.date)}\nDoctor: ${this.getDentistName(appointment)}\nMotivo: ${appointment.reason || 'No especificado'}`);
+    alert(`Detalles de la cita:\nFecha: ${this.formatToDDMMYYYY(appointment.date)}\nHora: ${this.extractHourFromISO(appointment.date) || appointment.timeBlock}\nDoctor: ${this.getDentistName(appointment)}\nMotivo: ${appointment.reason || 'No especificado'}`);
   }
 
   cancelAppointment(appointmentId: string, appointmentDate: string) {
-    // Verificar si la fecha de la cita ya pasó
     const appointmentDateTime = new Date(appointmentDate);
     const now = new Date();
-    
     if (appointmentDateTime < now) {
       alert('No puedes cancelar una cita que ya pasó.');
       return;
     }
-    
     if (confirm('¿Estás seguro de que quieres cancelar esta cita?')) {
       this.appoimentsServices.updateAppoiment(appointmentId, { status: 'cancelada' }).subscribe({
         next: (response: any) => {
-          console.log('Cita cancelada exitosamente:', response);
-          // Recargar las citas
           this.loadUserAppointments();
         },
         error: (error: any) => {
-          console.error('Error al cancelar la cita:', error);
           alert('Error al cancelar la cita. Por favor, intenta nuevamente.');
         }
       });

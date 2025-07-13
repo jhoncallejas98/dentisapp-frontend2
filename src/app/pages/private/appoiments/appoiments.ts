@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { AuthServices } from '../../../services/auth-services';
 import { Router } from '@angular/router';
+import { formatToDDMMYYYY, extractHourFromISO } from '../../../services/date-utils.service';
 
 interface Appointment {
   _id: string;
@@ -20,7 +20,7 @@ interface Appointment {
 @Component({
   selector: 'app-appoiments',
   standalone: true,
-  imports: [CommonModule, RouterModule, AsideBar],
+  imports: [CommonModule, RouterModule],
   templateUrl: './appoiments.html',
   styleUrl: './appoiments.css'
 })
@@ -28,6 +28,8 @@ export class AppoimentsComponent {
   appointments: Appointment[] = [];
   loading: boolean = false;
   error: string = '';
+  formatToDDMMYYYY = formatToDDMMYYYY;
+  extractHourFromISO = extractHourFromISO;
 
   constructor(
     private appoimentsService: AppoimentsServices, 

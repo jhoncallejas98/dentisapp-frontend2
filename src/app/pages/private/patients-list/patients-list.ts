@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AuthServices } from '../../../services/auth-services';
 
 interface Patient {
@@ -16,7 +15,7 @@ interface Patient {
 @Component({
   selector: 'app-patients-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, AsideBar],
+  imports: [CommonModule, RouterModule],
   templateUrl: './patients-list.html',
   styleUrl: './patients-list.css'
 })

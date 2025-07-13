@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AsideUsers } from "../../../components/aside-users/aside-users";
 import { AuthServices } from '../../../services/auth-services';
 import { IncapacidadMedicaServices } from '../../../services/incapacidad-medica-services';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { FormulaMedicaServices } from '../../../services/formula-medica-services';
 import { DentistServices } from '../../../services/dentist-services';
+import { formatToDDMMYYYY, extractHourFromISO } from '../../../services/date-utils.service';
 
 @Component({
   selector: 'app-dashboard-users',
-  imports: [AsideUsers, CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard-users.html',
   styleUrl: './dashboard-users.css'
 })
@@ -36,6 +36,9 @@ export class DashboardUsers implements OnInit {
 
   // Datos de dentistas
   dentists: any[] = [];
+
+  formatToDDMMYYYY = formatToDDMMYYYY;
+  extractHourFromISO = extractHourFromISO;
 
   constructor(
     public authServices: AuthServices,
@@ -108,14 +111,10 @@ export class DashboardUsers implements OnInit {
           
           this.appointments = this.appointments.filter((appointment: any) => {
             if (!appointment.date) return false;
-            
-            const appointmentDate = new Date(appointment.date);
-            appointmentDate.setHours(0, 0, 0, 0); // Inicio del día de la cita
-            
-            console.log('Comparando fecha de cita:', appointmentDate, 'con hoy:', today);
-            console.log('Cita:', appointment.reason, 'Fecha:', appointment.date, 'Es futura:', appointmentDate >= today);
-            
-            return appointmentDate >= today;
+            // Extrae solo la parte de la fecha (YYYY-MM-DD)
+            const citaFecha = appointment.date.substring(0, 10);
+            const hoyFecha = (new Date()).toISOString().substring(0, 10);
+            return citaFecha >= hoyFecha;
           });
           
           // Ordenar por fecha (más próximas primero)
@@ -288,16 +287,8 @@ export class DashboardUsers implements OnInit {
   formatDate(dateString: string): string {
     if (!dateString) return 'Fecha no disponible';
     
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      });
-    } catch {
-      return 'Fecha no válida';
-    }
+    // Usar el helper centralizado para formatear la fecha
+    return this.formatToDDMMYYYY(dateString);
   }
 
   formatDateTime(dateString: string): string {
@@ -317,17 +308,20 @@ export class DashboardUsers implements OnInit {
     }
   }
 
-  formatTime(dateString: string): string {
-    if (!dateString) return 'Hora no disponible';
+  formatTime(appointment: any): string {
+    if (!appointment) return 'Hora no disponible';
     
-    try {
-      const date = new Date(dateString);
-      return date.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-    } catch {
-      return 'Hora no válida';
+    // Primero intentar usar timeBlock si está disponible
+    if (appointment.timeBlock) {
+      return appointment.timeBlock;
     }
+    
+    // Si no hay timeBlock, extraer la hora del string ISO
+    if (appointment.date) {
+      const hour = this.extractHourFromISO(appointment.date);
+      if (hour) return hour;
+    }
+    
+    return 'Hora no disponible';
   }
 }

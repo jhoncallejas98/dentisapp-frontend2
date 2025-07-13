@@ -51,8 +51,8 @@
 
             <div class="appointment-card" *ngFor="let appointment of appointments">
               <div class="appointment-time">
-                <span class="time">{{ formatTime(appointment.date) }}</span>
-                <span class="date">{{ formatDate(appointment.date) }}</span>
+                <span class="time">{{ formatTime(appointment) }}</span>
+                <span class="date">{{ formatToDDMMYYYY(appointment.date) }}</span>
               </div>
               
               <div class="appointment-details">

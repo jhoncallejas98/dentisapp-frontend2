@@ -4,14 +4,13 @@ import { AppoimentsServices } from '../../../../services/appoiments-services';
 import { DentistServices } from '../../../../services/dentist-services';
 import { JsonPipe, CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { AsideUsers } from "../../../../components/aside-users/aside-users";
 import { AvailabilityServices } from '../../../../services/availability-services';
 import { AuthServices } from '../../../../services/auth-services';
 
 @Component({
   selector: 'app-new-form',
   standalone: true,
-  imports: [ReactiveFormsModule, AsideUsers, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './new-form.html',
   styleUrl: './new-form.css'
 })
@@ -68,15 +67,17 @@ currentUser: any = null;
     this.submitting = true;
     // Preparar el objeto a enviar
     const raw = this.formAppoiments.value;
-    console.log('Datos raw del formulario:', raw);
+    console.log('Valor de raw.date recibido del input:', raw.date);
     
     const cita: any = {
-      date: raw.date,
+      date: typeof raw.date === 'string' ? raw.date.substring(0, 10) : '',
       timeBlock: raw.timeBlock,
       status: raw.status,
       reason: raw.reason,
       notes: raw.notes
     };
+    console.log('Valor de cita.date que se enviará al backend:', cita.date);
+    
     // Paciente: si es ObjectId (24 hex), enviar patient, si no, cedulaPaciente
     if (/^[a-f\d]{24}$/i.test(raw.patient)) {
       cita.patient = raw.patient;

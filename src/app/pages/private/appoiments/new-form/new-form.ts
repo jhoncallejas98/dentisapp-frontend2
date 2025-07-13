@@ -102,7 +102,7 @@ availableBlocks: string[] = [];
     }
     
     const cita: any = {
-      date: fechaProcesada,
+      date: typeof raw.date === 'string' ? raw.date.substring(0, 10) : '',
       timeBlock: raw.timeBlock,
       status: raw.status,
       reason: raw.reason,
