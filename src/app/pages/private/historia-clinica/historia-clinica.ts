@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsideBar } from "../../../components/aside-bar-dentist/aside-bar";
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -12,7 +11,8 @@ import { AppoimentsServices } from '../../../services/appoiments-services';
 
 @Component({
   selector: 'app-historia-clinica',
-  imports: [CommonModule, AsideBar, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './historia-clinica.html',
   styleUrl: './historia-clinica.css'
 })

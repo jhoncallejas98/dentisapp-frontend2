@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsideUsers } from "../../../components/aside-users/aside-users";
 import { AuthServices } from '../../../services/auth-services';
 import { FormulaMedicaServices } from '../../../services/formula-medica-services';
 import { DentistServices } from '../../../services/dentist-services';
 
 @Component({
   selector: 'app-formula-users',
-  imports: [AsideUsers, CommonModule],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './formula-users.html',
   styleUrl: './formula-users.css'
 })

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AppoimentsServices } from '../../../services/appoiments-services';
 import { AuthServices } from '../../../services/auth-services';
 import { DateUtilsService } from '../../../services/date-utils.service';
@@ -22,7 +21,7 @@ interface WeekDay {
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule, AsideBar],
+  imports: [CommonModule],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css'
 })

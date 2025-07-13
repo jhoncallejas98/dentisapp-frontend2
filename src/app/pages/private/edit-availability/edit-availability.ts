@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { DentistServices } from '../../../services/dentist-services';
 import { AvailabilityServices } from '../../../services/availability-services';
 import { AuthServices } from '../../../services/auth-services';
@@ -10,7 +9,7 @@ import { AuthServices } from '../../../services/auth-services';
 @Component({
   selector: 'app-edit-availability',
   standalone: true,
-  imports: [CommonModule, FormsModule, AsideBar],
+  imports: [CommonModule, FormsModule],
   templateUrl: './edit-availability.html',
   styleUrls: ['./edit-availability.css']
 })

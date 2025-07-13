@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 
 @Component({
   selector: 'app-add-patient',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, AsideBar],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
   templateUrl: './add-patient.html',
   styleUrl: './add-patient.css'
 })

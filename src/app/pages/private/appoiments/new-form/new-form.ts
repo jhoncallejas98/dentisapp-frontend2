@@ -4,14 +4,13 @@ import { AppoimentsServices } from '../../../../services/appoiments-services';
 import { DentistServices } from '../../../../services/dentist-services';
 import { JsonPipe, CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { AsideBar } from "../../../../components/aside-bar-dentist/aside-bar";
 import { AvailabilityServices } from '../../../../services/availability-services';
 import { DateUtilsService } from '../../../../services/date-utils.service';
 
 @Component({
   selector: 'app-new-form',
   standalone: true,
-  imports: [ReactiveFormsModule, AsideBar, CommonModule, RouterModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './new-form.html',
   styleUrl: './new-form.css'
 })

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AsideUsers } from "../../../components/aside-users/aside-users";
 import { AuthServices } from '../../../services/auth-services';
 import { IncapacidadMedicaServices } from '../../../services/incapacidad-medica-services';
 
 @Component({
   selector: 'app-incapacidad-users',
-  imports: [AsideUsers, CommonModule],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './incapacidad-users.html',
   styleUrl: './incapacidad-users.css'
 })

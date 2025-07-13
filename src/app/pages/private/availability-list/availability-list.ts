@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AsideBar } from '../../../components/aside-bar-dentist/aside-bar';
 import { AvailabilityServices } from '../../../services/availability-services';
 import { AuthServices } from '../../../services/auth-services';
 
 @Component({
   selector: 'app-availability-list',
   standalone: true,
-  imports: [CommonModule, AsideBar],
+  imports: [CommonModule],
   templateUrl: './availability-list.html',
   styleUrls: ['./availability-list.css']
 })
