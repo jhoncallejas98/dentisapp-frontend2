@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class Login {
   formData!: FormGroup;
+  loading: boolean = false;
 
   constructor(private authServices: AuthServices, private router: Router) {
     this.formData = new FormGroup({
@@ -22,6 +23,7 @@ export class Login {
 
   onSubmit(){
     if (this.formData.valid){
+      this.loading = true;
       console.log(this.formData.value);
 
     this.authServices.loginUser(this.formData.value).subscribe({
@@ -48,9 +50,11 @@ export class Login {
       },
       error: (error) => {
         console.error(error);
+        this.loading = false;
       },
       complete: () => {
         this.formData.reset();
+        this.loading = false;
       }
     });
     }

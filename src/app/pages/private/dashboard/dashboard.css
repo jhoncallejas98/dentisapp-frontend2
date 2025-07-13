@@ -117,7 +117,7 @@ body {
 
 /* === BOTÓN VER === */
 .btn-view {
-  background: #111;
+  background: #6b7280;
   color: #fff;
   border-radius: 10px;
   font-size: 0.9rem;
@@ -127,7 +127,7 @@ body {
   align-items: center;
   gap: 0.4rem;
   border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.2);
   transition: all 0.2s ease;
   text-decoration: none;
   font-family: 'Inter', sans-serif;
@@ -136,9 +136,9 @@ body {
 }
 
 .btn-view:hover, .btn-view:focus {
-  background: #222;
+  background: #4b5563;
   transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.3);
 }
 
 /* === CONTENEDOR DE SECCIÓN === */

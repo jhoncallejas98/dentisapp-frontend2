@@ -1,73 +1,156 @@
+<div class="login-container">
+  <!-- Fondo decorativo -->
+  <div class="background-decoration">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
 
-<main class="main-container">
-    <section class="info-section">
-        <h1>DentisApp</h1>
-        <p>
-            Es la solución perfecta para modernizar tu consultorio odontológico: crea historias clínicas en segundos, agenda y organiza citas fácilmente, gestiona consentimientos informados y accede al historial de tus pacientes desde un solo lugar. Todo de forma rápida, segura y sin complicaciones. Simplifica tu práctica diaria y lleva la atención al siguiente nivel con la app pensada especialmente para odontólogos que buscan eficiencia y tranquilidad.
-        </p>
-    </section>
+  <!-- Contenido principal -->
+  <div class="login-content">
+    <!-- Sección de información -->
+    <div class="info-section">
+      <div class="hero-content">
+        <div class="logo-section">
+          <div class="logo-icon">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+              <path d="M2 17l10 5 10-5"></path>
+              <path d="M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h1 class="main-title">DentisApp</h1>
+          <p class="hero-tagline">Revoluciona tu consultorio dental</p>
+        </div>
+        
+        <div class="hero-description">
+          <p class="description-text">
+            La plataforma más avanzada para odontólogos modernos. 
+            <span class="highlight">Simplifica</span> tu práctica diaria y 
+            <span class="highlight">eleva</span> la calidad de atención a tus pacientes.
+          </p>
+        </div>
+      </div>
+      
+      <div class="features-section">
+        <h3 class="features-title">¿Por qué elegir DentisApp?</h3>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                <path d="M9 14l2 2 4-4"></path>
+              </svg>
+            </div>
+            <div class="feature-content">
+              <h4>Gestión Inteligente</h4>
+              <p>Administra pacientes y citas con tecnología de vanguardia</p>
+            </div>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12,6 12,12 16,14"></polyline>
+              </svg>
+            </div>
+            <div class="feature-content">
+              <h4>Agenda Automática</h4>
+              <p>Optimiza tu tiempo con programación inteligente</p>
+            </div>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14,2 14,8 20,8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10,9 9,9 8,9"></polyline>
+              </svg>
+            </div>
+            <div class="feature-content">
+              <h4>Historiales Digitales</h4>
+              <p>Acceso instantáneo a toda la información clínica</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- <section class="form-section">
-        <div class="tabs">
-            <button class="tab active">Doctor</button>
-            <button class="tab">Paciente</button>
+    <!-- Formulario de login -->
+    <div class="form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h2 class="welcome-title">¡Bienvenido de vuelta!</h2>
+          <p class="welcome-subtitle">Accede a tu consultorio digital</p>
         </div>
 
-        <form class="login-form">
-            <label for="correo">Correo</label>
-            <input type="email" id="correo" placeholder="Digite su correo" required />
-            <label for="contrasena">Contraseña</label>
-            <input type="password" id="contrasena" placeholder="Digite su contraseña" required />
-            <button type="submit">Iniciar sesión</button>
-            <a href="#" class="link">Recuperar contraseña</a>
-            <p class="without-account">¿No tienes una cuenta aún?</p>
-            <button class="register-btn" type="button">Registro</button>
-        </form> -->
-
-        <form class="form-login"  [formGroup]="formData" (ngSubmit)="onSubmit()"> 
-            <h2>LOGIN</h2>
-            <div class=" form-content">
-                <div class="field">     
-                    <label for="email">email</label>
-                    <input type="text" placeholder="correo@ejemplo.com" id="email" formControlName="email">
-                </div>
-                <div class="error" >
-                    <!-- validar el estado del campo actual -->
-                    @if (formData.get('email')?.invalid && (formData.get('email')?.dirty || formData.get('email')?.touched) ) {
-                        <!-- validar las reglas para el campo  -->
-                        @if (formData.get('email')?.errors?.['required']) {
-                            <span>El correo es obligatorio</span>
-                        }
-                        @if (formData.get('email')?.errors?.['email']) {
-                            <span>Por favor escriba un correo valido</span>
-                        }
-                    }
-                </div>
-
-                <div class="field">     
-                    <label for="">password *</label>
-                    <input type="password" placeholder="********" id="password" formControlName="password">
-                </div>
-                <div class="error">                   
-                    <!-- validar el estado del campo actual -->
-                    @if (formData.get('password')?.invalid && (formData.get('password')?.dirty || formData.get('password')?.touched) ) {
-                        <!-- validar las reglas para el campo  -->
-                        @if (formData.get('password')?.errors?.['required']) {
-                            <span>La contraseña es obligatoria</span>
-                        }
-                        @if (formData.get('password')?.errors?.['minlength']) {
-                            <span>Debe tener minimo 6 caracteres</span>
-                        }
-                        @if (formData.get('password')?.errors?.['maxlength']) {
-                            <span>Debe tener maximo 12 caracteres</span>
-                        }
-                    }
-                </div>
-
-                <div class="flied">
-                    <button type="submit" [disabled]="formData.invalid" >login</button>
-                </div>
+        <form class="login-form" [formGroup]="formData" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              <input 
+                type="email" 
+                id="email" 
+                placeholder="tu@correo.com" 
+                formControlName="email"
+                autocomplete="email"
+              >
             </div>
+            <div class="error-message" *ngIf="formData.get('email')?.invalid && (formData.get('email')?.dirty || formData.get('email')?.touched)">
+              <span *ngIf="formData.get('email')?.errors?.['required']">El correo es obligatorio</span>
+              <span *ngIf="formData.get('email')?.errors?.['email']">Por favor escribe un correo válido</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <circle cx="12" cy="16" r="1"></circle>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+              <input 
+                type="password" 
+                id="password" 
+                placeholder="••••••••" 
+                formControlName="password"
+                autocomplete="current-password"
+              >
+            </div>
+            <div class="error-message" *ngIf="formData.get('password')?.invalid && (formData.get('password')?.dirty || formData.get('password')?.touched)">
+              <span *ngIf="formData.get('password')?.errors?.['required']">La contraseña es obligatoria</span>
+              <span *ngIf="formData.get('password')?.errors?.['minlength']">Debe tener mínimo 6 caracteres</span>
+              <span *ngIf="formData.get('password')?.errors?.['maxlength']">Debe tener máximo 12 caracteres</span>
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            class="login-button" 
+            [disabled]="formData.invalid"
+            [class.loading]="loading"
+          >
+            <span class="button-text">Iniciar sesión</span>
+            <svg class="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10,17 15,12 10,7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </button>
         </form>
-    <!-- </section> -->
-</main> 
+
+
+      </div>
+    </div>
+  </div>
+</div> 
