@@ -65,6 +65,12 @@ export class AppoimentUsers implements OnInit {
       next: (data: any) => {
         console.log('Citas obtenidas:', data);
         this.appointments = Array.isArray(data) ? data : [];
+        // Ordenar citas por fecha (más recientes primero)
+        this.appointments.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB.getTime() - dateA.getTime();
+        });
         this.loading = false;
       },
       error: (err) => {
