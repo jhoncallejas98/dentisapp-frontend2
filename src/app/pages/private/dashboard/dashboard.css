@@ -141,6 +141,15 @@ body {
   box-shadow: 0 4px 16px rgba(107, 114, 128, 0.3);
 }
 
+.btn-view.disabled, .btn-view[aria-disabled="true"] {
+  background: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+
 /* === CONTENEDOR DE SECCIÓN === */
 .section-container {
   background: white;

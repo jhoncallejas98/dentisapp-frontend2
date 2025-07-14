@@ -52,12 +52,24 @@
               </span>
             </td>
             <td>
-              <a class="btn-view" [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]">Ver</a>
+              <a class="btn-view"
+                 [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]"
+                 [class.disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled'"
+                 [attr.aria-disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled'"
+                 [tabindex]="appointment.status === 'cancelada' || appointment.status === 'cancelled' ? -1 : 0"
+                 (click)="$event.preventDefault()" *ngIf="appointment.status === 'cancelada' || appointment.status === 'cancelled'">
+                Ver
+              </a>
+              <a class="btn-view"
+                 [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]"
+                 *ngIf="appointment.status !== 'cancelada' && appointment.status !== 'cancelled'">
+                Ver
+              </a>
             </td>
             <td>
-              <button class="btn-primary" 
+              <button class="btn-primary"
                       (click)="atenderPaciente(appointment)"
-                      [disabled]="appointment.status === 'attended' || appointment.status === 'completed'">
+                      [disabled]="appointment.status === 'attended' || appointment.status === 'completed' || appointment.status === 'cancelada' || appointment.status === 'cancelled'">
                 Atender
               </button>
             </td>
@@ -101,16 +113,30 @@
           </div>
           
           <div class="card-actions">
-            <a class="btn-view" [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]">
+            <a class="btn-view"
+               [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]"
+               [class.disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled'"
+               [attr.aria-disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled'"
+               [tabindex]="appointment.status === 'cancelada' || appointment.status === 'cancelled' ? -1 : 0"
+               (click)="$event.preventDefault()" *ngIf="appointment.status === 'cancelada' || appointment.status === 'cancelled'">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
               Ver Historia
             </a>
-            <button class="btn-primary" 
+            <a class="btn-view"
+               [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]"
+               *ngIf="appointment.status !== 'cancelada' && appointment.status !== 'cancelled'">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              Ver Historia
+            </a>
+            <button class="btn-primary"
                     (click)="atenderPaciente(appointment)"
-                    [disabled]="appointment.status === 'attended' || appointment.status === 'completed'">
+                    [disabled]="appointment.status === 'attended' || appointment.status === 'completed' || appointment.status === 'cancelada' || appointment.status === 'cancelled'">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9 12l2 2 4-4"></path>
                 <path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z"></path>
