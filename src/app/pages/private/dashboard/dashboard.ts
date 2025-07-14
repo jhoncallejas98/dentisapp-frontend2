@@ -111,8 +111,6 @@ export class DashboardComponent implements OnInit {
 
   // Función helper para traducir estados de citas
   translateStatus(status: string): string {
-    console.log('Traduciendo estado:', status);
-    
     const statusMap: { [key: string]: string } = {
       'attended': 'Atendido',
       'completed': 'Completado',
@@ -124,10 +122,7 @@ export class DashboardComponent implements OnInit {
       'confirmada': 'Confirmada',
       'cancelada': 'Cancelada'
     };
-    
-    const translatedStatus = statusMap[status?.toLowerCase()] || status;
-    console.log('Estado traducido:', translatedStatus);
-    return translatedStatus;
+    return statusMap[status?.toLowerCase()] || status;
   }
 
   cargarPacientesDelDia() {

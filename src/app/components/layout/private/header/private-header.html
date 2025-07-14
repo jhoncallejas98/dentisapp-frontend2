@@ -21,18 +21,18 @@
           <input 
             type="text" 
             class="search-input" 
-            placeholder="Buscar paciente por cédula..." 
+            placeholder="Buscar paciente por cédula o nombre" 
             [(ngModel)]="searchTerm"
             (input)="onSearchInput()"
           />
-          <div class="search-results" *ngIf="searchResults.length > 0">
+          <div class="search-results" *ngIf="showDropdown">
             <div 
               class="result-item" 
               *ngFor="let patient of searchResults" 
               (click)="openPatientHistory(patient)"
             >
               <span class="patient-name">{{ patient.name || patient.firstName + ' ' + patient.lastName }}</span>
-              <span class="patient-cedula">{{ patient.cedula || patient.documentId }}</span>
+              <span class="patient-cedula">{{ patient.cedula || patient.documentId || patient._id || 'Sin documento' }}</span>
             </div>
           </div>
         </div>
