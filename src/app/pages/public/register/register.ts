@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment';
 
 @Component({
   selector: 'app-register',
@@ -48,7 +49,7 @@ export class Register {
       }
     };
     
-    this.http.post('http://localhost:3000/api/users', userData).subscribe({
+    this.http.post(`${environment.apiUrl}/users`, userData).subscribe({
       next: (res: any) => {
         this.successMessage = 'Odontólogo registrado exitosamente.';
         this.registerForm.reset();

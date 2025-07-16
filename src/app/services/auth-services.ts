@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, of, tap } from 'rxjs';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class AuthServices {
   constructor(private http: HttpClient) { }
 
   loginUser (credentials: any) { // credencial es un objetio que se crea al hacer el login
-      return this.http.post(' http://localhost:3000/api/auth/login', credentials);
+      return this.http.post(`${environment.apiUrl}/auth/login`, credentials);
   }
 
   saveLocalStorage(key:string, value:any) {
@@ -22,7 +23,7 @@ export class AuthServices {
   }
 
     verifyAuthenticateUser() {
-    return this.http.get('http://localhost:3000/api/auth/re-new-token', {headers: this.getHeaders()})
+    return this.http.get(`${environment.apiUrl}/auth/re-new-token`, {headers: this.getHeaders()})
                 .pipe( 
                   map((data: any) =>{
                   console.log('services',data);
@@ -57,7 +58,7 @@ export class AuthServices {
   }
 
   getAllUsers() {
-    return this.http.get('http://localhost:3000/api/users', { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/users`, { headers: this.getHeaders() });
   }
 
   getCurrentUserId(): string | null {
@@ -107,7 +108,7 @@ export class AuthServices {
   getUserProfile() {
     const userId = this.getCurrentUserId();
     if (!userId) return null;
-    return this.http.get(`http://localhost:3000/api/users/${userId}`, { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/users/${userId}`, { headers: this.getHeaders() });
   }
 
   getUserAppointments() {
@@ -117,7 +118,7 @@ export class AuthServices {
     console.log('Buscando citas para cédula:', cedula);
     
     // Obtener todas las citas y filtrar por cédula del paciente
-    return this.http.get('http://localhost:3000/api/appoiment', { headers: this.getHeaders() })
+    return this.http.get(`${environment.apiUrl}/appoiment`, { headers: this.getHeaders() })
       .pipe(
         map((data: any) => {
           console.log('Todas las citas obtenidas:', data);
@@ -141,7 +142,7 @@ export class AuthServices {
     const cedula = this.getCurrentUserCedula();
     if (!cedula) return null;
     // Obtener todas las fórmulas y filtrar por cédula del paciente
-    return this.http.get('http://localhost:3000/api/formulacionMedica', { headers: this.getHeaders() })
+    return this.http.get(`${environment.apiUrl}/formulacionMedica`, { headers: this.getHeaders() })
       .pipe(
         map((data: any) => {
           if (Array.isArray(data)) {
@@ -163,7 +164,7 @@ export class AuthServices {
     const cedula = this.getCurrentUserCedula();
     if (!cedula) return null;
     // Obtener todas las historias clínicas y filtrar por cédula del paciente
-    return this.http.get('http://localhost:3000/api/historiaClinica', { headers: this.getHeaders() })
+    return this.http.get(`${environment.apiUrl}/historiaClinica`, { headers: this.getHeaders() })
       .pipe(
         map((data: any) => {
           if (Array.isArray(data)) {

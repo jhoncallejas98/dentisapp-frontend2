@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +42,7 @@ export class AvailabilityServices {
   getAvailability(dentistId: string, date: string) {
     const diaSemana = this.getDiaSemana(date);
     console.log('Frontend - Fecha:', date, 'Día de la semana:', diaSemana);
-    return this.http.get(`http://localhost:3000/api/disponibilidad?dentist=${dentistId}&date=${date}&diaSemana=${diaSemana}`, { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/disponibilidad?dentist=${dentistId}&date=${date}&diaSemana=${diaSemana}`, { headers: this.getHeaders() });
   }
 
   createOrUpdateAvailability(data: any) {
@@ -58,11 +59,11 @@ export class AvailabilityServices {
     }
     
     console.log('Payload final para disponibilidad:', payload);
-    return this.http.post('http://localhost:3000/api/disponibilidad', payload, { headers: this.getHeaders() });
+    return this.http.post(`${environment.apiUrl}/disponibilidad`, payload, { headers: this.getHeaders() });
   }
 
   getAllAvailabilities() {
-    return this.http.get('http://localhost:3000/api/disponibilidad', { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/disponibilidad`, { headers: this.getHeaders() });
   }
   updateAvailability(id: string, data: any) {
     // Preparar el payload correctamente para el backend
@@ -75,9 +76,9 @@ export class AvailabilityServices {
     }
     
     console.log('Payload para actualizar disponibilidad:', payload);
-    return this.http.patch(`http://localhost:3000/api/disponibilidad`, payload, { headers: this.getHeaders() });
+    return this.http.patch(`${environment.apiUrl}/disponibilidad`, payload, { headers: this.getHeaders() });
   }
   deleteAvailability(id: string) {
-    return this.http.delete(`http://localhost:3000/api/disponibilidad/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${environment.apiUrl}/disponibilidad/${id}`, { headers: this.getHeaders() });
   }
 } 

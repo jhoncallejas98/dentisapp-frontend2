@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,32 +15,30 @@ export class AppoimentsServices {
   }
 
   getAppoiments(){
-    return this.http.get('http://localhost:3000/api/appoiment', { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/appoiment`, { headers: this.getHeaders() });
   }
 
   getAppoimentById(id: string) {
-    return this.http.get(`http://localhost:3000/api/appoiment/${id}`, { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/appoiment/${id}`, { headers: this.getHeaders() });
   }
 
   registerAppoiment(newAppoiment:any) {
-    return this.http.post('http://localhost:3000/api/appoiment', newAppoiment, { headers: this.getHeaders() });
+    return this.http.post(`${environment.apiUrl}/appoiment`, newAppoiment, { headers: this.getHeaders() });
   }
 
   updateAppoiment(id: string, updateData: any) {
-    return this.http.patch(`http://localhost:3000/api/appoiment/${id}`, updateData, { headers: this.getHeaders() });
+    return this.http.patch(`${environment.apiUrl}/appoiment/${id}`, updateData, { headers: this.getHeaders() });
   }
 
   deleteAppoiment(id: string) {
-    return this.http.delete(`http://localhost:3000/api/appoiment/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${environment.apiUrl}/appoiment/${id}`, { headers: this.getHeaders() });
   }
 
   getAppoimentsByCedula(cedula: string) {
-    // Usar el endpoint que existe y filtrar client-side
-    return this.http.get('http://localhost:3000/api/appoiment', { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/appoiment`, { headers: this.getHeaders() });
   }
 
   getAppoimentsByDoctor(doctorCedula: string) {
-    // Obtener todas las citas y filtrar por el doctor actual
-    return this.http.get('http://localhost:3000/api/appoiment', { headers: this.getHeaders() });
+    return this.http.get(`${environment.apiUrl}/appoiment`, { headers: this.getHeaders() });
   }
 }
