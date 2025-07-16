@@ -170,8 +170,15 @@ export class DashboardComponent implements OnInit {
         this.appointments = doctorAppointments.filter((appointment: any) => {
           // Usar el servicio para manejar fechas de manera consistente
           const appointmentDateString = this.dateUtilsService.formatDate(appointment.date);
-          console.log('Comparando fechas - Hoy:', todayString, 'Cita:', appointmentDateString);
           return this.dateUtilsService.areDatesEqual(appointmentDateString, todayString);
+        });
+
+        // Ordenar las citas por hora (timeBlock) ascendente
+        this.appointments.sort((a, b) => {
+          // Asumimos formato HH:mm
+          const [aHour, aMin] = a.timeBlock.split(":").map(Number);
+          const [bHour, bMin] = b.timeBlock.split(":").map(Number);
+          return aHour !== bHour ? aHour - bHour : aMin - bMin;
         });
 
         console.log('Pacientes del día para el doctor:', this.appointments);
