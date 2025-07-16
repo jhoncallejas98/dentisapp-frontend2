@@ -24,6 +24,7 @@ import { CalendarComponent } from './pages/private/calendar/calendar';
 import { IncapacidadUsers } from './pages/private/incapacidad-users/incapacidad-users';
 import { NewForm } from './pages/private/appoiments-users/new-form/new-form';
 import { IncapacidadMedica } from './pages/private/incapacidad-medica/incapacidad-medica';
+import { NotAuthorized } from './pages/public/not-authorized/not-authorized';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,7 @@ export const routes: Routes = [
       { path: "register", component: Register },
       { path: "plans", component: Plans },
       { path: "contact", component: Contact },
+      { path: "not-authorized", component: NotAuthorized },
       { path: "", redirectTo: "home", pathMatch: "full" }
     ]
   },

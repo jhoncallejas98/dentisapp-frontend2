@@ -11,13 +11,14 @@ export const authGuard: CanActivateFn = (route, state) => {
       map((data) =>{
         console.log('Guard',data);
     if (!data){
-      router.navigateByUrl('home')
+      router.navigateByUrl('/not-authorized')
       return false
     }
 
         return true
       }),
       catchError(()=>{
+        router.navigateByUrl('/not-authorized');
         return of(false);
       }) 
     );
@@ -33,8 +34,7 @@ export const dentistGuard: CanActivateFn = (route, state) => {
   if (userRole === 'dentist' || userRole === 'admin') {
     return true;
   } else {
-    // Si no es doctor, redirigir al dashboard de usuarios
-    router.navigateByUrl('dashboard-users');
+    router.navigateByUrl('/not-authorized');
     return false;
   }
 };
@@ -49,8 +49,7 @@ export const patientGuard: CanActivateFn = (route, state) => {
   if (userRole === 'patient') {
     return true;
   } else {
-    // Si no es paciente, redirigir al dashboard principal
-    router.navigateByUrl('dashboard');
+    router.navigateByUrl('/not-authorized');
     return false;
   }
 };
