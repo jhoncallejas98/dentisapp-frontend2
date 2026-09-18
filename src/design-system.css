@@ -1,0 +1,305 @@
+:root {
+  --da-ink: #12333a;
+  --da-text: #476167;
+  --da-muted: #718589;
+  --da-primary: #0b5563;
+  --da-primary-dark: #083f49;
+  --da-accent: #27c2b1;
+  --da-accent-soft: #e4f8f4;
+  --da-canvas: #f4f7f9;
+  --da-surface: #fff;
+  --da-line: #e1e9eb;
+  --da-danger: #c64f3b;
+  --da-warning: #a47319;
+  --da-success: #287249;
+  --da-shadow: 0 12px 35px rgba(18, 51, 58, .07);
+}
+
+html { scroll-behavior: smooth; }
+html, body { font-family: 'Manrope', sans-serif; color: var(--da-text); background: var(--da-canvas); }
+button, input, select, textarea { font: inherit; }
+
+.main-content .layout-container {
+  display: block !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+.main-content :is(.patients-container,.appointments-container,.availability-container,.calendar-container,.appoiment-container,.formula-container,.incapacidad-container,.add-patient-container,.content-container) {
+  width: 100% !important;
+  max-width: 1400px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  margin: 0 auto !important;
+  padding: 36px clamp(20px, 3vw, 48px) 56px !important;
+  overflow: visible !important;
+  background: transparent !important;
+  box-sizing: border-box;
+}
+
+.main-content :is(.patients-header,.appointments-header,.availability-header,.calendar-header,.appoiment-header,.formula-header,.incapacidad-header,.add-patient-header,.header-section,.page-header) {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 20px !important;
+  margin: 0 0 26px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.main-content :is(.header-content,.header-section) :is(h1,h2),
+.main-content .form-title {
+  margin: 0 !important;
+  color: var(--da-ink) !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-size: clamp(1.65rem, 2.6vw, 2.15rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.main-content .header-content p {
+  margin: 7px 0 0 !important;
+  color: var(--da-muted) !important;
+  font-size: .86rem !important;
+  font-weight: 500 !important;
+}
+
+.main-content :is(.btn-primary,.btn-save,.btn-add,.atender-btn) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  min-height: 42px !important;
+  width: auto !important;
+  padding: 0 16px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: var(--da-primary) !important;
+  color: #fff !important;
+  font-size: .78rem !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+  box-shadow: 0 8px 18px rgba(11,85,99,.16) !important;
+  cursor: pointer;
+  transition: background .18s, transform .18s, box-shadow .18s !important;
+}
+
+.main-content :is(.btn-primary,.btn-save,.btn-add,.atender-btn):hover:not(:disabled) {
+  background: var(--da-primary-dark) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 22px rgba(11,85,99,.22) !important;
+}
+
+.main-content :is(.btn-secondary,.btn-cancel,.btn-view) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  min-height: 40px !important;
+  width: auto !important;
+  padding: 0 14px !important;
+  border: 1px solid var(--da-line) !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  color: #34565d !important;
+  font-size: .76rem !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+
+.main-content :is(.btn-secondary,.btn-cancel,.btn-view):hover { border-color: #c7d7da !important; background: #eef4f5 !important; transform: none !important; }
+
+.main-content .btn-icon {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  border: 1px solid var(--da-line) !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  color: #516c71 !important;
+  box-shadow: none !important;
+}
+
+.main-content .btn-icon:hover { border-color: #bcd0d3 !important; background: #eef7f6 !important; color: var(--da-primary) !important; }
+
+.main-content :is(input:not([type='checkbox']):not([type='radio']),select,textarea) {
+  min-height: 44px !important;
+  width: 100%;
+  padding: 10px 12px !important;
+  border: 1px solid #d5e0e2 !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  color: var(--da-ink) !important;
+  font-size: .82rem !important;
+  box-shadow: none !important;
+  transition: border-color .18s, box-shadow .18s !important;
+}
+
+.main-content textarea { min-height: 110px !important; resize: vertical; }
+.main-content :is(input:not([type='checkbox']):not([type='radio']),select,textarea):focus { outline: none !important; border-color: var(--da-accent) !important; box-shadow: 0 0 0 3px rgba(39,194,177,.12) !important; transform: none !important; }
+.main-content :is(.form-group,.field) label,.main-content .availability-form label,.main-content .agenda-form label { display: block; margin-bottom: 7px !important; color: #49666b !important; font-size: .7rem !important; font-weight: 800 !important; text-transform: none !important; }
+
+.main-content :is(.patient-form,.availability-form,.agenda-form,.form-container,.form-card) {
+  border: 1px solid var(--da-line) !important;
+  border-radius: 8px !important;
+  background: rgba(255,255,255,.96) !important;
+  box-shadow: var(--da-shadow) !important;
+}
+
+.main-content :is(.patient-form,.availability-form,.agenda-form) {
+  width: calc(100% - 40px) !important;
+  max-width: 980px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 36px auto 56px !important;
+  padding: clamp(24px,4vw,42px) !important;
+  overflow: visible !important;
+}
+
+.main-content .form-section { margin: 0 0 26px !important; padding: 0 0 24px !important; border: 0 !important; border-bottom: 1px solid var(--da-line) !important; background: transparent !important; box-shadow: none !important; }
+.main-content :is(.form-section,.form-card) h3 { color: var(--da-ink) !important; font-size: .95rem !important; }
+
+.main-content :is(.patient-list-item,.appointment-item,.appointment-card,.availability-card,.formula-card,.incapacidad-card,.content-card) {
+  border: 1px solid var(--da-line) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: var(--da-shadow) !important;
+}
+
+.main-content :is(.patient-list-item,.appointment-item) { margin-bottom: 10px !important; padding: 17px 18px !important; transition: border-color .18s, transform .18s !important; }
+.main-content :is(.patient-list-item,.appointment-item):hover { border-color: #bcd8d5 !important; transform: translateY(-1px) !important; }
+.main-content :is(.card-header,.availability-card .card-header) { border-bottom: 1px solid var(--da-line) !important; background: #f7f9fa !important; color: var(--da-ink) !important; }
+
+.main-content table { overflow: hidden; border: 1px solid var(--da-line) !important; border-radius: 8px !important; background: #fff !important; box-shadow: var(--da-shadow) !important; }
+.main-content :is(thead,th) { background: #f7f9fa !important; color: var(--da-muted) !important; font-size: .68rem !important; font-weight: 800 !important; }
+.main-content td { border-color: #edf1f2 !important; color: var(--da-text) !important; font-size: .78rem !important; }
+.main-content :is(.status-badge,.estado,.time-block) { border-radius: 5px !important; font-size: .65rem !important; font-weight: 800 !important; }
+.main-content :is(.badge-green,.asistio) { background: #e7f5ec !important; color: var(--da-success) !important; }
+.main-content :is(.badge-yellow,.pendiente) { background: #fff4d7 !important; color: var(--da-warning) !important; }
+.main-content :is(.badge-red,.cancelada) { background: #ffebe7 !important; color: var(--da-danger) !important; }
+
+.main-content :is(.no-data-container,.empty-state,.loading-container,.error-container) {
+  width: 100% !important;
+  min-height: 280px !important;
+  margin: 0 !important;
+  padding: 50px 24px !important;
+  border: 1px solid var(--da-line) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: var(--da-shadow) !important;
+  color: var(--da-muted) !important;
+}
+
+.main-content :is(.no-data-container,.empty-state) :is(h2,h3) { color: var(--da-ink) !important; font-family: 'Outfit',sans-serif !important; }
+.main-content :is(.calendar-content,.calendar-grid) { border-color: var(--da-line) !important; border-radius: 8px !important; background: #fff !important; box-shadow: var(--da-shadow) !important; }
+.main-content .day-header { background: #eef7f6 !important; color: var(--da-ink) !important; }
+.main-content .tabs-container { border: 1px solid var(--da-line) !important; border-radius: 8px !important; background: #fff !important; box-shadow: none !important; }
+.main-content .tab-button.active { border-color: var(--da-accent) !important; color: var(--da-primary) !important; }
+
+app-login .login-container { min-height: calc(100vh - 74px) !important; height: auto !important; background: #f2f7f7 !important; }
+app-login .login-content { min-height: calc(100vh - 74px) !important; height: auto !important; max-width: none !important; }
+app-login .info-section { background: var(--da-primary) !important; color: #fff !important; }
+app-login :is(.main-title,.features-title,.feature-content h4) { background: none !important; color: #fff !important; -webkit-text-fill-color: currentColor !important; }
+app-login :is(.hero-tagline,.description-text,.feature-content p) { color: #c4dadd !important; }
+app-login .feature-card { border: 1px solid rgba(255,255,255,.11) !important; border-radius: 7px !important; background: rgba(255,255,255,.06) !important; }
+app-login .form-section { background: #f2f7f7 !important; }
+app-login .form-container { border: 1px solid var(--da-line) !important; border-radius: 8px !important; box-shadow: var(--da-shadow) !important; }
+app-login :is(.welcome-title,.highlight) { background: none !important; color: var(--da-ink) !important; -webkit-text-fill-color: currentColor !important; }
+
+app-login .login-button,app-register button[type='submit'],app-plans .cta-plan { border-radius: 7px !important; background: var(--da-primary) !important; color: #fff !important; box-shadow: 0 8px 18px rgba(11,85,99,.16) !important; }
+app-login .form-group input,app-register :is(input,select) { border: 1px solid #d5e0e2 !important; border-radius: 7px !important; background: #fff !important; }
+app-login .form-group input:focus,app-register :is(input,select):focus { border-color: var(--da-accent) !important; box-shadow: 0 0 0 3px rgba(39,194,177,.12) !important; }
+
+app-register { display: block; min-height: calc(100vh - 74px); padding: 60px 20px; background: #f2f7f7; }
+app-register .register-container { max-width: 620px !important; margin: 0 auto !important; padding: clamp(26px,4vw,42px) !important; border: 1px solid var(--da-line) !important; border-radius: 8px !important; background: #fff !important; box-shadow: var(--da-shadow) !important; }
+app-register .register-container h2 { color: var(--da-ink) !important; font-family: 'Outfit',sans-serif !important; }
+
+app-plans .plans-section { padding: 90px max(5vw,20px) !important; background: #f4f7f7 !important; }
+app-plans .plans-section h2 { color: var(--da-ink) !important; font-family: 'Outfit',sans-serif !important; letter-spacing: 0 !important; }
+app-plans .plan-card { align-items: flex-start !important; border: 1px solid var(--da-line) !important; border-radius: 8px !important; background: #fff !important; box-shadow: var(--da-shadow) !important; }
+app-plans .plan-card:nth-child(2) { border-top: 4px solid var(--da-accent) !important; }
+app-plans .plan-card li::before { content: '✓' !important; color: var(--da-accent) !important; }
+
+app-contact .hero-contact { min-height: calc(100vh - 74px) !important; height: auto !important; padding: 80px 0 !important; background: #f2f7f7 !important; }
+app-contact :is(.left-content h1,.team-card h3) { color: var(--da-ink) !important; font-family: 'Outfit',sans-serif !important; }
+app-contact .team-card { border: 1px solid var(--da-line) !important; border-radius: 8px !important; background: #fff !important; box-shadow: var(--da-shadow) !important; }
+app-contact .team-image { border-color: var(--da-accent) !important; }
+app-contact .stat-number { color: var(--da-primary) !important; }
+
+.main-content #appointmentContainer,
+app-formula-medica > .main-content {
+  width: calc(100% - 40px) !important;
+  max-width: 980px !important;
+  min-height: 0 !important;
+  margin: 36px auto 56px !important;
+  padding: clamp(24px,4vw,42px) !important;
+  border: 1px solid var(--da-line) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: var(--da-shadow) !important;
+}
+
+.main-content #appointmentForm,
+app-formula-medica form {
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  gap: 18px !important;
+}
+
+.main-content #appointmentForm > div,
+app-formula-medica form > div {
+  min-width: 0;
+}
+
+.main-content #appointmentForm label,
+app-formula-medica form label {
+  display: block;
+  margin-bottom: 7px !important;
+  color: #49666b !important;
+  font-size: .7rem !important;
+  font-weight: 800 !important;
+}
+
+.main-content #appointmentForm :is(.half-field,.button-container,.success-message,.error-message),
+app-formula-medica form :is(.half-field,.button-container,.success-message,.error-message) {
+  grid-column: 1 / -1;
+}
+
+.main-content #appointmentForm button[type='submit'],
+app-formula-medica button[type='submit'] {
+  min-height: 44px !important;
+  padding: 0 20px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: var(--da-primary) !important;
+  color: #fff !important;
+  font-size: .78rem !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 18px rgba(11,85,99,.16) !important;
+}
+
+.main-content .filters-section {
+  padding: 18px !important;
+  border: 1px solid var(--da-line) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  .main-content :is(.patients-container,.appointments-container,.availability-container,.calendar-container,.appoiment-container,.formula-container,.incapacidad-container,.add-patient-container,.content-container) { padding: 24px 16px 40px !important; }
+  .main-content :is(.patients-header,.appointments-header,.availability-header,.calendar-header,.appoiment-header,.formula-header,.incapacidad-header,.add-patient-header,.header-section,.page-header) { align-items: stretch !important; flex-direction: column !important; }
+  .main-content :is(.btn-primary,.btn-save,.btn-add) { width: 100% !important; }
+  .main-content .form-row,app-register .form-row { display: grid !important; grid-template-columns: 1fr !important; gap: 0 !important; }
+  .main-content #appointmentForm,app-formula-medica form { grid-template-columns: 1fr !important; }
+  .main-content #appointmentForm > div,app-formula-medica form > div { grid-column: 1 !important; }
+}

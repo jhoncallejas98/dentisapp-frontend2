@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsideBar } from "../../../components/aside-bar-dentist/aside-bar";
 import { FormsModule } from '@angular/forms';
 import { IncapacidadMedicaServices } from '../../../services/incapacidad-medica-services';
 import { AuthServices } from '../../../services/auth-services';
 
 @Component({
   selector: 'app-incapacidad-medica',
-  imports: [CommonModule, AsideBar, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './incapacidad-medica.html',
   styleUrl: './incapacidad-medica.css'
 })

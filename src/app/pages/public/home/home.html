@@ -1,39 +1,98 @@
-<main class="main-container">
-  <section id="quienes-somos" class="who-we-are">
-    <div class="who-container">
-        <h2>¿Quiénes somos?</h2>
-        
-        <p>
-        👋 Somos un equipo de odontólogos y desarrolladores que unimos nuestras pasiones para crear algo grande: una herramienta digital que simplifica, agiliza y transforma la manera en que se lleva un consultorio. 
-        </p>
-        
-        <p>
-        🦷 <strong>Todo empezó</strong> con una necesidad real: la gestión manual de pacientes, historias clínicas y citas se volvía un caos. Así nació <strong>DentisApp</strong>, una solución diseñada por y para odontólogos.
-        </p>
-    
-        <div class="values">
-        <div>
-            <h3>🎯 Misión</h3>
-            <p>Facilitar el día a día de los profesionales en salud oral, ofreciendo herramientas digitales eficientes y fáciles de usar.</p>
+<main class="landing">
+    <section class="hero">
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+            <span class="hero-eyebrow">Software odontológico integral</span>
+            <h1>DentisApp</h1>
+            <p>La operación de tu clínica, clara y conectada. Agenda, historias clínicas y pacientes en un solo lugar.</p>
+            <div class="hero-actions">
+                <a class="button button-primary" routerLink="/register">Comenzar ahora</a>
+                <a class="button button-light" href="#producto">Ver cómo funciona</a>
+            </div>
+            <div class="hero-trust">
+                <span>Datos clínicos seguros</span>
+                <span>Soporte en español</span>
+                <span>Sin instalaciones</span>
+            </div>
         </div>
-        <div>
-            <h3>🔭 Visión</h3>
-            <p>Ser la plataforma líder en gestión odontológica en Latinoamérica para el 2030.</p>
+        <a class="scroll-cue" href="#producto" aria-label="Conocer el producto">
+            <span>Descubre más</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"></path></svg>
+        </a>
+    </section>
+
+    <section class="product-section" id="producto">
+        <div class="section-heading">
+            <span class="section-eyebrow">Todo en contexto</span>
+            <h2>Menos administración.<br>Más tiempo para sonrisas.</h2>
+            <p>Cada herramienta fue diseñada para reducir pasos, evitar errores y mantener al equipo alineado.</p>
         </div>
-        <div>
-            <h3>💡 Nuestros valores</h3>
-            <ul>
-            <li>✅ Simplicidad</li>
-            <li>🔒 Seguridad</li>
-            <li>💬 Comunicación efectiva</li>
-            <li>🤝 Empatía con el profesional</li>
-            </ul>
+
+        <div class="product-showcase">
+            <div class="product-copy">
+                <div class="feature-row">
+                    <span class="feature-number">01</span>
+                    <div><h3>Agenda que trabaja contigo</h3><p>Consulta disponibilidad, citas y estados desde una vista clara para toda la clínica.</p></div>
+                </div>
+                <div class="feature-row">
+                    <span class="feature-number">02</span>
+                    <div><h3>Historia clínica conectada</h3><p>Encuentra antecedentes, diagnósticos y documentos sin perder el hilo del paciente.</p></div>
+                </div>
+                <div class="feature-row">
+                    <span class="feature-number">03</span>
+                    <div><h3>Seguimiento sin fricción</h3><p>Convierte cada cita en una atención organizada y cada dato en una mejor decisión.</p></div>
+                </div>
+            </div>
+
+            <div class="product-preview" aria-label="Vista previa del panel de DentisApp">
+                <div class="preview-topbar"><span></span><span></span><span></span><strong>DentisApp / Hoy</strong></div>
+                <div class="preview-body">
+                    <div class="preview-sidebar">
+                        <span class="preview-logo">D</span>
+                        <i class="active"></i><i></i><i></i><i></i>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-heading"><div><small>Panel clínico</small><b>Buenos días, doctora</b></div><button>Nueva cita</button></div>
+                        <div class="preview-stats"><span><small>Pacientes</small><b>156</b></span><span><small>Citas hoy</small><b>8</b></span><span><small>Atendidos</small><b>5</b></span></div>
+                        <div class="preview-agenda">
+                            <div class="preview-agenda-title"><b>Próximos pacientes</b><small>8 citas</small></div>
+                            <div class="preview-patient"><i>MF</i><span><b>María Fernández</b><small>Valoración inicial</small></span><time>09:00</time><em>Confirmada</em></div>
+                            <div class="preview-patient"><i>JR</i><span><b>Juan Rodríguez</b><small>Control de ortodoncia</small></span><time>10:30</time><em class="pending">Pendiente</em></div>
+                            <div class="preview-patient"><i>AS</i><span><b>Ana Suárez</b><small>Limpieza dental</small></span><time>11:15</time><em>Confirmada</em></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
+
+    <section class="workflow-section">
+        <div class="workflow-intro">
+            <span class="section-eyebrow">Un día más simple</span>
+            <h2>De la agenda al seguimiento, sin cambiar de herramienta.</h2>
         </div>
-    
-        <button class="cta-scroll" onclick="document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' })">
-        ¡Quiero empezar!
-        </button>
-    </div>
+        <div class="workflow-grid">
+            <article><span>01</span><h3>Recibe y organiza</h3><p>Centraliza pacientes, disponibilidad y citas en una agenda compartida.</p></article>
+            <article><span>02</span><h3>Atiende con contexto</h3><p>Consulta el expediente completo antes y durante cada procedimiento.</p></article>
+            <article><span>03</span><h3>Documenta y continúa</h3><p>Genera fórmulas e incapacidades y conserva un seguimiento ordenado.</p></article>
+        </div>
+    </section>
+
+    <section class="proof-section">
+        <div class="proof-quote">
+            <span class="section-eyebrow">Hecho para odontología</span>
+            <blockquote>“La tecnología debe desaparecer durante la consulta y dejar que el profesional se concentre en su paciente.”</blockquote>
+            <p>Ese principio guía cada pantalla de DentisApp.</p>
+        </div>
+        <div class="proof-metrics">
+            <div><strong>360°</strong><span>Visión del paciente</span></div>
+            <div><strong>24/7</strong><span>Acceso a la clínica</span></div>
+            <div><strong>1</strong><span>Fuente de información</span></div>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div><span class="section-eyebrow">Tu clínica puede sentirse diferente</span><h2>Empieza a trabajar con claridad.</h2></div>
+        <div class="final-actions"><a class="button button-primary" routerLink="/register">Crear mi cuenta</a><a class="text-link" routerLink="/contact">Hablar con nosotros <span>→</span></a></div>
     </section>
 </main>

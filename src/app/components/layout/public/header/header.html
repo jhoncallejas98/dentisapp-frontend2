@@ -1,26 +1,26 @@
 <header class="navbar">
-  <div class="logo">DentisApp</div>
+  <a class="logo" routerLink="/home"><span class="logo-mark">D</span><span>DentisApp<small>Clínica digital</small></span></a>
 
   <nav class="header-selection" [class.hide]="menuOpen">
     <ul>
-      <li><a routerLink="/who-we-are" class="quienes-somos-header">¿Quiénes somos?</a></li>
+      <li><a routerLink="/home" fragment="producto">Producto</a></li>
       <li><a routerLink="/plans" class="planes-header">Planes</a></li>
       <li><a routerLink="/contact" class="contacto-header">Contacto</a></li>
-      <li><a routerLink="/login" class="iniciar-sesion-header">Iniciar sesión</a></li>
+      <li><a routerLink="/login" class="iniciar-sesion-header">Entrar</a></li>
       <!-- <li><a class="iniciar-sesion-header" (click)="logout()">Cerrar sesión</a></li> -->
     </ul>
   </nav>
 
-  <button class="hamburger" (click)="toggleMenu()">
-    &#9776; <!-- ícono hamburguesa -->
+  <button class="hamburger" (click)="toggleMenu()" aria-label="Abrir menú">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
   </button>
 
   <div class="menu" [class.active]="menuOpen">
     <ul>
-      <li><a routerLink="/who-we-are" (click)="toggleMenu()">¿Quiénes somos?</a></li>
+      <li><a routerLink="/home" fragment="producto" (click)="toggleMenu()">Producto</a></li>
       <li><a routerLink="/plans" (click)="toggleMenu()">Planes</a></li>
       <li><a routerLink="/contact" (click)="toggleMenu()">Contacto</a></li>
-      <li><a routerLink="/login" (click)="toggleMenu()">Iniciar sesión</a></li>
+      <li><a routerLink="/login" (click)="toggleMenu()">Entrar</a></li>
       <!-- <li><a (click)="logout(); toggleMenu()">Cerrar sesión</a></li> -->
     </ul>
   </div>

@@ -245,6 +245,29 @@ footer {
     padding: 0.5rem;
 }
 
+:host {
+    display: block;
+}
+
+footer {
+    padding: 14px 24px;
+    border-top: 1px solid #e1e9eb;
+    background: #f4f7f9;
+    color: #718589;
+    text-align: right;
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer span {
+    margin: 0 5px;
+    color: #27c2b1;
+}
+
 .logos-aside {
     width: 2rem;
     height: 2rem;

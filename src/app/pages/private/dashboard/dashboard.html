@@ -1,24 +1,86 @@
 <div class="dashboard-container">
-  <!-- Header simple -->
   <div class="dashboard-header">
     <div class="header-content">
-      <h2>Dashboard</h2>
-      <p>Resumen de tu día</p>
+      <span class="eyebrow">Panel clínico</span>
+      <h2>Tu consulta, bajo control</h2>
+      <p>Revisa la operación de hoy y continúa con la atención de tus pacientes.</p>
     </div>
-    <button class="btn-primary" routerLink="/appoiments/new">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="5" x2="12" y2="19"></line>
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-      </svg>
-      Nueva Cita
-    </button>
+    <div class="header-actions">
+      <div class="today-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+          <path d="M16 3v4M8 3v4M3 11h18"></path>
+        </svg>
+        <span>{{ today | date:'EEEE, d MMMM':'':'es' }}</span>
+      </div>
+      <button class="btn-primary" routerLink="/appoiments/new">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Nueva cita
+      </button>
+    </div>
   </div>
 
-  <!-- Pacientes del día -->
+  <div class="stats-grid">
+    <article class="stat-card stat-teal">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M19 8v6M22 11h-6"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="stat-label">Pacientes registrados</span>
+        <strong>{{ getTotalPatients() }}</strong>
+      </div>
+    </article>
+    <article class="stat-card stat-blue">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+          <path d="M16 3v4M8 3v4M3 11h18"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="stat-label">Citas para hoy</span>
+        <strong>{{ getTodayAppointments() }}</strong>
+      </div>
+    </article>
+    <article class="stat-card stat-green">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6 9 17l-5-5"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="stat-label">Atendidos</span>
+        <strong>{{ getCompletedAppointments() }}</strong>
+      </div>
+    </article>
+    <article class="stat-card stat-coral">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 7v5l3 2"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="stat-label">Por atender</span>
+        <strong>{{ getPendingAppointments() }}</strong>
+      </div>
+    </article>
+  </div>
+
   <div class="section-container">
     <div class="section-header">
-      <h3>Pacientes del Día</h3>
-      <span class="date">{{ today | date:'EEEE, dd MMMM':'':'es' }}</span>
+      <div>
+        <span class="section-kicker">Agenda de hoy</span>
+        <h3>Próximos pacientes</h3>
+      </div>
+      <span class="appointment-count">{{ appointments.length }} citas</span>
     </div>
 
     <div class="patients-table-wrapper">
@@ -26,20 +88,25 @@
       <table class="patients-table desktop-only" *ngIf="appointments.length > 0">
         <thead>
           <tr>
-            <th>Documento</th>
-            <th>Nombre Completo</th>
-            <th>Hora Cita</th>
+            <th>Paciente</th>
+            <th>Hora</th>
             <th>Motivo</th>
             <th>Estado</th>
-            <th>Historia Clínica</th>
-            <th>Atender</th>
+            <th class="actions-heading">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let appointment of appointments">
-            <td>{{ appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient }}</td>
-            <td>{{ appointment.patient.name || appointment.patient }}</td>
-            <td>{{ appointment.timeBlock }}</td>
+            <td>
+              <div class="patient-cell">
+                <span class="patient-avatar">{{ getPatientInitial(appointment.patient) }}</span>
+                <span>
+                  <strong>{{ appointment.patient.name || appointment.patient }}</strong>
+                  <small>{{ appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient }}</small>
+                </span>
+              </div>
+            </td>
+            <td><span class="time-cell">{{ appointment.timeBlock }}</span></td>
             <td>{{ appointment.reason }}</td>
             <td>
               <span class="status-badge"
@@ -51,22 +118,20 @@
                 {{ translateStatus(appointment.status) }}
               </span>
             </td>
-            <td>
+            <td class="table-actions">
               <a class="btn-view"
                  [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]"
                  [class.disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled'"
                  [attr.aria-disabled]="appointment.status === 'cancelada' || appointment.status === 'cancelled'"
                  [tabindex]="appointment.status === 'cancelada' || appointment.status === 'cancelled' ? -1 : 0"
                  (click)="$event.preventDefault()" *ngIf="appointment.status === 'cancelada' || appointment.status === 'cancelled'">
-                Ver
+                Historia
               </a>
               <a class="btn-view"
                  [routerLink]="['/historia-clinica', appointment.patient.cedula || appointment.patient.documentId || appointment.patient._id || appointment.patient]"
                  *ngIf="appointment.status !== 'cancelada' && appointment.status !== 'cancelled'">
-                Ver
+                Historia
               </a>
-            </td>
-            <td>
               <button class="btn-primary"
                       (click)="atenderPaciente(appointment)"
                       [disabled]="appointment.status === 'attended' || appointment.status === 'completed' || appointment.status === 'cancelada' || appointment.status === 'cancelled'">
@@ -148,7 +213,14 @@
         </div>
       </div>
       <div *ngIf="!loading && appointments.length === 0" class="no-patients-message">
-        No hay pacientes agendados para el día de hoy.
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+            <path d="M16 3v4M8 3v4M3 11h18M9 16l2 2 4-4"></path>
+          </svg>
+        </div>
+        <strong>Agenda despejada</strong>
+        <span>No hay pacientes agendados para hoy.</span>
       </div>
       <div *ngIf="loading" class="loading-message">Cargando pacientes...</div>
       <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>

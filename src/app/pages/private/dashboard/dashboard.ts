@@ -235,11 +235,11 @@ export class DashboardComponent implements OnInit {
   }
 
   getCompletedAppointments(): number {
-    return this.appointments.filter(p => p.status === 'completed').length;
+    return this.appointments.filter(p => ['attended', 'completed', 'asistio'].includes(p.status?.toLowerCase())).length;
   }
 
   getPendingAppointments(): number {
-    return this.appointments.filter(p => p.status === 'pending').length;
+    return this.appointments.filter(p => ['pending', 'pendiente'].includes(p.status?.toLowerCase())).length;
   }
 
   get selectedClinicalRecord() {

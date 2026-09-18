@@ -25,16 +25,21 @@ import { AsideBar } from '../../aside-bar-dentist/aside-bar';
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            background: #f4f7f9;
         }
         
         .content-wrapper {
             display: flex;
             flex: 1;
+            min-height: 0;
         }
         
         .main-content {
             flex: 1;
-            background-color: #f9f9f9;
+            min-width: 0;
+            background:
+                radial-gradient(circle at 94% 3%, rgba(39, 194, 177, 0.09), transparent 24rem),
+                #f4f7f9;
         }
         
         @media (max-width: 900px) {

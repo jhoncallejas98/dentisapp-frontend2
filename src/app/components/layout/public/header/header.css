@@ -1,86 +1,80 @@
-body {
-  font-size: 1.4rem;
-  font-family: "Inter", sans-serif;
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
-}
-
-/* Navbar principal */
 .navbar {
-  background-color: #f3e8e1;
-  padding: 1.2rem 2.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative;
-  z-index: 10;
-  /* Sin border-bottom */
+  min-height: 74px;
+  padding: 0 max(6vw, 28px);
+  border-bottom: 1px solid #e3eaeb;
+  background: rgba(255,255,255,.96);
+  backdrop-filter: blur(16px);
 }
 
 .logo {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: #222;
-  letter-spacing: -1px;
   display: flex;
   align-items: center;
+  gap: 10px;
+  color: #12333a;
+  font-family: 'Outfit',sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
 }
+.logo > span:last-child { display:flex;flex-direction:column; }.logo small { margin-top:4px;color:#799094;font-family:'Manrope',sans-serif;font-size:.5rem;text-transform:uppercase; }.logo-mark { display:grid;place-items:center;width:36px;height:36px;border-radius:8px;background:#0b5563;color:#fff;box-shadow:0 7px 16px rgba(11,85,99,.2); }
 
 /* Menú horizontal */
 .header-selection ul {
   list-style: none;
   display: flex;
-  gap: 2.2rem;
+  gap: 6px;
   margin: 0;
   padding: 0;
 }
 
 .header-selection li a {
   text-decoration: none;
-  color: #222;
-  padding: 0.5rem 1.2rem;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 1.1rem;
-  transition: background-color 0.25s, color 0.25s, text-decoration 0.25s;
-  position: relative;
+  color: #526b70;
+  padding: .65rem .9rem;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: .76rem;
+  transition: background-color .2s,color .2s;
 }
 
 .header-selection a:hover,
 .header-selection a.active {
-  background-color: #ececec;
-  color: #000;
-  text-decoration: underline;
+  background-color: #eef7f6;
+  color: #0b7065;
 }
 
 /* Estilo específico si estás en la página de login */
-.page-login .iniciar-sesion-header {
-  background-color: rgba(0, 0, 0, 0.5);
+.header-selection li .iniciar-sesion-header {
+  margin-left: 8px;
+  background: #0b5563;
   color: #fff;
 }
 
 /* Botón hamburguesa */
 .hamburger {
   display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
+  place-items:center;width:40px;height:40px;padding:0;background:#fff;border:1px solid #dce6e8;border-radius:7px;
   cursor: pointer;
-  color: #222;
+  color: #12333a;
 }
+.hamburger svg{width:20px;height:20px}
 
 /* Menú hamburguesa oculto por defecto */
 .menu {
   display: none;
   position: absolute;
   top: 100%;
-  right: 0;
-  background-color: #f3e8e1;
+  left: 0;
+  background-color: #fff;
   width: 100vw;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-top:1px solid #e3eaeb;box-shadow:0 20px 40px rgba(18,51,58,.12);
 }
 
 .menu.active {
@@ -94,25 +88,17 @@ body {
 }
 
 .menu li {
-  margin: 1rem 0;
+  margin: .4rem 0;
   text-align: center;
 }
 
 .menu a {
   text-decoration: none;
-  color: #222;
-  font-size: 1.2rem;
-  font-weight: 500;
-  padding: 0.5rem 1.5rem;
-  display: inline-block;
-  border-radius: 999px;
-  transition: background 0.3s, text-decoration 0.25s;
+  color:#34555c;font-size:.9rem;font-weight:700;padding:.8rem 1.5rem;display:block;border-radius:6px;transition:background .2s;
 }
 
 .menu a:hover {
-  background-color: #ececec;
-  color: #000;
-  text-decoration: underline;
+  background-color:#eef7f6;color:#0b7065;
 }
 
 /* RESPONSIVO */
@@ -121,10 +107,10 @@ body {
     gap: 1.2rem;
   }
   .navbar {
-    padding: 1rem 1.5rem;
+    padding: 0 20px;
   }
   .logo {
-    font-size: 1.8rem;
+    font-size: 1rem;
   }
 }
 
@@ -133,7 +119,7 @@ body {
     display: none;
   }
   .hamburger {
-    display: block;
+    display: grid;
   }
   .menu {
     display: none;

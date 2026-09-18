@@ -1,29 +1,39 @@
 <header class="header">
   <div class="container">
     <nav class="navbar">
-      <!-- Botón hamburguesa solo en móviles -->
       <button class="hamburger mobile-only" (click)="onHamburgerClick()" aria-label="Abrir menú">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
       </button>
-      
-      <!-- Logo -->
+
       <div class="navbar__left">
-        <a class="logo-site" href="#">DentisApp</a>
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 3c-1.9 0-2.8-1-4.6-1C4.5 2 3 4.5 3 7.2c0 4 2.1 5.1 2.6 9.5.3 2.6 1.2 4.3 2.5 4.3 1.7 0 1.5-4.8 3.9-4.8s2.2 4.8 3.9 4.8c1.3 0 2.2-1.7 2.5-4.3.5-4.4 2.6-5.5 2.6-9.5C21 4.5 19.5 2 16.6 2 14.8 2 13.9 3 12 3Z"></path>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <span class="logo-site">DentisApp</span>
+          <span class="workspace-label">Gestión clínica</span>
+        </div>
       </div>
-      
-      <!-- Barra de búsqueda en desktop -->
+
       <div class="navbar__center desktop-only" *ngIf="isDentist">
         <div class="search-bar">
-          <input 
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+          <input
             type="text" 
             class="search-input" 
-            placeholder="Buscar paciente por cédula o nombre" 
+            placeholder="Buscar paciente por nombre o documento" 
             [(ngModel)]="searchTerm"
             (input)="onSearchInput()"
+            aria-label="Buscar paciente"
           />
           <div class="search-results" *ngIf="showDropdown">
             <div 
@@ -37,20 +47,14 @@
           </div>
         </div>
       </div>
-      
-      <!-- Logout en desktop -->
-      <div class="navbar__right desktop-only">
-        <svg class="logout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" (click)="logout()" style="cursor:pointer;">
-          <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
+
+      <button class="logout-button" (click)="logout()" aria-label="Cerrar sesión" title="Cerrar sesión">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
         </svg>
-      </div>
-      
-      <!-- Logout en mobile -->
-      <div class="navbar__right mobile-only">
-        <svg class="logout-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" (click)="logout()" style="cursor:pointer;">
-          <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
-        </svg>
-      </div>
+      </button>
     </nav>
   </div>
 </header>
